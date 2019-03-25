@@ -72,6 +72,7 @@ struct messaggi {
 
 struct utente {
 	int id_utente;
+
 	char nome_utente[64];
 	char password_utente[64];
 	};
@@ -548,15 +549,21 @@ void *gestore_utente(void *socket){
             struct stat s;
             fstat(fd, &s);
             char responseMessage[1000];
-            sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n\n", s.st_size);
-            
+            sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n", s.st_size, ctime(&s.st_mtime));
             send(sock, responseMessage, strlen(responseMessage), 0);
             while ( (bytes_read=read(fd, data_to_send, 4096))>0 )
                 write (sock, data_to_send, 4096);
-            printf("Risposta inviata!");
             close(fd);
         } else{
-            write(sock, "HTTP/1.1 404 Not Found\n", strlen("HTTP/1.0 404 Not Found\n")); //FILE NOT FOUND
+			struct stat s;
+			fd=open("404.html", O_RDONLY);
+            fstat(fd, &s);
+            char responseMessage[1000];
+            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n", s.st_size, ctime(&s.st_mtime));
+            send(sock, responseMessage, strlen(responseMessage), 0);
+			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", reqline[1]);
+			write (sock, data_to_send, 4096);
+            close(fd);
         }
     }
 	
