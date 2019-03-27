@@ -512,7 +512,7 @@ void *gestore_utente(void *socket){
 
     // Codice per impostare il timeout sul socket per la connessione             
     struct timeval tv;
-    tv.tv_sec = 100000;
+    tv.tv_sec = 10;
     tv.tv_usec = 0;
     setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 	
@@ -559,9 +559,9 @@ void *gestore_utente(void *socket){
 			fd=open("404.html", O_RDONLY);
             fstat(fd, &s);
             char responseMessage[1000];
-            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n", s.st_size, ctime(&s.st_mtime));
-            send(sock, responseMessage, strlen(responseMessage), 0);
 			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", reqline[1]);
+            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n", strlen(data_to_send), ctime(&s.st_mtime));
+            send(sock, responseMessage, strlen(responseMessage), 0);
 			write (sock, data_to_send, 4096);
             close(fd);
         }
