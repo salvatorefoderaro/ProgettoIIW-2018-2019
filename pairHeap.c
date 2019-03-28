@@ -88,6 +88,9 @@ PairHeap DeleteMin( ElementType *MinItem, PairHeap H )
             NewRoot = CombineSiblings( H->LeftChild );
         free( H );
     }
+    // Aggiungere il codice per rimuovere l'elemento anche dall'albero di ricerca
+
+
     return NewRoot;
 }
 
@@ -196,10 +199,8 @@ void Destroy( PairHeap H )
 void main(void){
 
     PairHeap test = Initialize();
-    Position *newNode = malloc(sizeof(Position));
-    Position *newNode1 = malloc(sizeof(Position));
-    test = Insert(10, test, newNode);
-    test = Insert(12, test, newNode1);
-    printf("\nIl minimo è: %d\n", FindMin(test));
-    printf("\nWewew\n");
+    for (int i = 0; i< 100000000000; i++){
+        Position *newNode = malloc(sizeof(Position));
+        test = Insert(i, test, newNode);
+    }
 }

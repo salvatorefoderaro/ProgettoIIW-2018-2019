@@ -215,6 +215,8 @@ void avl_insert( avl_tree_t *tree, char* value ) {
 		
 	}
 
+	// Serve il codice per la creazione di un nuovo elemento nella coda
+
 	avl_balance( tree );
 }
 
@@ -228,6 +230,9 @@ avl_node_t *avl_find( avl_tree_t *tree, char* value ) {
 		else
 			current = current->left;
 	}
+
+	// Se il nodo è stato trovato, aggiungere il codice per aumentare/decrementarne la priorità
+
 	return current;
 }
 
@@ -280,7 +285,6 @@ int main( int argc, char **argv ) {
 
 	tree = avl_create();
 
-	/* Insert 1-20 in random order -- this is suboptimal, but easy */
 	srand( time( NULL ) );
 
 		char r[20] = "Ciao a tutti";
@@ -289,7 +293,10 @@ int main( int argc, char **argv ) {
         aux1 = strdup(r1);
 		avl_insert( tree, aux );
         avl_insert( tree, aux1 );
-
+		printf("\nNodo trovato è: %s\n", avl_find(tree, "Wewewew"));
+		if (avl_find(tree, "AAAA") == NULL){
+			printf("\nNodo non trovato!\n");
+		}
 
 	avl_print( tree , "<li> %s </li>\n");
 
