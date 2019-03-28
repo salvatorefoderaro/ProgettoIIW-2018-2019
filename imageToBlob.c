@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include "MagickWand/MagickWand.h"
+
+void ThrowWandException(MagickWand *wand)
+{ char
+  *description;
+
+  ExceptionType
+  severity;
+
+  description=MagickGetException(wand,&severity);
+  (void) fprintf(stderr,"%s %s %lu %s\n",GetMagickModule(),description);
+  description=(char *) MagickRelinquishMemory(description);
+}
+
+#define SwapWands(a,b) { MagickWand *tmp=a; a=b; b=tmp; }
+
+char *test(char *fileName, int w, int h, int quality, int colorSpace, int *size)
+{
+    MagickWand *output;  /* the appended output image */
+
+    MagickBooleanType status;
+    PixelWand *color;
+    size_t lunghezza;
+    MagickWandGenesis();
+
+    output = NewMagickWand();
+
+    status = MagickReadImage(output, "xc:red" );
+    if (status == MagickFalse)
+      ThrowWandException(output);
+
+    status = MagickSetImageFormat(output,"jpg");
+    if (status == MagickFalse)
+      ThrowWandException(output);
+
+    if (w != 0 || h != 0){
+    status = MagickResizeImage(output, w, h, 0);
+    if (status == MagickFalse)
+      ThrowWandException(output);
+    }
+
+    if (quality != 0){
+    status = MagickSetImageCompressionQuality(output, 10);
+    if (status == MagickFalse)
+      ThrowWandException(output);
+    }
+
+    if (colorSpace != 0){
+    status = MagickSetImageColorspace(output, 3);
+    if (status == MagickFalse)
+      ThrowWandException(output);
+    }
+
+    MagickResetIterator(output);
+
+    unsigned char *test = MagickGetImageBlob(output, &lunghezza);
+    printf("\nLa dimensione è: %ld\n", lunghezza);
+
+    // Scrittura su file
+    FILE *write_ptr;
+    write_ptr = fopen("test124.jpg","wb");
+    fwrite(test,lunghezza,1,write_ptr);
+
+    status = MagickWriteImage(output,"test.png");
+    if (status == MagickFalse)
+      ThrowWandException(output);
+
+    output = DestroyMagickWand(output);
+
+    MagickWandTerminus();
+
+    return test;
+}
+
+void main(void){
+  int size;
+  test("Aaa", 5000, 5000, 80, 3, &size);
+}

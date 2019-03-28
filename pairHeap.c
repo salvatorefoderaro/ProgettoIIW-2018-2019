@@ -9,6 +9,12 @@ struct PairNode {
     Position    Prev;
 };
 
+struct avl_node_s {
+	struct avl_node_s *left;
+	struct avl_node_s *right;
+	char* value;
+};
+
 #define MaxSiblings 1000
 
 Position CompareAndLink( Position First, Position Second );
@@ -87,9 +93,10 @@ PairHeap DeleteMin( ElementType *MinItem, PairHeap H )
         if( H->LeftChild != NULL )
             NewRoot = CombineSiblings( H->LeftChild );
         free( H );
-    }
-    // Aggiungere il codice per rimuovere l'elemento anche dall'albero di ricerca
+        
+        // Aggiungere il codice per rimuovere l'elemento anche dall'albero di ricerca
 
+    }
 
     return NewRoot;
 }

@@ -24,8 +24,6 @@ int main(int argc, char *argv[])
 
     PixelWand *color;
 
-    MagickBooleanType status;
-
     MagickWandGenesis();
 
     red = NewMagickWand();
