@@ -11,7 +11,7 @@ PairHeap Initialize( void );
 void Destroy( PairHeap H );
 PairHeap MakeEmpty( PairHeap H );
 PairHeap Insert( ElementType Item, PairHeap H, Position *Loc );
-PairHeap DeleteMin( ElementType *MinItem, PairHeap H );
+PairHeap DeleteMin(PairHeap H );
 ElementType FindMin( PairHeap H );
 PairHeap DecreaseKey( Position P, ElementType NewVal, PairHeap H );
 int IsEmpty( PairHeap H );

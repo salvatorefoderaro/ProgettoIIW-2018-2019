@@ -15,8 +15,11 @@ void ThrowWandException(MagickWand *wand)
 
 #define SwapWands(a,b) { MagickWand *tmp=a; a=b; b=tmp; }
 
-char *test(char *fileName, int w, int h, int quality, int colorSpace, int *size)
+char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *size)
 {
+    /*
+
+    */
     MagickWand *output;  /* the appended output image */
 
     MagickBooleanType status;
@@ -75,5 +78,5 @@ char *test(char *fileName, int w, int h, int quality, int colorSpace, int *size)
 
 void main(void){
   int size;
-  test("Aaa", 5000, 5000, 80, 3, &size);
+  getBlob("Aaa", 0, 0, 0, 3, &size);
 }

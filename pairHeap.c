@@ -2,23 +2,19 @@
 #include "fatal.h"
 #include <stdlib.h>
 
-struct PairNode {
+struct PairNode
+{
     ElementType Element;
     Position    LeftChild;
     Position    NextSibling;
     Position    Prev;
 };
 
-struct avl_node_s {
-	struct avl_node_s *left;
-	struct avl_node_s *right;
-	char* value;
-};
-
 #define MaxSiblings 1000
 
 Position CompareAndLink( Position First, Position Second );
 PairHeap CombineSiblings( Position FirstSibling );
+
 
 PairHeap Initialize( void )
 {
@@ -59,6 +55,7 @@ PairHeap Insert( ElementType Item, PairHeap H, Position *Loc )
         return CompareAndLink( H, NewNode );
 }
 
+
 /* Lower item in Position P by Delta */
 
 PairHeap DecreaseKey( Position P, ElementType Delta, PairHeap H )
@@ -81,7 +78,7 @@ PairHeap DecreaseKey( Position P, ElementType Delta, PairHeap H )
     return CompareAndLink( H, P );
 }
 
-PairHeap DeleteMin( ElementType *MinItem, PairHeap H )
+PairHeap DeleteMin(PairHeap H )
 {
     Position NewRoot = NULL;
 
@@ -89,15 +86,10 @@ PairHeap DeleteMin( ElementType *MinItem, PairHeap H )
         Error( "Pairing heap is empty!" );
     else
     {
-        *MinItem = H->Element;
         if( H->LeftChild != NULL )
             NewRoot = CombineSiblings( H->LeftChild );
         free( H );
-        
-        // Aggiungere il codice per rimuovere l'elemento anche dall'albero di ricerca
-
     }
-
     return NewRoot;
 }
 
@@ -204,10 +196,13 @@ void Destroy( PairHeap H )
 }
 
 void main(void){
-
     PairHeap test = Initialize();
-    for (int i = 0; i< 100000000000; i++){
-        Position *newNode = malloc(sizeof(Position));
-        test = Insert(i, test, newNode);
-    }
+    Position *node = malloc(sizeof(Position));
+    test = Insert(2, test, node);
+    printf("\n----- Min is: %d -----\n", FindMin(test));
+    printf("\n----- Make delete -----\n");
+    test = DecreaseKey(*node, 1, test);
+    printf("\n----- Min is: %d -----\n", FindMin(test));
+    test = DeleteMin(test);
+    printf("\n----- Min is: %d -----\n", FindMin(test));
 }

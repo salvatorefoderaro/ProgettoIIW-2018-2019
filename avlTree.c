@@ -1,12 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+typedef struct treeNode 
+{ 
+  char *imageBuffer;
+  int size;
+  int quality;
+  int w;
+  int h;
+  int spaceColor;
+  struct treeNode *next; 
+} treeNode; 
  
 typedef struct node
 {
 	char data[1024];
 	struct node *left,*right;
 	int ht;
+	treeNode *imageList;
 } node;
  
 node *insert(node *, char*);
@@ -81,6 +93,7 @@ node * insert(node *T, char* x)
         strcpy(T->data, x);
 		T->left=NULL;
 		T->right=NULL;
+		T->imageList=NULL;
 	}
 	else
 		if(x > T->data)		// insert in right subtree
