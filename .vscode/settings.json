@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "avltree.h": "c"
+        "avltree.h": "c",
+        "magickcore.h": "c",
+        "typeinfo": "c"
     }
 }

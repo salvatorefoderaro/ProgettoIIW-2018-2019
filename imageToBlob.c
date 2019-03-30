@@ -1,3 +1,7 @@
+/*
+`pkg-config --cflags --libs MagickWand`
+*/ 
+
 #include <stdio.h>
 #include "MagickWand/MagickWand.h"
 
@@ -15,11 +19,8 @@ void ThrowWandException(MagickWand *wand)
 
 #define SwapWands(a,b) { MagickWand *tmp=a; a=b; b=tmp; }
 
-char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *size)
-{
-    /*
+char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *size){
 
-    */
     MagickWand *output;  /* the appended output image */
 
     MagickBooleanType status;
@@ -29,7 +30,7 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
 
     output = NewMagickWand();
 
-    status = MagickReadImage(output, "xc:red" );
+    status = MagickReadImage(output, "xc:blue" );
     if (status == MagickFalse)
       ThrowWandException(output);
 
@@ -37,7 +38,7 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
     if (status == MagickFalse)
       ThrowWandException(output);
 
-    if (w != 0 || h != 0){
+    if (w != 0 && h != 0){
     status = MagickResizeImage(output, w, h, 0);
     if (status == MagickFalse)
       ThrowWandException(output);
@@ -58,17 +59,7 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
     MagickResetIterator(output);
 
     unsigned char *test = MagickGetImageBlob(output, &lunghezza);
-    printf("\nLa dimensione è: %ld\n", lunghezza);
-
-    // Scrittura su file
-    FILE *write_ptr;
-    write_ptr = fopen("test124.jpg","wb");
-    fwrite(test,lunghezza,1,write_ptr);
-
-    status = MagickWriteImage(output,"test.png");
-    if (status == MagickFalse)
-      ThrowWandException(output);
-
+    printf("\nLa dimensione è: %ld indirizzo: %x\n", lunghezza, test);
     output = DestroyMagickWand(output);
 
     MagickWandTerminus();
@@ -76,7 +67,7 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
     return test;
 }
 
-void main(void){
+/* void main(void){
   int size;
   getBlob("Aaa", 0, 0, 0, 3, &size);
-}
+} */

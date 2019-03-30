@@ -1,27 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct treeNode 
-{ 
-  char *imageBuffer;
-  int size;
-  int quality;
-  int w;
-  int h;
-  int spaceColor;
-  struct treeNode *next; 
-} treeNode; 
+#include "linkedListImage.c"
  
-typedef struct node
-{
+typedef struct node {
 	char data[1024];
 	struct node *left,*right;
 	int ht;
 	treeNode *imageList;
 } node;
  
-node *insert(node *, char*);
+node *insert(node *, char*,  treeNode *imageList);
 node *Delete(node *,char*);
 void preorder(node *);
 void inorder(node *);
@@ -33,59 +22,78 @@ node *LL(node *);
 node *LR(node *);
 node *RL(node *);
 int BF(node *);
- 
-int main()
+node *searchNode(node *T, char* find, int w, int h, int quality, int colorSpace, char* address, int *size);
+
+node *root;
+
+/* int main(void)
 {
-	node *root=NULL;
+	root=NULL;
 	int x,n,i,op;
     char string[1024];
 	
-	do
-	{
-		printf("\n1)Create:");
+	do{
 		printf("\n2)Insert:");
-		printf("\n3)Delete:");
+		printf("\n3)Cerca:");
 		printf("\n4)Print:");
-		printf("\n5)Quit:");
 		printf("\n\nEnter Your Choice:");
 		scanf("%d",&op);
 		
-		switch(op)
-		{
-			/* case 1: printf("\nEnter no. of elements:");
-					scanf("%d",&n);
-					printf("\nEnter tree data:");
-					root=NULL;
-					for(i=0;i<n;i++)
-					{
-						scanf("%d",&x);
-						root=insert(root,x);
-					}
-					break; */
+		switch(op){	
+		case 2: printf("\nEnter a data:");
+				scanf("%s",string);
+				treeNode *test = malloc(sizeof(treeNode));
+				insert(root, string, test);
+				break;
 				
-			case 2: printf("\nEnter a data:");
-					scanf("%s",&string);
-					root=insert(root,string);
-					break;
-					
-			/* case 3: printf("\nEnter a data:");
-					scanf("%d",&x);
-					root=Delete(root,x);
-					break; */
-			
-			case 4: printf("\nPreorder sequence:\n");
-					preorder(root);
-					printf("\n\nInorder sequence:\n");
-					inorder(root);
-					printf("\n");
-					break;			
+		case 3: printf("\nEnter a data:");
+				
+				scanf("%s", string);
+				char *address;
+				int *size;
+				if (searchNode(root, string, 0, 0, 0, 0, address, size) == NULL){
+					treeNode *imageListNode = createNode(string, 1024, 1024, 0, 0, size);
+					root = insert(root, string, imageListNode);
+					address = imageListNode->imageBuffer;
+				}
+				printf("\nIndirizzo è: %x\n", address);
+				    // Scrittura su file
+				FILE *write_ptr;
+				write_ptr = fopen("test124.jpg","wb");
+				fwrite(address,12576,1,write_ptr);
+				break;
+		
+		case 4: printf("\n\nInorder sequence:\n");
+				preorder(root);
+				break;			
 		}
-	}while(op!=5);
+	} while(op != 5);
 	
 	return 0;
+} */
+
+node *searchNode(node *T, char* find, int w, int h, int quality, int colorSpace, char* address, int *size){
+	
+	node *returnNode;
+    if (T == NULL){
+        return NULL;
+    }
+	if (strcmp(find, T->data) == 0){
+		returnNode = T;
+	} else if(find > T->data){
+		returnNode = searchNode(T->right, find, w, h, quality, colorSpace, address, size);
+	} else if (find < T->data) {
+		returnNode = searchNode(T->left, find, w, h, quality, colorSpace, address, size);
+	}
+
+	if (returnNode != NULL){
+		searchNodeInList(returnNode->imageList, find, w, h, quality, colorSpace, address, size); 
+	} else {
+		return NULL;
+	}
 }
  
-node * insert(node *T, char* x)
+node *insert(node *T, char* x, treeNode *imageList)
 {
 	if(T==NULL)
 	{
@@ -93,55 +101,43 @@ node * insert(node *T, char* x)
         strcpy(T->data, x);
 		T->left=NULL;
 		T->right=NULL;
-		T->imageList=NULL;
+		T->imageList=imageList;
 	}
-	else
-		if(x > T->data)		// insert in right subtree
-		{
-			T->right=insert(T->right,x);
-			if(BF(T)==-2)
-				if(x>T->right->data)
-					T=RR(T);
-				else
-					T=RL(T);
-		}
-		else
-			if(x<T->data)
-			{
-				T->left=insert(T->left,x);
-				if(BF(T)==2)
-					if(x < T->left->data)
-						T=LL(T);
-					else
-						T=LR(T);
-			}
-		
-		T->ht=height(T);
-		
-		return(T);
+	else if(x > T->data){
+		T->right=insert(T->right, x, imageList);
+		if(BF(T)==-2)
+			if(x>T->right->data)
+				T=RR(T);
+			else
+				T=RL(T);
+	} else if(x < T->data){
+		T->left=insert(T->left,x, imageList);
+		if(BF(T)==2)
+			if(x < T->left->data)
+				T=LL(T);
+			else
+				T=LR(T);
+	}
+	
+	T->ht=height(T);
+	return T;
 }
  
-node * Delete(node *T,char * x)
+node *Delete(node *T,char * x)
 {
 	node *p;
 	
-	if(T==NULL)
-	{
+	if(T==NULL){
 		return NULL;
 	}
-	else
-		if(x > T->data)		// insert in right subtree
-		{
+	else if(x > T->data){
 			T->right=Delete(T->right,x);
 			if(BF(T)==2)
 				if(BF(T->left)>=0)
 					T=LL(T);
 				else
 					T=LR(T);
-		}
-		else
-			if(x<T->data)
-			{
+		} else if(x<T->data){
 				T->left=Delete(T->left,x);
 				if(BF(T)==-2)	//Rebalance during windup
 					if(BF(T->right)<=0)
@@ -149,11 +145,9 @@ node * Delete(node *T,char * x)
 					else
 						T=RL(T);
 			}
-			else
-			{
+			else {
 				//data to be deleted is found
-				if(T->right!=NULL)
-				{	//delete its inorder succesor
+				if(T->right!=NULL){	//delete its inorder succesor
 					p=T->right;
 					
 					while(p->left!= NULL)
