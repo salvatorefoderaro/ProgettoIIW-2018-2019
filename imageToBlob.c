@@ -5,9 +5,10 @@
 #include <stdio.h>
 #include "MagickWand/MagickWand.h"
 
-void ThrowWandException(MagickWand *wand)
-{ char
-  *description;
+#define SwapWands(a,b) { MagickWand *tmp=a; a=b; b=tmp; }
+
+void ThrowWandException(MagickWand *wand){ 
+  char *description;
 
   ExceptionType
   severity;
@@ -16,8 +17,6 @@ void ThrowWandException(MagickWand *wand)
   (void) fprintf(stderr,"%s %s %lu %s\n",GetMagickModule(),description);
   description=(char *) MagickRelinquishMemory(description);
 }
-
-#define SwapWands(a,b) { MagickWand *tmp=a; a=b; b=tmp; }
 
 char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *size){
 

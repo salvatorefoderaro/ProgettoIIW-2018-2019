@@ -42,7 +42,6 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *s
    while(hashArray[hashIndex] != NULL) {
 	
       if(hashArray[hashIndex]->key == key)
-         printf("Address is: %x", hashArray[hashIndex]->imageList);
       	return searchNodeInList(hashArray[hashIndex]->imageList, string, w, h, quality, colorSpace, size); 
 			
       ++hashIndex;
@@ -50,6 +49,7 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *s
       hashIndex %= SIZE;
    }        
 
+   printf("\n     *****     Nodo non presente nell'albero, procedo all'inserimento     *****\n");
     treeNode *imageListNode = createNode(string, 1024, 1024, 0, 0);
     insertHash(string, imageListNode);
     size = &(imageListNode->size);
@@ -118,7 +118,7 @@ int main() {
    char *test = searchHash("ciao", 0, 0, 0, 0, lunghezza);
    char *test1 = searchHash("ciao", 1000, 10000, 0, 0, lunghezza);
 
-   printf("\nAddress in Hash is: %x %x\n", test, test1);
+   //printf("\nAddress in Hash is: %x %x\n", test, test1);
 
    FILE *write_ptr;
    write_ptr = fopen("test12422221.jpg","wb");

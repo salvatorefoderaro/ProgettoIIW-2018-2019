@@ -502,7 +502,7 @@ int leggi_tutti_messaggi(void *socket){
 
     return 0+1000;
 }
-	
+
 void *gestore_utente(void *socket){
     char data_to_send[4096];
 	char buff[2000];
@@ -528,23 +528,47 @@ void *gestore_utente(void *socket){
         puts(out);
         int bytes_read;
         int fd;
-        char *reqline[3];
+		char *reqline[4], *requestType, *host, *userAgent, *accept, *requestedFile;
+
+		/* Ottengo tutte quante le informazioni dalla richiesta */
 
         reqline[0] = strtok(buffer, " \t\n");
-
 		if ( strncmp(reqline[0], "GET\0", 4)==0){
-			reqline[1] = strtok(NULL, " \t");
-			reqline[2] = strtok(NULL, " \t\n");
-        }
+			requestType = reqline[0];
+
+        } else if ( strncmp(reqline[0], "HEAD\0", 5) == 0){
+			requestType = reqline[0];
+		}
+
+		reqline[1] = strtok(NULL, " \t");
+		reqline[2] = strtok(NULL, " \t\n");
+
+		reqline[3] = strtok(NULL, "\n");
+		while (reqline[3] != NULL){
+			if(strncmp(reqline[3], "Host:", 5) == 0){
+				host = reqline[3];
+			
+			} else if(strncmp(reqline[3], "User-Agent:", 11) == 0){
+				userAgent= reqline[3];
+			
+			} else if(strncmp(reqline[3], "Accept:", 7) == 0){
+				accept = reqline[3];
+			}
+			reqline[3] = strtok(NULL, "\n");
+		}
 
         if ( strncmp(reqline[1], "/\0", 2)==0){
-            reqline[1] = "index.html";        //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
+            requestedFile = "index.html";        //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
         } else {
-            reqline[1] = strtok(reqline[1], "/");
+            requestedFile = strtok(reqline[1], "/");
         }
 
+		/* Stampo le informazioi ottenute dalla richiesta */
+
+		printf("\n\nRequested file: %s\nRequest type is: %s\nHost is: %s\nAccept is: %s\nUser-Agent is: %s\n\n", requestedFile, requestType, host, accept, userAgent);
+
         // Invio la risposta
-        if ( (fd=open(reqline[1], O_RDONLY))!=-1 )    //FILE FOUND
+        if ( (fd=open(requestedFile, O_RDONLY))!=-1 )    //FILE FOUND
         {
             struct stat s;
             fstat(fd, &s);
@@ -559,7 +583,7 @@ void *gestore_utente(void *socket){
 			fd=open("404.html", O_RDONLY);
             fstat(fd, &s);
             char responseMessage[1000];
-			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", reqline[1]);
+			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
             sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n", strlen(data_to_send), ctime(&s.st_mtime));
             send(sock, responseMessage, strlen(responseMessage), 0);
 			write (sock, data_to_send, 4096);
