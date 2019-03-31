@@ -1,13 +1,14 @@
 #include "pairheap.h"
 #include "fatal.h"
 #include <stdlib.h>
+// #include "pairHeap.c"
 
-struct PairNode
-{
+struct PairNode{
     ElementType Element;
     Position    LeftChild;
     Position    NextSibling;
     Position    Prev;
+    //DataItem    *hashNode;
 };
 
 #define MaxSiblings 1000
@@ -15,14 +16,11 @@ struct PairNode
 Position CompareAndLink( Position First, Position Second );
 PairHeap CombineSiblings( Position FirstSibling );
 
-
-PairHeap Initialize( void )
-{
+PairHeap Initialize( void ){
     return NULL;
 }
 
-PairHeap MakeEmpty( PairHeap H )
-{
+PairHeap MakeEmpty( PairHeap H ){
     if( H != NULL )
     {
         MakeEmpty( H->LeftChild );
@@ -37,13 +35,13 @@ PairHeap MakeEmpty( PairHeap H )
 /* A pointer to the newly allocated node */
 /* is passed back by reference and accessed as *Loc */
 
-PairHeap Insert( ElementType Item, PairHeap H, Position *Loc )
-{
+PairHeap Insert( ElementType Item, PairHeap H, Position *Loc ){
     Position NewNode;
 
     NewNode = malloc( sizeof( struct PairNode ) );
     if( NewNode == NULL )
-        FatalError( "Out of space!!!" );
+        FatalError("Out of space!!!");
+        
     NewNode->Element = Item;
     NewNode->LeftChild = NewNode->NextSibling = NULL;
     NewNode->Prev = NULL;
@@ -55,11 +53,7 @@ PairHeap Insert( ElementType Item, PairHeap H, Position *Loc )
         return CompareAndLink( H, NewNode );
 }
 
-
-/* Lower item in Position P by Delta */
-
-PairHeap DecreaseKey( Position P, ElementType Delta, PairHeap H )
-{
+PairHeap DecreaseKey( Position P, ElementType Delta, PairHeap H ){
     if( Delta < 0 )
         Error( "DecreaseKey called with negative Delta" );
 
@@ -78,8 +72,7 @@ PairHeap DecreaseKey( Position P, ElementType Delta, PairHeap H )
     return CompareAndLink( H, P );
 }
 
-PairHeap DeleteMin(PairHeap H )
-{
+PairHeap DeleteMin(PairHeap H ){
     Position NewRoot = NULL;
 
     if( IsEmpty( H ) )
@@ -87,8 +80,10 @@ PairHeap DeleteMin(PairHeap H )
     else
     {
         if( H->LeftChild != NULL )
-            NewRoot = CombineSiblings( H->LeftChild );
-        free( H );
+            NewRoot = CombineSiblings(H->LeftChild);
+        // free(H->hashNode->imageList); -> Libero dalla memoria la lista collegata
+        // deleteHash(H->hashNode); -> Elimino l'elemento dalla tabella Hash
+        free(H);
     }
     return NewRoot;
 }
@@ -99,8 +94,7 @@ PairHeap DeleteMin(PairHeap H )
 /* First is assumed NOT NULL */
 /* First->NextSibling  MUST be NULL on entry */
 
-Position CompareAndLink( Position First, Position Second )
-{
+Position CompareAndLink( Position First, Position Second ){
     if( Second == NULL )
         return First;
     else
@@ -132,9 +126,8 @@ Position CompareAndLink( Position First, Position Second )
 
 /* Assumes FirstSibling is NOT NULL */
 
-PairHeap CombineSiblings( Position FirstSibling )
-{
-    static Position TreeArray[ MaxSiblings ];
+PairHeap CombineSiblings(Position FirstSibling){
+    static Position TreeArray[MaxSiblings];
     int i, j, NumSiblings;
 
     /* If only one tree, return it */
@@ -172,26 +165,22 @@ PairHeap CombineSiblings( Position FirstSibling )
     return TreeArray[ 0 ];
 }
 
-ElementType FindMin( PairHeap H )
-{
+ElementType FindMin( PairHeap H ){
     if( !IsEmpty( H ) )
         return H->Element;
     Error( "Priority Queue is Empty" );
     return 0;
 }
 
-int IsEmpty( PairHeap H )
-{
+int IsEmpty( PairHeap H ){
     return H == NULL;
 }
 
-int IsFull( PairHeap H )
-{
+int IsFull( PairHeap H ){
     return 0;   /* Never full */
 }
 
-void Destroy( PairHeap H )
-{
+void Destroy( PairHeap H ){
     MakeEmpty( H );
 }
 

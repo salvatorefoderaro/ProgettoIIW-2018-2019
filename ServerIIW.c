@@ -528,7 +528,7 @@ void *gestore_utente(void *socket){
         puts(out);
         int bytes_read;
         int fd;
-		char *reqline[4], *requestType, *host, *userAgent, *accept, *requestedFile;
+		char *reqline[4], *requestType, *host, *userAgent, *accept, *requestedFile, *httpVersion;
 
 		/* Ottengo tutte quante le informazioni dalla richiesta */
 
@@ -558,14 +558,19 @@ void *gestore_utente(void *socket){
 		}
 
         if ( strncmp(reqline[1], "/\0", 2)==0){
-            requestedFile = "index.html";        //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
-        } else {
-            requestedFile = strtok(reqline[1], "/");
-        }
+            requestedFile = "htdocs/index.html";        //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
+        
+		} else {
+            char *fileName= strtok(reqline[1], " ");
+			requestedFile = malloc(strlen(fileName) + 7);
+			strcat(requestedFile, "htdocs");
+			strcat(requestedFile, fileName);
+		}
+		httpVersion = reqline[2];
 
 		/* Stampo le informazioi ottenute dalla richiesta */
 
-		printf("\n\nRequested file: %s\nRequest type is: %s\nHost is: %s\nAccept is: %s\nUser-Agent is: %s\n\n", requestedFile, requestType, host, accept, userAgent);
+		printf("\n\nRequested file: %s\nRequest type is: %s\nHost is: %s\nAccept is: %s\nUser-Agent is: %s\nHTTP Version is: %s\n\n", requestedFile, requestType, host, accept, userAgent, httpVersion);
 
         // Invio la risposta
         if ( (fd=open(requestedFile, O_RDONLY))!=-1 )    //FILE FOUND
@@ -586,7 +591,7 @@ void *gestore_utente(void *socket){
 			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
             sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n", strlen(data_to_send), ctime(&s.st_mtime));
             send(sock, responseMessage, strlen(responseMessage), 0);
-			write (sock, data_to_send, 4096);
+			write (sock, data_to_send, strlen(data_to_send));
             close(fd);
         }
     }

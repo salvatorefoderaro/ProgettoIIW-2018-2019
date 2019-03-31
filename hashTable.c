@@ -9,7 +9,7 @@
 
 struct DataItem {
    treeNode *imageList;
-   PairNode *queueNode;
+   // PairNode *queueNode;
    int data;   
    long key;
 };

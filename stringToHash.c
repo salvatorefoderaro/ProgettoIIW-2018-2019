@@ -1,3 +1,6 @@
+    /* Non viene utilizzato come file "solitario" in quanto è stato inglobato
+    come funzione all'interno di hashTable.c */
+    
     unsigned long
     hash(unsigned char *str)
     {
