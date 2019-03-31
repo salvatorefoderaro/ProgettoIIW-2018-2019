@@ -195,7 +195,7 @@ void Destroy( PairHeap H )
     MakeEmpty( H );
 }
 
-void main(void){
+/* void main(void){
     PairHeap test = Initialize();
     Position *node = malloc(sizeof(Position));
     test = Insert(2, test, node);
@@ -205,4 +205,4 @@ void main(void){
     printf("\n----- Min is: %d -----\n", FindMin(test));
     test = DeleteMin(test);
     printf("\n----- Min is: %d -----\n", FindMin(test));
-}
+} */

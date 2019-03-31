@@ -3,11 +3,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "linkedListImage.c"
+#include "pairheap.h"
 
 #define SIZE 30
 
 struct DataItem {
-    treeNode *imageList;
+   treeNode *imageList;
+   PairNode *queueNode;
    int data;   
    long key;
 };
@@ -38,22 +40,25 @@ long hashCode(long key) {
 char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *size) {
    long key = hash(string);
    int hashIndex = hashCode(key);  
+
+   // PairHeap test = Initialize();
 	
    while(hashArray[hashIndex] != NULL) {
 	
       if(hashArray[hashIndex]->key == key)
+         // test = DecreaseKey(hashArray[hashIndex]->queueNode, 1, test);
       	return searchNodeInList(hashArray[hashIndex]->imageList, string, w, h, quality, colorSpace, size); 
-			
       ++hashIndex;
-		
       hashIndex %= SIZE;
    }        
 
    printf("\n     *****     Nodo non presente nell'albero, procedo all'inserimento     *****\n");
-    treeNode *imageListNode = createNode(string, 1024, 1024, 0, 0);
-    insertHash(string, imageListNode);
-    size = &(imageListNode->size);
-    return imageListNode->imageBuffer;
+   // Position *node = malloc(sizeof(Position));   
+   // test = Insert(2, test, node); 
+   treeNode *imageListNode = createNode(string, 1024, 1024, 0, 0);
+   insertHash(string, imageListNode);
+   size = &(imageListNode->size);
+   return imageListNode->imageBuffer;
 }
 
 void insertHash(char *string, treeNode *imageList) {
