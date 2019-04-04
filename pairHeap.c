@@ -8,7 +8,6 @@ struct PairNode{
     Position    LeftChild;
     Position    NextSibling;
     Position    Prev;
-    //DataItem    *hashNode;
 };
 
 #define MaxSiblings 1000

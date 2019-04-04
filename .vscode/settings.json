@@ -4,6 +4,7 @@
         "magickcore.h": "c",
         "typeinfo": "c",
         "pairheap.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "magickwand.h": "c"
     }
 }

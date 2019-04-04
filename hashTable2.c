@@ -8,7 +8,6 @@
 #define SIZE 30
 
 struct DataItem {
-   treeNode *imageList;
    int data;   
    long key;
    char *imageBuffer;
@@ -54,7 +53,7 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *s
     while(hashArray[hashIndex] != NULL) {
 
     if(hashArray[hashIndex]->key == key){
-        printf("\n     *****     Nodo presente nella tabella Hash     *****     ");     
+        printf("\n     *****     Nodo presente nella tabella Hash     *****     \n");     
         return hashArray[hashIndex]->imageBuffer; 
     }
     ++hashIndex;
@@ -71,11 +70,12 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *s
 void insertHash(char *string, char *image) {
 
     long key = hash(string);
+    free(string);
 
     struct DataItem *item = (struct DataItem*) malloc(sizeof(struct DataItem));
     item->data = NULL;
     item->key = key;
-    item->imageBuffer;
+    item->imageBuffer = image;
 
     int hashIndex = hashCode(key);
 
@@ -129,7 +129,7 @@ int main() {
    int *lunghezza, *lunghezza1;
    char *test = searchHash("ciao", 0, 0, 0, 0, lunghezza);
    char *test1 = searchHash("ciao", 1000, 10000, 0, 0, lunghezza);
-   searchHash("ciao", 1000, 10000, 0, 0, lunghezza);
+   printf("%x\n", searchHash("ciao", 1000, 10000, 0, 0, lunghezza));
 
    //printf("\nAddress in Hash is: %x %x\n", test, test1);
 

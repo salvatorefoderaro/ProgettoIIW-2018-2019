@@ -1,9 +1,8 @@
-#include<stdio.h>
-#include<string.h>    
-#include<sys/socket.h>
-#include<arpa/inet.h> 
-#include<unistd.h>    
-#include <time.h>
+#include <stdio.h>
+#include <string.h>    
+#include <sys/socket.h>
+#include <arpa/inet.h> 
+#include <unistd.h>    
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +13,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <time.h>
+
 #define fflush(stdin) while(getchar() != '\n')
 #define file_utenti "user.dat"
 #define file_messaggi "messages.dat"
@@ -510,7 +511,7 @@ void *gestore_utente(void *socket){
 	int scelta, valore_ritorno, uscita_thread, read_size;
 	sock = *((int*)socket);
 
-    // Codice per impostare il timeout sul socket per la connessione             
+	// Struttura dati per impostare il timeout della connessione
     struct timeval tv;
     tv.tv_sec = 10;
     tv.tv_usec = 0;
@@ -524,7 +525,7 @@ void *gestore_utente(void *socket){
 	while(ricevuti = recv(sock , buffer, sizeof(struct comunicazione)+3*sizeof(char), 0)> 0){
         // Ricevo il messaggio, ma devo comunque dare una risposta
         char out[2000];
-        sprintf(out, "\nSocket numero: %d\nIl messaggio ricevuto è: %s\n", sock, buffer);
+        sprintf(out, "\nSocket numero: %d\n", sock, buffer);
         puts(out);
         int bytes_read;
         int fd;
@@ -568,32 +569,31 @@ void *gestore_utente(void *socket){
 		}
 		httpVersion = reqline[2];
 
-		/* Stampo le informazioi ottenute dalla richiesta */
+		printf("\nRequested file: %s\nRequest type is: %s\nHost is: %s\nAccept is: %s\nUser-Agent is: %s\nHTTP Version is: %s\n\n", requestedFile, requestType, host, accept, userAgent, httpVersion);
 
-		printf("\n\nRequested file: %s\nRequest type is: %s\nHost is: %s\nAccept is: %s\nUser-Agent is: %s\nHTTP Version is: %s\n\n", requestedFile, requestType, host, accept, userAgent, httpVersion);
-
-        // Invio la risposta
-        if ( (fd=open(requestedFile, O_RDONLY))!=-1 )    //FILE FOUND
+        if ((fd=open(requestedFile, O_RDONLY))!=-1)    //FILE FOUND
         {
+			printf("\nValue of fd is: %d\n", fd);
             struct stat s;
             fstat(fd, &s);
             char responseMessage[1000];
             sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n", s.st_size, ctime(&s.st_mtime));
-            send(sock, responseMessage, strlen(responseMessage), 0);
-            while ( (bytes_read=read(fd, data_to_send, 4096))>0 )
-                write (sock, data_to_send, 4096);
+			send(sock, responseMessage, strlen(responseMessage), 0);            
+			if(strcmp(requestType, "GET") == 0){
+				while ( (bytes_read=read(fd, data_to_send, 4096))>0)
+					write (sock, data_to_send, 4096);
+			}
             close(fd);
         } else{
-			struct stat s;
-			fd=open("404.html", O_RDONLY);
-            fstat(fd, &s);
             char responseMessage[1000];
 			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
-            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n", strlen(data_to_send), ctime(&s.st_mtime));
+            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\n", strlen(data_to_send));
             send(sock, responseMessage, strlen(responseMessage), 0);
-			write (sock, data_to_send, strlen(data_to_send));
-            close(fd);
-        }
+            if(strcmp(requestType, "GET") == 0){			
+				write (sock, data_to_send, strlen(data_to_send));
+			}
+			close(fd);
+		}
     }
 	
 	time_t now = time (0);
