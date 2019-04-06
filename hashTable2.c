@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "linkedListImage.c"
 #include "pairheap.h"
+#include "imageToBlob.c"
 
 #define SIZE 30
 
@@ -11,14 +11,15 @@ struct DataItem {
    int data;   
    long key;
    char *imageBuffer;
+   int imageSize;
 };
 
 struct DataItem* hashArray[SIZE]; 
 struct DataItem* dummyItem;
 struct DataItem* item;
 
-char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *size);
-void insertHash(char *string, char *imageBuffer);
+char *searchHash(char *string, int w, int h, int quality, int colorSpace);
+void insertHash(char *string, char *imageBuffer, int imagesize);
 struct DataItem* deleteHash(struct DataItem* item);
 
 signed long hash(char *str){
@@ -35,8 +36,8 @@ long hashCode(long key) {
    return key % SIZE;
 }
 
-char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *size) {
-     
+char *searchHash(char *string, int w, int h, int quality, int colorSpace){
+
    char *intToString = malloc(4*sizeof(int) + 4*sizeof(char));
    sprintf(intToString, "|%d|%d|%d|%d", w, h, quality, colorSpace);
    
@@ -59,15 +60,15 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace, int *s
     ++hashIndex;
     hashIndex %= SIZE;
    }        
-
+   int imageSize;
     printf("\n     *****     Nodo non presente nella tabella Hash, procedo con l'inserimento     *****\n");
+    char *image = getBlob(string, w, h, quality, colorSpace, &imageSize);
 
-    char *image = getBlob(string, w, h, quality, colorSpace, size);
-    insertHash(toHash, image);
+    insertHash(toHash, image, imageSize);
     return image;
 }
 
-void insertHash(char *string, char *image) {
+void insertHash(char *string, char *image, int imageSize) {
 
     long key = hash(string);
     free(string);
@@ -76,6 +77,7 @@ void insertHash(char *string, char *image) {
     item->data = NULL;
     item->key = key;
     item->imageBuffer = image;
+    item->imageSize = imageSize;
 
     int hashIndex = hashCode(key);
 
@@ -126,12 +128,9 @@ int main() {
    dummyItem->data = -1;  
    dummyItem->key = -1; 
 
-   int *lunghezza, *lunghezza1;
-   char *test = searchHash("ciao", 0, 0, 0, 0, lunghezza);
-   char *test1 = searchHash("ciao", 1000, 10000, 0, 0, lunghezza);
-   printf("%x\n", searchHash("ciao", 1000, 10000, 0, 0, lunghezza));
-
-   //printf("\nAddress in Hash is: %x %x\n", test, test1);
+   char *test = searchHash("ciao", 300, 300, 0, 0);
+   char *test1 = searchHash("ciao", 1000, 10000, 0, 0);
+   printf("%x\n", searchHash("ciao", 1000, 10000, 0, 0));
 
    FILE *write_ptr;
    write_ptr = fopen("test12422221.jpg","wb");
