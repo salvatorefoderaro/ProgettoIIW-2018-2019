@@ -5,6 +5,10 @@
         "typeinfo": "c",
         "pairheap.h": "c",
         "stdio.h": "c",
-        "magickwand.h": "c"
-    }
+        "magickwand.h": "c",
+        "string.h": "c",
+        "program.h": "c",
+        "codahash.h": "c"
+    },
+    "python.linting.pylintEnabled": true
 }

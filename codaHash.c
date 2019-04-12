@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-struct nodo{
-  char indice[128];
-  struct nodo* suc;
-} nodo;
+#include "hashTableCoda.h"
+#include "codaHash.h"
 
 struct nodo* coda;
 
@@ -43,7 +40,6 @@ struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){
   }
   return coda;
 }
-
 
 struct nodo* inserisci_n(struct nodo* testa,struct nodo* nod){
   struct nodo* aus;
@@ -88,7 +84,7 @@ void stampa(struct nodo *testa){
   printf("Coda:%s\n\n",coda->indice);
 }
 
-void main(){
+/* void main(){
     struct nodo* testa;
     testa=NULL;
     coda=NULL;
@@ -144,13 +140,16 @@ void main(){
     
     stampa(testa); 
 
+
     testa=inserisci_n(testa,n);
     stampa(testa); 
     
     testa=inserisci_n(testa,n4);
     stampa(testa); 
 
+
+
     printf("ASD:%s\n",n->indice);//perche' non da errore??
     libera_ln(testa);
     printf("%s\n",testa->indice);//perche' non da errore??
-}
+} */

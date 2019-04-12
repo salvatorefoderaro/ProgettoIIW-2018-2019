@@ -2,22 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "pairheap.h"
 #include "imageToBlob.c"
+#include "hashTableCoda.h"
+#include "codaHash.h"
 
 #define SIZE 30
-
-typedef struct DataItem {
-   int data;   
-   long key;
-   char *imageBuffer;
-   int imageSize;
-   nodo *queue;
-} DataItem;
 
 DataItem* hashArray[SIZE]; 
 DataItem* dummyItem;
 DataItem* item;
+nodo *testa;
 
 char *searchHash(char *string, int w, int h, int quality, int colorSpace);
 void insertHash(char *string, char *imageBuffer, int imagesize);
@@ -28,7 +22,7 @@ signed long hash(char *str){
     int c;
 
     while (c = *str++)
-        hash = ((hash * 33) + hash) + c; /* hash * 33 + c */
+        hash = ((hash * 33) + hash) + c;
 
     return hash;
 }
@@ -56,7 +50,7 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
 
     if(hashArray[hashIndex]->key == key){
         printf("\n     *****     Nodo presente nella tabella Hash     *****     \n");
-         // inserisci_n(testa,hashArray[hashIndex]->queue);
+        testa = inserisci_n(testa,hashArray[hashIndex]->queue);
         return hashArray[hashIndex]->imageBuffer; 
     }
     ++hashIndex;
@@ -80,10 +74,11 @@ void insertHash(char *string, char *image, int imageSize) {
     item->imageBuffer = image;
     item->imageSize = imageSize;
    
-    // struct nodo *node = malloc(sizeof(struct nodo));
-    // node -> hashItem = item;
-    // node -> valore = *qualcosa*
-    // inserisci_n(testa, node);
+    struct nodo *node = malloc(sizeof(struct nodo));
+    node -> hashItem = item;
+    strcpy(node->indice, string);
+    item->queue = node;
+    testa = inserisci_n(testa, node);
 
     int hashIndex = hashCode(key);
 
@@ -129,7 +124,7 @@ void display() {
 }
 
 int main() {
-
+   testa = NULL;
    dummyItem = (struct DataItem*) malloc(sizeof(struct DataItem));
    dummyItem->data = -1;  
    dummyItem->key = -1; 
@@ -141,4 +136,7 @@ int main() {
    FILE *write_ptr;
    write_ptr = fopen("test12422221.jpg","wb");
    fwrite(test,12576,1,write_ptr);
+   
+   printf("Testa is: %s", testa);
+   stampa(testa);
 }
