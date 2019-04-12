@@ -42,6 +42,7 @@ struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){
   }else{
     coda->suc=mes;
     coda=mes;
+    mes->suc=NULL;
   }
   return coda;
 }
@@ -53,19 +54,22 @@ struct nodo* inserisci_n(struct nodo* testa,struct nodo* nod){
   struct nodo* aus2;
   aus2=testa;
   aus1=aus2;
-
   while(testa!=NULL){
     aus=testa->suc;
     if(strcmp(testa->indice,nod->indice)==0){
       if(testa->suc!=NULL){
+        
           if(testa==aus2){
-              aus2=libera_n(testa);
+              aus2=testa->suc;
+              printf("\nCIAO:");
+              puts(aus2->indice);
           }else{
               puts(aus1->indice);
-              aus1->suc=libera_n(testa);
+              aus1->suc=testa->suc;
           }   
           break;
       }else{
+          testa=aus2;
           return testa;
       }
     } 
@@ -116,29 +120,34 @@ void main(){
     stampa(testa);
 
     struct nodo *n4=malloc(sizeof(struct nodo));
-    strcpy(n4->indice,"ind1");
+    strcpy(n4->indice,"ind4");
     n4->suc=NULL;
     testa=inserisci_n(testa,n4);
 
     stampa(testa);
 
     struct nodo *n5=malloc(sizeof(struct nodo));
-    strcpy(n5->indice,"ind4");
+    strcpy(n5->indice,"ind5");
     n5->suc=NULL;
     testa=inserisci_n(testa,n5);
 
     stampa(testa);
 
-    printf("%s\n",testa->indice);
-    struct nodo *n6=malloc(sizeof(struct nodo));
-    strcpy(n6->indice,"ind3");
+    struct nodo *n6=malloc(sizeof(struct nodo)); //errore:la malloc restituisce lo stesso puntatore del nodo4. Perche'?
+    strcpy(n6->indice,"ind6");
     n6->suc=NULL;
-    printf("%s\n",n6->indice);
+    testa=inserisci_n(testa,n6);
     
-    //testa=inserisci_n(testa,n6);
+    stampa(testa); 
 
+
+    testa=inserisci_n(testa,n);
     stampa(testa); 
     
+    testa=inserisci_n(testa,n4);
+    stampa(testa); 
+
+
 
     printf("ASD:%s\n",n->indice);//perche' non da errore??
     libera_ln(testa);
