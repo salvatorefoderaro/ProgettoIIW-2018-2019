@@ -9,14 +9,32 @@ struct nodo{
 
 struct nodo* coda;
 
-struct nodo* libera_n(struct nodo *n){
+struct nodo* libera_n(struct nodo *testa,struct nodo *n){
   //nodo e' il puntatore al nodo da liberare
-  //restituisce il puntatore al nuovo nodo della lista (e quindi alla nuova testa)
+  //restituisce il puntatore alla testa
    struct nodo* new;
-   new=n->suc;
-   free(n->indice);
-   free(n);
-   return new;
+   struct nodo* aus;
+   aus=testa;
+   if(testa->indice==n->indice){
+      new=n->suc;
+      free(n->indice);
+      free(n);
+      return new;
+   }
+   else{
+      
+     while(testa->suc->indice!=n->indice){
+        if(testa->suc->suc==NULL){
+          puts("ERRORE:nodo non presente nella lista");
+          return aus;
+        }
+        testa=testa->suc;
+     }
+     testa->suc=n->suc;
+     free(n->indice);
+     free(n);
+     return aus;
+   }
 }
 
 void libera_ln(struct nodo *testa){
@@ -51,6 +69,11 @@ struct nodo* inserisci_n(struct nodo* testa,struct nodo* nod){
   struct nodo* aus2;
   aus2=testa;
   aus1=aus2;
+  if(testa==NULL){
+    testa=nod;
+    coda=nod;
+    return testa;
+  }
   while(testa!=NULL){
     aus=testa->suc;
     if(strcmp(testa->indice,nod->indice)==0){
@@ -58,10 +81,7 @@ struct nodo* inserisci_n(struct nodo* testa,struct nodo* nod){
         
           if(testa==aus2){
               aus2=testa->suc;
-              printf("\nCIAO:");
-              puts(aus2->indice);
           }else{
-              puts(aus1->indice);
               aus1->suc=testa->suc;
           }   
           break;
@@ -73,6 +93,7 @@ struct nodo* inserisci_n(struct nodo* testa,struct nodo* nod){
     aus1=testa;
     testa=aus;
   }
+  
   coda=inserisci_in_coda(coda,nod);  
   testa=aus2;
   return testa;
@@ -96,16 +117,23 @@ void main(){
     // Ho il solo ind1
 
     struct nodo *n=malloc(sizeof(struct nodo));
+    if(!n){
+      puts("Impossibile allocare memoria");
+      exit(-1);
+    }
     strcpy(n->indice,"ind1");
     n->suc=NULL;
-    testa=n;
-    coda=n;
+    testa=inserisci_n(testa,n);
 
     stampa(testa);
     
     // Inserisco ind2
 
     struct nodo *n2=malloc(sizeof(struct nodo));
+    if(!n2){
+      puts("Impossibile allocare memoria");
+      exit(-1);
+    }
     strcpy(n2->indice,"ind2");
     n2->suc=NULL;
     testa=inserisci_n(testa,n2);
@@ -115,6 +143,10 @@ void main(){
     // Inserisco ind3
 
     struct nodo *n3=malloc(sizeof(struct nodo));
+    if(!n3){
+      puts("Impossibile allocare memoria");
+      exit(-1);
+    }
     strcpy(n3->indice,"ind3");
     n3->suc=NULL;
     testa=inserisci_n(testa,n3);
@@ -124,6 +156,10 @@ void main(){
     // Ou
 
     struct nodo *n4=malloc(sizeof(struct nodo));
+    if(!n4){
+      puts("Impossibile allocare memoria");
+      exit(-1);
+    }
     strcpy(n4->indice,"ind4");
     n4->suc=NULL;
     testa=inserisci_n(testa,n4);
@@ -131,6 +167,10 @@ void main(){
     stampa(testa);
 
     struct nodo *n5=malloc(sizeof(struct nodo));
+    if(!n5){
+      puts("Impossibile allocare memoria");
+      exit(-1);
+    }
     strcpy(n5->indice,"ind5");
     n5->suc=NULL;
     testa=inserisci_n(testa,n5);
@@ -138,6 +178,10 @@ void main(){
     stampa(testa);
 
     struct nodo *n6=malloc(sizeof(struct nodo)); //errore:la malloc restituisce lo stesso puntatore del nodo4. Perche'?
+    if(!n6){
+      puts("Impossibile allocare memoria");
+      exit(-1);
+    }
     strcpy(n6->indice,"ind6");
     n6->suc=NULL;
     testa=inserisci_n(testa,n6);
@@ -149,8 +193,13 @@ void main(){
     
     testa=inserisci_n(testa,n4);
     stampa(testa); 
-
-    printf("ASD:%s\n",n->indice);//perche' non da errore??
-    libera_ln(testa);
-    printf("%s\n",testa->indice);//perche' non da errore??
+    
+    testa=libera_n(testa,n);
+    stampa(testa);
+    printf("\nASD2:%s\n",n->indice);//perche' non da errore??
+    testa=libera_n(testa,testa);    
+    stampa(testa);
+    testa=libera_n(testa,n);    
+    stampa(testa);
+    
 }
