@@ -12,4 +12,6 @@ struct DataItem {
 
 typedef struct DataItem DataItem;
 
+#define SIZE 30
+
 #endif

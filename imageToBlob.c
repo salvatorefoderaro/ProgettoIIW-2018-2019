@@ -3,9 +3,7 @@
 */ 
 
 #include <stdio.h>
-#include "MagickWand/MagickWand.h"
-
-#define SwapWands(a,b) { MagickWand *tmp=a; a=b; b=tmp; }
+#include "imageToBlob.h"
 
 void ThrowWandException(MagickWand *wand){ 
   char *description;

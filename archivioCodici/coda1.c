@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "coda.h"
 
+struct nodo{
+  char indice[128];
+  struct nodo* suc;
+} nodo;
 
+struct nodo* coda;
 
 struct nodo* libera_n(struct nodo *testa,struct nodo *n){
   //nodo e' il puntatore al nodo da liberare
@@ -33,7 +37,7 @@ struct nodo* libera_n(struct nodo *testa,struct nodo *n){
    }
 }
 
-void libera_ln(struct nodo *testa){
+struct nodo *libera_ln(struct nodo *testa){
   //testa e' il puntatore alla radice della lista collegata
   //libera la lista dalla memoria
   struct nodo* aus;
@@ -43,6 +47,7 @@ void libera_ln(struct nodo *testa){
     free(testa);
     testa=aus;
   }
+  return testa;
 }
 
 struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){
@@ -60,21 +65,27 @@ struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){
 
 
 struct nodo* inserisci_n(struct nodo* testa,struct nodo* nod){
+
+  
   struct nodo* aus;
   struct nodo* aus1;
   struct nodo* aus2;
+
   aus2=testa;
   aus1=aus2;
+<<<<<<< Updated upstream
   if(testa==NULL){
     testa=nod;
     coda=nod;
     return testa;
   }
+=======
+
+>>>>>>> Stashed changes
   while(testa!=NULL){
     aus=testa->suc;
     if(strcmp(testa->indice,nod->indice)==0){
       if(testa->suc!=NULL){
-        
           if(testa==aus2){
               aus2=testa->suc;
           }else{
@@ -105,7 +116,7 @@ void stampa(struct nodo *testa){
   printf("Coda:%s\n\n",coda->indice);
 }
 
-/* void main(){
+void main(){
     struct nodo* testa;
     testa=NULL;
     coda=NULL;
@@ -198,4 +209,4 @@ void stampa(struct nodo *testa){
     testa=libera_n(testa,n);    
     stampa(testa);
     
-} */
+}

@@ -2,38 +2,44 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "imageToBlob.h"
-#include "hashTableCoda.h"
-#include "coda.h"
+#include "pairheap.h"
+#include "imageToBlob.c"
+
+#define SIZE 30
+
+pthread_rwlock_t *account_lock;
+
+typedef struct DataItem {
+   int data;   
+   long key;
+   char *imageBuffer;
+   int imageSize;
+} DataItem;
 
 DataItem* hashArray[SIZE]; 
 DataItem* dummyItem;
 DataItem* item;
-nodo *testa;
-nodo *coda;
+
+char *searchHash(char *string, int w, int h, int quality, int colorSpace);
+void insertHash(char *string, char *imageBuffer, int imagesize);
+struct DataItem* deleteHash(struct DataItem* item);
 
 signed long hash(char *str){
-    // Questa funzione accetta come input una stringa e restituisce la sua codifica in numero
     signed long hash = 5381;
     int c;
 
     while (c = *str++)
-        hash = ((hash * 33) + hash) + c;
+        hash = ((hash * 33) + hash) + c; /* hash * 33 + c */
 
     return hash;
 }
 
 long hashCode(long key) {
-   // Questa funzione prende in input un numero e ne restituisce il modulo
-   // relativo alla dimensione della tabella Hash impostata
    return key % SIZE;
 }
 
 char *searchHash(char *string, int w, int h, int quality, int colorSpace){
-   // Questa funzione effettua la ricerca di una stringa all'interno della tabella hash
 
-   // Costruisco la stringa, utilizzando il nome del file da cercare e tutti quanti
-   // i parametri relativi all'immagine
    char *intToString = malloc(4*sizeof(int) + 4*sizeof(char));
    sprintf(intToString, "|%d|%d|%d|%d", w, h, quality, colorSpace);
    
@@ -42,65 +48,43 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
    strcat(toHash, string);
    strcat(toHash, intToString);
    
-   // Ottengo l'indice della stringa e ne faccio il modulo relativo alla mia tabella Hash
    long key = hash(toHash);
    int hashIndex = hashCode(key);
 
    free(intToString);
 	
-    // Scorro tutta la tabella Hash
-    while(hashArray[hashIndex] != NULL) {
-   
-    // Controllo che il nodo che sto cercando sia presente nella tabella
-    if(hashArray[hashIndex]->key == key){
+    pthread_rwlock_rdlock(account_lock);
 
-        // Se è presente effettuo l'inserimento nella coda con priorità, in modo
-        // da modificarne la posizione nella coda e restituisco l'indirizzo al buffer
-        // dove è contenuta l'immagine
+    while(hashArray[hashIndex] != NULL) {
+
+    if(hashArray[hashIndex]->key == key){
         printf("\n     *****     Nodo presente nella tabella Hash     *****     \n");
-        testa = inserisci_n(testa, hashArray[hashIndex]->queue);
+        pthread_rwlock_unlock(account_lock);
         return hashArray[hashIndex]->imageBuffer; 
     }
     ++hashIndex;
     hashIndex %= SIZE;
    }        
-    
-    // Se invece il nodo non è resente nella lista... Inizializzo l'intero "imageSize"
-    // per poter fare il successivo controllo con la dimensione disponibile in tabella
-    int imageSize;
+   pthread_rwlock_unlock(account_lock);
+   pthread_rwlock_wrlock(account_lock);
+   int imageSize;
     printf("\n     *****     Nodo non presente nella tabella Hash, procedo con l'inserimento     *****\n");
-    
-    // Utilizzo la funzione getBlob per caricare l'immagine con i parametri desiderati
-    // in memoria ed ottenere come valore di ritorno "image" l'indirizzo del buffer
     char *image = getBlob(string, w, h, quality, colorSpace, &imageSize);
-    
-    // Effettuo l'inserimento della nuova immagine/versione nella tabella Hash
     insertHash(toHash, image, imageSize);
-
+    pthread_rwlock_unlock(account_lock);
     return image;
 }
 
 void insertHash(char *string, char *image, int imageSize) {
-    // Questa funzione permette di inserire una nuova versione/immagine all'interno della
-    // tabella Hash
 
     long key = hash(string);
+    free(string);
 
-    // Creo il nodo per la tabella Hash ed effettuo l'inserimento
     struct DataItem *item = (struct DataItem*) malloc(sizeof(struct DataItem));
     item->data = NULL;
     item->key = key;
     item->imageBuffer = image;
     item->imageSize = imageSize;
-   
-    // Creo il nodo per la coda con priorità ed effettuo l'inserimento
-    struct nodo *node = malloc(sizeof(struct nodo));
-    node->hashItem = item;
-    strcpy(node->indice, string);
-    item->queue = node;
-    node->suc = NULL;
-    testa = inserisci_n(testa, node);
-   
 
     int hashIndex = hashCode(key);
 
@@ -110,13 +94,10 @@ void insertHash(char *string, char *image, int imageSize) {
     }
 	
     hashArray[hashIndex] = item;
-    free(string);
 }
 
-/* Funzione da sistemare */
 struct DataItem* deleteHash(struct DataItem* item) {
-   // Elimino un nodo dalla tabella Hash ma è tutto da ricontrollare questo
-
+   
    int key = item->key;
    int hashIndex = hashCode(key);
 
@@ -149,21 +130,17 @@ void display() {
 }
 
 int main() {
-   testa = NULL;
-   coda = NULL;
 
+   account_lock=malloc(sizeof(pthread_rwlock_t));
+   pthread_rwlock_init(account_lock, 0, NULL);
+   
    dummyItem = (struct DataItem*) malloc(sizeof(struct DataItem));
    dummyItem->data = -1;  
    dummyItem->key = -1; 
 
    char *test = searchHash("ciao", 300, 300, 0, 0);
-   stampa(testa);
    char *test1 = searchHash("ciao", 1000, 10000, 0, 0);
-   stampa(testa);
-   char *test2 = searchHash("ciao12345", 1000, 10000, 0, 0);
-   stampa(testa);
-   testa = libera_n(testa, testa);
-   stampa(testa);
+   printf("%x\n", searchHash("ciao", 1000, 10000, 0, 0));
 
    FILE *write_ptr;
    write_ptr = fopen("test12422221.jpg","wb");

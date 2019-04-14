@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hashTableCoda.h"
 #include "codaHash.h"
-
-struct nodo* coda;
+#include "hashTableCoda.h"
 
 struct nodo* libera_n(struct nodo *n){
   //nodo e' il puntatore al nodo da liberare
@@ -41,17 +39,20 @@ struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){
   return coda;
 }
 
+
 struct nodo* inserisci_n(struct nodo* testa,struct nodo* nod){
+
   struct nodo* aus;
   struct nodo* aus1;
   struct nodo* aus2;
+
   aus2=testa;
   aus1=aus2;
+
   while(testa!=NULL){
     aus=testa->suc;
     if(strcmp(testa->indice,nod->indice)==0){
       if(testa->suc!=NULL){
-        
           if(testa==aus2){
               aus2=testa->suc;
               printf("\nCIAO:");
@@ -140,14 +141,11 @@ void stampa(struct nodo *testa){
     
     stampa(testa); 
 
-
     testa=inserisci_n(testa,n);
     stampa(testa); 
     
     testa=inserisci_n(testa,n4);
     stampa(testa); 
-
-
 
     printf("ASD:%s\n",n->indice);//perche' non da errore??
     libera_ln(testa);
