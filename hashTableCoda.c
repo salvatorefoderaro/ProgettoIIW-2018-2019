@@ -12,6 +12,8 @@ DataItem* item;
 nodo *testa;
 nodo *coda;
 
+void insertHash(char *string, char *image, int imageSize);
+
 signed long hash(char *str){
     // Questa funzione accetta come input una stringa e restituisce la sua codifica in numero
     signed long hash = 5381;
@@ -45,7 +47,6 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
    // Ottengo l'indice della stringa e ne faccio il modulo relativo alla mia tabella Hash
    long key = hash(toHash);
    int hashIndex = hashCode(key);
-
    free(intToString);
 	
     // Scorro tutta la tabella Hash
@@ -64,58 +65,71 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
     ++hashIndex;
     hashIndex %= SIZE;
    }        
-    
-    // Se invece il nodo non è resente nella lista... Inizializzo l'intero "imageSize"
-    // per poter fare il successivo controllo con la dimensione disponibile in tabella
-    int imageSize;
-    printf("\n     *****     Nodo non presente nella tabella Hash, procedo con l'inserimento     *****\n");
-    
-    // Utilizzo la funzione getBlob per caricare l'immagine con i parametri desiderati
-    // in memoria ed ottenere come valore di ritorno "image" l'indirizzo del buffer
-    char *image = getBlob(string, w, h, quality, colorSpace, &imageSize);
-    
-    // Effettuo l'inserimento della nuova immagine/versione nella tabella Hash
-    insertHash(toHash, image, imageSize);
+   /*
+   Se invece il nodo non è resente nella lista... Inizializzo l'intero "imageSize"
+   per poter fare il successivo controllo con la dimensione disponibile in tabella
+   */
+   int imageSize;
+   printf("\n     *****     Nodo non presente nella tabella Hash, procedo con l'inserimento     *****\n");
+   
+   /*
+   Utilizzo la funzione getBlob per caricare l'immagine con i parametri desiderati
+   in memoria ed ottenere come valore di ritorno "image" l'indirizzo del buffer
+   */
 
-    return image;
+   char *image = getBlob(string, w, h, quality, colorSpace, &imageSize);
+  
+   // Effettuo l'inserimento della nuova immagine/versione nella tabella Hash
+   insertHash(toHash, image, imageSize);
+
+   return image;
 }
 
 void insertHash(char *string, char *image, int imageSize) {
-    // Questa funzione permette di inserire una nuova versione/immagine all'interno della
-    // tabella Hash
+   // Questa funzione permette di inserire una nuova versione/immagine all'interno della
+   // tabella Hash
 
-    long key = hash(string);
+   long key = hash(string);
 
-    // Creo il nodo per la tabella Hash ed effettuo l'inserimento
-    struct DataItem *item = (struct DataItem*) malloc(sizeof(struct DataItem));
-    item->data = NULL;
-    item->key = key;
-    item->imageBuffer = image;
-    item->imageSize = imageSize;
-   
-    // Creo il nodo per la coda con priorità ed effettuo l'inserimento
-    struct nodo *node = malloc(sizeof(struct nodo));
-    node->hashItem = item;
-    strcpy(node->indice, string);
-    item->queue = node;
-    node->suc = NULL;
-    testa = inserisci_n(testa, node);
-   
+   // Creo il nodo per la tabella Hash ed effettuo l'inserimento
+   struct DataItem *item = (struct DataItem*) malloc(sizeof(struct DataItem));
+   item->data = NULL;
+   item->key = key;
+   item->imageBuffer = image;
+   item->imageSize = imageSize;
 
-    int hashIndex = hashCode(key);
+   /* 
+   Questo pezzo è da modificare nella nuova versione di Francesco,
+   in quanto non dovrebbe servire più il malloc ma passo direttamente l'indice
+   della coda o comunque la stringa.
+   */
 
-    while(hashArray[hashIndex] != NULL && hashArray[hashIndex]->key != -1) {
-        ++hashIndex;
-        hashIndex %= SIZE;
-    }
-	
-    hashArray[hashIndex] = item;
-    free(string);
+   // Creo il nodo per la coda con priorità ed effettuo l'inserimento
+   struct nodo *node = malloc(sizeof(struct nodo));
+   node->hashItem = item;
+   strcpy(node->indice, string);
+   item->queue = node;
+   node->suc = NULL;
+   testa = inserisci_n(testa, node);
+
+   int hashIndex = hashCode(key);
+
+   while(hashArray[hashIndex] != NULL && hashArray[hashIndex]->key != -1) {
+      ++hashIndex;
+      hashIndex %= SIZE;
+   }
+
+   hashArray[hashIndex] = item;
+   free(string);
 }
 
-/* Funzione da sistemare */
+   /* Funzione da sistemare */
 struct DataItem* deleteHash(struct DataItem* item) {
-   // Elimino un nodo dalla tabella Hash ma è tutto da ricontrollare questo
+   /*
+   Elimino un nodo dalla tabella Hash ma è tutto da ricontrollare questo
+   in quanto non mi sembra che faccia la free del nodo precedentemente allocato,
+   ma si limita ad impostare un "dummyItem" che alcun senso non ha!
+   */
 
    int key = item->key;
    int hashIndex = hashCode(key);
@@ -152,20 +166,25 @@ int main() {
    testa = NULL;
    coda = NULL;
 
+   /*
+   dummyItem che serve per l'eliminazione, ma boh.
+   */
    dummyItem = (struct DataItem*) malloc(sizeof(struct DataItem));
    dummyItem->data = -1;  
    dummyItem->key = -1; 
 
-   char *test = searchHash("ciao", 300, 300, 0, 0);
+   char *test = searchHash("template.jpg", 0, 0, 0, 0);
+   char *test1 = searchHash("template.jpg", 1000, 10000, 0, 0);
+   char *test2 = searchHash("template.jpg", 1000, 10000, 0, 0);
    stampa(testa);
-   char *test1 = searchHash("ciao", 1000, 10000, 0, 0);
-   stampa(testa);
-   char *test2 = searchHash("ciao12345", 1000, 10000, 0, 0);
-   stampa(testa);
-   testa = libera_n(testa, testa);
-   stampa(testa);
+   // testa = libera_n(testa, testa); # Prova per vedere se funziona la rimozione della testa
+   // stampa(testa);
 
+   /*
+   Va aggiunto come parametro di input l'indirizzo dell'intero che indica la dimensione
+   in questo modo posso passarlo al Server che può mettere nell'header la lunghezza
+   */
    FILE *write_ptr;
    write_ptr = fopen("test12422221.jpg","wb");
-   fwrite(test,12576,1,write_ptr);
+   fwrite(test,5000,1,write_ptr);
 }

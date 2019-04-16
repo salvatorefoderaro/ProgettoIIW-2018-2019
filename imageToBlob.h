@@ -1,6 +1,7 @@
 #ifndef _IMAGETOBLOB_H 
 #define _IMAGETOBLOB_H
 
+#define imagePath "htdocs/img/"
 #include "MagickWand/MagickWand.h"
 
 void ThrowWandException(MagickWand *wand);

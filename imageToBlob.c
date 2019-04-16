@@ -1,7 +1,3 @@
-/*
-`pkg-config --cflags --libs MagickWand`
-*/ 
-
 #include <stdio.h>
 #include "imageToBlob.h"
 
@@ -18,16 +14,19 @@ void ThrowWandException(MagickWand *wand){
 
 char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *size){
 
-    MagickWand *output;  /* the appended output image */
-
+    MagickWand *output;
     MagickBooleanType status;
-    PixelWand *color;
-    size_t lunghezza;
     MagickWandGenesis();
+
+    char *requestedFile = malloc(strlen(fileName) + 11);
+    memset(requestedFile, 0, strlen(fileName) + 11);
+    strcat(requestedFile, imagePath);
+    strcat(requestedFile, fileName);
 
     output = NewMagickWand();
 
-    status = MagickReadImage(output, "xc:blue" );
+    status = MagickReadImage(output, requestedFile);
+    free(requestedFile);
     if (status == MagickFalse)
       ThrowWandException(output);
 
@@ -42,13 +41,13 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
     }
 
     if (quality != 0){
-    status = MagickSetImageCompressionQuality(output, 10);
+    status = MagickSetImageCompressionQuality(output, quality);
     if (status == MagickFalse)
       ThrowWandException(output);
     }
 
     if (colorSpace != 0){
-    status = MagickSetImageColorspace(output, 3);
+    status = MagickSetImageColorspace(output, colorSpace);
     if (status == MagickFalse)
       ThrowWandException(output);
     }
@@ -63,8 +62,3 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
 
     return test;
 }
-
-/* void main(void){
-  int size;
-  getBlob("Aaa", 0, 0, 0, 3, &size);
-} */

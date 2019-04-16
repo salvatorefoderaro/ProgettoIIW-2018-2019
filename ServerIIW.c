@@ -16,30 +16,7 @@
 #include <time.h>
 
 #define fflush(stdin) while(getchar() != '\n')
-#define file_utenti "user.dat"
-#define file_messaggi "messages.dat"
- 
-/*	Codici errore (Corrispondono al valore di ritorno):
- * 
- *  -1 | Accesso già effettuato
- *	-2 | Effettua prima log-in
- *	-3 | Nome utente e Password non trovati
- *	-5 | Errore nell'apertura del file
- *  -6 | Nessun messaggio presente
- * 	-7 | Errore nella scrittura del file
- * 	-8 | Il messaggio non è presente nel sistema
- * 	-9 | Non hai il permesso per eliminare il messaggio!
- *  -10 | Nome utente già presente!
- *  -11 | Stringa vuota non permessa
- * 
- *  Codice operazione:
- *	 0 | Effettua accesso -> Argomento1: nome_utente | Argomento2: password
- *   1 | Leggi tutti i messaggi -> Argomento1: NULL | Argomento2: NULL
- * 	 2 | Inserisci messaggio -> Argomento1: oggetto_messaggio | Argomento2: testo_messaggio
- * 	 3 | Rimuovi messaggio -> Argomento1: id_messaggio | Argomento2: NULL
- *   4 | Effettua registrazione -> Argomento1: nome_utente | Argomento2: password
- *   5 | Disconnessione ->	Argomento1: NULL | Argomento2: NULL
- */ 
+#define htdocsPath "htdocs"
  
 pthread_mutex_t *fileMessagesAccess;
 pthread_mutex_t *fileUsersAccess;
@@ -66,6 +43,7 @@ void *gestore_utente(void *socket){
     char comunicazioneServer[1024];
 	int ricevuti;
 	while(ricevuti = recv(sock , buffer, 4096, 0)> 0){
+		
         // Ricevo il messaggio, ma devo comunque dare una risposta
         char out[2000];
         sprintf(out, "\nSocket numero: %d\n", sock, buffer);
@@ -79,41 +57,48 @@ void *gestore_utente(void *socket){
         reqline[0] = strtok(buffer, " \t\n");
 		if ( strncmp(reqline[0], "GET\0", 4)==0){
 			requestType = reqline[0];
-
         } else if ( strncmp(reqline[0], "HEAD\0", 5) == 0){
 			requestType = reqline[0];
 		}
 
 		reqline[1] = strtok(NULL, " \t");
 		reqline[2] = strtok(NULL, " \t\n");
-
 		reqline[3] = strtok(NULL, "\n");
+
 		while (reqline[3] != NULL){
 			if(strncmp(reqline[3], "Host:", 5) == 0){
 				host = reqline[3];
-			
 			} else if(strncmp(reqline[3], "User-Agent:", 11) == 0){
 				userAgent= reqline[3];
-			
 			} else if(strncmp(reqline[3], "Accept:", 7) == 0){
 				accept = reqline[3];
 			}
 			reqline[3] = strtok(NULL, "\n");
 		}
 
+		char *fileType = malloc(5*sizeof(char));
+
         if ( strncmp(reqline[1], "/\0", 2)==0){
-            requestedFile = "htdocs/index.html";        //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
-        
+    	    requestedFile = "htdocs/index.html";        //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
 		} else {
             char *fileName= strtok(reqline[1], " ");
 			requestedFile = malloc(strlen(fileName) + 7);
 			memset(requestedFile, 0, strlen(fileName) + 7);
-			strcat(requestedFile, "htdocs");
+			strcat(requestedFile, htdocsPath);
 			strcat(requestedFile, fileName);
+
+			fileType = strrchr(fileName, '.');
+			printf("Il tipo di file è: %s", fileType + 1);
 		}
+
 		httpVersion = reqline[2];
 
 		printf("\nRequested file: %s\nRequest type is: %s\nHost is: %s\nAccept is: %s\nUser-Agent is: %s\nHTTP Version is: %s\n\n", requestedFile, requestType, host, accept, userAgent, httpVersion);
+
+		if (strcmp(fileType, ".jpg") == 0){
+			printf("\nE' un'immagine!\n");
+			// Inserire tutta la logica della tabella Hash con i vari parametri
+		}
 
         if ((fd=open(requestedFile, O_RDONLY))!=-1)    //FILE FOUND
         {
@@ -124,7 +109,7 @@ void *gestore_utente(void *socket){
             sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n", s.st_size, ctime(&s.st_mtime));
 			send(sock, responseMessage, strlen(responseMessage), 0);            
 			if(strcmp(requestType, "GET") == 0){
-				while ( (bytes_read=read(fd, data_to_send, 4096))>0)
+				while ((bytes_read=read(fd, data_to_send, 4096))>0)
 					write(sock, data_to_send, 4096);
 			}
             close(fd);
@@ -145,8 +130,6 @@ void *gestore_utente(void *socket){
 	sTm = gmtime (&now);
 	strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
 	free(buffer);
-
-
 
 	sprintf(comunicazioneServer, "%s | Socket numero: %d | Connessione interrotta", buff, sock);
 	puts(comunicazioneServer);
