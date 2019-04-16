@@ -13,7 +13,6 @@ void ThrowWandException(MagickWand *wand){
 }
 
 char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *size){
-
     MagickWand *output;
     MagickBooleanType status;
     MagickWandGenesis();
