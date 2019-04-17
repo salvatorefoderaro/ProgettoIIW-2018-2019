@@ -21,7 +21,6 @@ signed long hash(char *str){
 
     while (c = *str++)
         hash = ((hash * 33) + hash) + c;
-
     return hash;
 }
 
@@ -47,7 +46,6 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
    // Ottengo l'indice della stringa e ne faccio il modulo relativo alla mia tabella Hash
    long key = hash(toHash);
    int hashIndex = hashCode(key);
-   free(intToString);
 	
     // Scorro tutta la tabella Hash
     while(hashArray[hashIndex] != NULL) {
@@ -59,7 +57,7 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
         // da modificarne la posizione nella coda e restituisco l'indirizzo al buffer
         // dove è contenuta l'immagine
         printf("\n     *****     Nodo presente nella tabella Hash     *****     \n");
-        testa = inserisci_n(testa, hashArray[hashIndex]->queue);
+        testa = inserisci_n(testa, toHash);
         return hashArray[hashIndex]->imageBuffer; 
     }
     ++hashIndex;
@@ -97,20 +95,9 @@ void insertHash(char *string, char *image, int imageSize) {
    item->key = key;
    item->imageBuffer = image;
    item->imageSize = imageSize;
-
-   /* 
-   Questo pezzo è da modificare nella nuova versione di Francesco,
-   in quanto non dovrebbe servire più il malloc ma passo direttamente l'indice
-   della coda o comunque la stringa.
-   */
-
-   // Creo il nodo per la coda con priorità ed effettuo l'inserimento
-   struct nodo *node = malloc(sizeof(struct nodo));
-   node->hashItem = item;
-   strcpy(node->indice, string);
-   item->queue = node;
-   node->suc = NULL;
-   testa = inserisci_n(testa, node);
+   
+   // Pezzo aggiornato con la nuova versione della coda con priorità
+   testa = inserisci_n(testa, string);
 
    int hashIndex = hashCode(key);
 
@@ -184,7 +171,8 @@ int main() {
    Va aggiunto come parametro di input l'indirizzo dell'intero che indica la dimensione
    in questo modo posso passarlo al Server che può mettere nell'header la lunghezza
    */
-   FILE *write_ptr;
-   write_ptr = fopen("test12422221.jpg","wb");
-   fwrite(test,5000,1,write_ptr);
+  
+   // FILE *write_ptr;
+   // write_ptr = fopen("test12422221.jpg","wb");
+   // fwrite(test,5000,1,write_ptr);
 }
