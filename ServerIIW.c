@@ -100,7 +100,7 @@ void *gestore_utente(void *socket){
 			// Inserire tutta la logica della tabella Hash con i vari parametri
 		}
 
-        if ((fd=open(requestedFile, O_RDONLY))!=-1)    //FILE FOUND
+        if ( (fd=open(requestedFile, O_RDONLY)) !=-1)
         {
 			printf("\nValue of fd is: %d\n", fd);
             struct stat s;

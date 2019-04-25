@@ -6,11 +6,16 @@ struct DataItem {
    long key;
    char *imageBuffer;
    int imageSize;
-   struct nodo *queue;
+   pthread_rwlock_t *test;
 };
+
+struct DataItemHead {
+   long key;
+   struct DataItem *next;
+}
 
 typedef struct DataItem DataItem;
 
-#define SIZE 30
+#define SIZE 5
 
 #endif

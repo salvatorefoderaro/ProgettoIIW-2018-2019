@@ -15,7 +15,6 @@ nodo *coda;
 void insertHash(char *string, char *image, int imageSize);
 
 signed long hash(char *str){
-    // Questa funzione accetta come input una stringa e restituisce la sua codifica in numero
     signed long hash = 5381;
     int c;
 
@@ -35,13 +34,13 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
 
    // Costruisco la stringa, utilizzando il nome del file da cercare e tutti quanti
    // i parametri relativi all'immagine
-   char *intToString = malloc(4*sizeof(int) + 4*sizeof(char));
-   sprintf(intToString, "|%d|%d|%d|%d", w, h, quality, colorSpace);
+   char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
+   sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality, colorSpace);
    
-   char *toHash = malloc(4*sizeof(int) + 4*sizeof(char) + strlen(string));
+   /* char *toHash = malloc(4*sizeof(int) + 4*sizeof(char) + strlen(string));
    memset(toHash, 0, 4*sizeof(int) + 4*sizeof(char) + strlen(string));
    strcat(toHash, string);
-   strcat(toHash, intToString);
+   strcat(toHash, intToString); */
    
    // Ottengo l'indice della stringa e ne faccio il modulo relativo alla mia tabella Hash
    long key = hash(toHash);
@@ -50,15 +49,15 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
     // Scorro tutta la tabella Hash
     while(hashArray[hashIndex] != NULL) {
    
-    // Controllo che il nodo che sto cercando sia presente nella tabella
-    if(hashArray[hashIndex]->key == key){
+      // Controllo che il nodo che sto cercando sia presente nella tabella
+      if(hashArray[hashIndex]->key == key){
 
-        // Se è presente effettuo l'inserimento nella coda con priorità, in modo
-        // da modificarne la posizione nella coda e restituisco l'indirizzo al buffer
-        // dove è contenuta l'immagine
-        printf("\n     *****     Nodo presente nella tabella Hash     *****     \n");
-        testa = inserisci_n(testa, toHash);
-        return hashArray[hashIndex]->imageBuffer; 
+         // Se è presente effettuo l'inserimento nella coda con priorità, in modo
+         // da modificarne la posizione nella coda e restituisco l'indirizzo al buffer
+         // dove è contenuta l'immagine
+         printf("\n     *****     Nodo presente nella tabella Hash     *****     \n");
+         testa = inserisci_n(testa, toHash);
+         return hashArray[hashIndex]->imageBuffer; 
     }
     ++hashIndex;
     hashIndex %= SIZE;
@@ -95,6 +94,8 @@ void insertHash(char *string, char *image, int imageSize) {
    item->key = key;
    item->imageBuffer = image;
    item->imageSize = imageSize;
+   item->test = malloc(sizeof(pthread_rwlock_t));
+   pthread_rwlock_init(item->test);
    
    // Pezzo aggiornato con la nuova versione della coda con priorità
    testa = inserisci_n(testa, string);
@@ -122,13 +123,12 @@ struct DataItem* deleteHash(struct DataItem* item) {
    int hashIndex = hashCode(key);
 
    while(hashArray[hashIndex] != NULL) {
-	
       if(hashArray[hashIndex]->key == key) {
+         pthread_rwlock_rdlock(hashArray[hashIndex]->test);
          struct DataItem* temp = hashArray[hashIndex]; 
          hashArray[hashIndex] = dummyItem; 
          return temp;
-      }
-		
+      }	
       ++hashIndex;
       hashIndex %= SIZE;
    }      
@@ -139,13 +139,11 @@ void display() {
    int i = 0;
 	
    for(i = 0; i<SIZE; i++) {
-	
       if(hashArray[i] != NULL)
          printf(" (%ld,%d)",hashArray[i]->key,hashArray[i]->data);
       else
          printf(" ~~ ");
    }
-	
    printf("\n");
 }
 
@@ -160,9 +158,15 @@ int main() {
    dummyItem->data = -1;  
    dummyItem->key = -1; 
 
+   printf("\n\n");
+   display();
+   printf("\n\n");
+
    char *test = searchHash("template.jpg", 0, 0, 0, 0);
    char *test1 = searchHash("template.jpg", 1000, 10000, 0, 0);
    char *test2 = searchHash("template.jpg", 1000, 10000, 0, 0);
+   
+   printf("\n     *****     Stampa della coda con priorita'     *****\n");
    stampa(testa);
    // testa = libera_n(testa, testa); # Prova per vedere se funziona la rimozione della testa
    // stampa(testa);
