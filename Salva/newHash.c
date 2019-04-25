@@ -1,6 +1,6 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "imageToBlob.h"
 
 struct hashNode {
    long key;
@@ -14,8 +14,6 @@ typedef struct hashNode hashNode;
 hashNode *testa[SIZE] = { NULL }; 
 
 long hashCode(long key) {
-   // Questa funzione prende in input un numero e ne restituisce il modulo
-   // relativo alla dimensione della tabella Hash impostata
    return key % SIZE;
 }
 
@@ -36,14 +34,16 @@ int *deleteNode(long test){
         hashNode *toDelete = testa[hashIndex];
         testa[hashIndex] = testa[hashIndex]->next;
         int size = toDelete->imageSize;
+        MagickRelinquishMemory(toDelete->imageBuffer);
         free(toDelete);
         return size;
     }
     else if (testa[hashIndex]->key == test && testa[hashIndex]->next == NULL){
         printf("Entro nel secondo?");
         hashNode *toDelete = testa[hashIndex];
-        int size = testa[hashIndex]->imageSize;
-        free(testa[hashIndex]);
+        int size = toDelete->imageSize;
+        MagickRelinquishMemory(toDelete->imageBuffer);
+        free(toDelete);
         testa[hashIndex] = NULL;
         return size;
     } else {
@@ -54,11 +54,13 @@ int *deleteNode(long test){
         if (support->next->next != NULL){
             hashNode *toDelete = support->next;
             int size = toDelete->imageSize;
+         MagickRelinquishMemory(toDelete->imageBuffer);  
             free(toDelete);
             support->next = support->next->next;
             return size;
         } else {
             int size = support->next->imageSize;
+            MagickRelinquishMemory(support->imageBuffer);
             free(support->next);
             support->next = NULL;
             return size;
@@ -84,18 +86,16 @@ char* searchHashNode(char *string, int w, int h, int quality, int colorSpace){
         support = support->next;
     }
 
+    // Inserisco il nodo nella tabella Hash
+
     printf("\nNot found\n");
 
     hashNode *testNode = malloc(sizeof(hashNode));
     testNode->next = NULL;
     testNode->key = key;
-    testNode->imageBuffer = NULL;
+    testNode->imageBuffer = getBlob(string, w, h, quality, colorSpace, &(testNode->imageSize));
 
     insertHashNode(testNode, hashIndex);
-
-    printf("Inserted");
-
-    // Inserisco il nodo nella tabella Hash
 
 }
 
@@ -115,10 +115,14 @@ void insertHashNode(hashNode *newNode, int index){
 
 int main(void){
 
+    MagickWandGenesis();
+
     searchHashNode("AAA", 10, 10, 10, 10);
     searchHashNode("AAA", 10, 10, 10, 10);
     searchHashNode("BBBB", 10, 10, 10, 10);
     searchHashNode("BBBB", 10, 10, 10, 10);
-    deleteNode(4247311488675142450);
+    printf("\nLa dimensione eliminata è: %d\n", deleteNode(4247311488675142450));
     searchHashNode("AAA", 10, 10, 10, 10);
+
+    MagickWandTerminus();
 }

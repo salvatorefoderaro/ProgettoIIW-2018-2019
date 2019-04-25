@@ -4,7 +4,7 @@
 #include "coda.h"
 
 struct nodo{
-  char indice[128]; //identificatore del file nella tabella 
+  long indice; //identificatore del file nella tabella 
   struct nodo* suc; //puntatore al nodo successivo della lista collegata(coda)
 } nodo;
 
@@ -49,7 +49,7 @@ void libera_ln(struct nodo *testa){
   struct nodo* aus;
   while(testa!=NULL){
     aus=testa->suc;
-    free(testa->indice); 
+    // free(testa->indice); 
     free(testa);
     testa=aus;
   }

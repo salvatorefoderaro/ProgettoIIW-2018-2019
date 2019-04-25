@@ -77,16 +77,12 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
    char *image = getBlob(string, w, h, quality, colorSpace, &imageSize);
   
    // Effettuo l'inserimento della nuova immagine/versione nella tabella Hash
-   insertHash(toHash, image, imageSize);
+   insertHash(key, image, imageSize);
 
    return image;
 }
 
-void insertHash(char *string, char *image, int imageSize) {
-   // Questa funzione permette di inserire una nuova versione/immagine all'interno della
-   // tabella Hash
-
-   long key = hash(string);
+void insertHash(long key, char *image, int imageSize) {
 
    // Creo il nodo per la tabella Hash ed effettuo l'inserimento
    struct DataItem *item = (struct DataItem*) malloc(sizeof(struct DataItem));
@@ -97,7 +93,6 @@ void insertHash(char *string, char *image, int imageSize) {
    item->test = malloc(sizeof(pthread_rwlock_t));
    pthread_rwlock_init(item->test);
    
-   // Pezzo aggiornato con la nuova versione della coda con priorità
    testa = inserisci_n(testa, string);
 
    int hashIndex = hashCode(key);
