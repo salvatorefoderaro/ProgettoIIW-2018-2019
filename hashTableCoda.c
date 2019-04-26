@@ -12,6 +12,8 @@ DataItem* item;
 nodo *testa;
 nodo *coda;
 
+
+
 void insertHash(char *string, char *image, int imageSize);
 
 signed long hash(char *str){
