@@ -8,7 +8,8 @@
         "magickwand.h": "c",
         "string.h": "c",
         "program.h": "c",
-        "codahash.h": "c"
+        "codahash.h": "c",
+        "newhash.h": "c"
     },
     "python.linting.pylintEnabled": true
 }
