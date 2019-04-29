@@ -74,7 +74,7 @@ int deleteHashNode(long test){
     }
 }
 
-char* searchHashNode(char *string, int w, int h, int quality, int colorSpace){
+char* searchHashNode(char *string, int w, int h, int quality, int colorSpace, int *toSend){
 
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
@@ -87,12 +87,13 @@ char* searchHashNode(char *string, int w, int h, int quality, int colorSpace){
     int hashIndex = hashCode(key);
     printf("\nHash index is: %d\n", hashIndex);
 
-    // Scorro la tabella Hash per cercare se il nodo è presebte
+    // Scorro la tabella Hash per cercare se il nodo è presente
     hashNode *support = testaHash[hashIndex];
     while(support != NULL){
 
         if (support->key == key){
-
+            toSend = &(support->imageSize);
+            printf("\nTo send is: %d\n", *toSend);
             printf("\nFound\n");
             return support->imageBuffer;
         }
@@ -106,7 +107,9 @@ char* searchHashNode(char *string, int w, int h, int quality, int colorSpace){
     hashNode *testNode = malloc(sizeof(hashNode));
     testNode->next = NULL;
     testNode->key = key;
-    testNode->imageBuffer = getBlob(string, w, h, quality, colorSpace, &(testNode->imageSize));
+    testNode->imageBuffer = getBlob(string, w, h, quality, colorSpace, toSend);
+    testNode->imageSize = *toSend;
+    printf("\nTo send is: %d\n", *toSend);
     limite_dimensione-=testNode->imageSize;
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
@@ -146,30 +149,35 @@ void insertHashNode(hashNode *newNode, int index){
     }
 }
 
-int main(void){
+/* int main(void){
 
     MagickWandGenesis();
 
     testaCoda = NULL;
 
-    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
-    searchHashNode("AAA", 10, 10, 10, 10);
+    int *sizeWe = malloc(sizeof(int));
 
     printf("\nAvaliable dimension is: %d\n", limite_dimensione);
-    searchHashNode("AAA", 10, 10, 10, 10);
+    searchHashNode("AAA1", 10, 10, 10, 10, sizeWe);
 
     printf("\nAvaliable dimension is: %d\n", limite_dimensione);
-    searchHashNode("BBBB", 10, 10, 10, 10);
+    searchHashNode("AAA1", 10, 10, 10, 10, sizeWe);
 
     printf("\nAvaliable dimension is: %d\n", limite_dimensione);
-    searchHashNode("BBBB", 10, 10, 10, 10);
+    searchHashNode("BBBB", 10, 10, 10, 10, sizeWe);
 
     printf("\nAvaliable dimension is: %d\n", limite_dimensione);
-    printf("\nLa dimensione eliminata è: %d\n", deleteHashNode(4247311488675142450));
-    searchHashNode("AAA", 10, 10, 10, 10);
+    searchHashNode("BBBB", 10, 10, 10, 10, sizeWe);
+
+    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
+
+    // printf("\nLa dimensione eliminata è: %d\n", deleteHashNode(4247311488675142450));
+    
+    searchHashNode("AAA", 10, 10, 10, 10, sizeWe);
+    searchHashNode("AAA", 10, 10, 10, 10, sizeWe);
 
     printf("\nAvaliable dimension is: %d\n", limite_dimensione);
     stampa(testaCoda);
-
+    libera_ln(testaCoda);
     MagickWandTerminus();
-}
+} */

@@ -15,6 +15,6 @@ extern int limite_dimensione;  /* Declaration of the variable */
 
 void insertHashNode(hashNode *newNode, int index);
 int deleteHashNode(long test);
-char* searchHashNode(char *string, int w, int h, int quality, int colorSpace);
+char* searchHashNode(char *string, int w, int h, int quality, int colorSpace, int *toSend);
 
 #endif
