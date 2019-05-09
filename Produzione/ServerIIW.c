@@ -111,7 +111,7 @@ void *gestore_utente(void *socket){
 			if (strcmp(fileType, ".jpg") == 0){
 				printf("\nE' un'immagine!\n");
 				int *size = malloc(sizeof(int));
-				char *testAddress = searchHashNode(requestedFile, 0, 0, 0, 0, size);
+				char *testAddress = searchHashNode(requestedFile, 800, 600, 10, 10, size);
 
 				/*
 				char responseMessage[1000];

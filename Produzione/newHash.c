@@ -141,6 +141,9 @@ void insertHashNode(hashNode *newNode, int index){
         hashNode *support = testaHash[index];
 
         while(support->next != NULL){
+            if (support->next->key == newNode->key){
+                return
+            }
             support = support->next;
         }
         
