@@ -15,6 +15,9 @@ struct nodo* libera_n(struct nodo *testa,long n){
    struct nodo* aus;
    aus=testa;
    if(testa->indice==n){ //se il nodo da eliminare e' quello in testa 
+      //try sem in scrittura
+      //se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
+      //se va bene blocco il semaforo in scrittura relativo a testa->sem(non c' e' bisogno di liberarlo perche' elimino il nodo) 
       limite_dimensione+=deleteHashNode(n);//CONTROLLARE perche' la funzione puo' ritornare NULL
       new=testa->suc; //la nuova testa punta al successivo della vecchia 
       free(testa);

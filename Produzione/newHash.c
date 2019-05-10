@@ -74,7 +74,7 @@ int deleteHashNode(long test){
     }
 }
 
-char* searchHashNode(char *string, int w, int h, int quality, int colorSpace, int *toSend){
+hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpace, int *toSend){
 
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
@@ -95,7 +95,11 @@ char* searchHashNode(char *string, int w, int h, int quality, int colorSpace, in
             toSend = &(support->imageSize);
             printf("\nTo send is: %d\n", *toSend);
             printf("\nFound\n");
-            return support->imageBuffer;
+            //try to read sem
+            //if fail->support=testaHash[hashIndex]; //cosi' rifa' il controllo del nodo in cache(cioe' rifa' la read) perche' il semaforo e' in scrittura quindi il nodo e' in fase di eliminazione
+            //else: pthread_rwlock_rdlock(&(support->sem));
+                 //aggiugngere aggiornamento della coda con priorita'
+            return support//support->imageBuffer;
         }
 
         support = support->next;
@@ -113,15 +117,25 @@ char* searchHashNode(char *string, int w, int h, int quality, int colorSpace, in
     limite_dimensione-=testNode->imageSize;
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
+    //non serve il semaforo in scrittura per il nuovo nodo perche' nessuno puo' leggerlo o scriverci perche' non il nodo non e' ancora inserita nella hash
+
+
+    //open sem_nominato(hashIndex,0)
+    //if fail(vuol dire che qualcun' altro sta inserendo lo stesso nodo)->libera il nodoHash allocato e return NULL(ci vorrebbe un goto) (con NULL bisogna mettere un controllo nel server per cui se ritorna null rileggo)
+    //if ok->inserisco il nodo e distruggo il semaforo nominato 
+    // Effettuo l'inserimento del nodo nella tabella Hash e nella coda con priorita'
     while( (limite_dimensione - testNode->imageSize) < 0 ){
         
         // ... in caso contrario elimino la testa dalla coda con priorità per liberare spazio
-        libera_ln(testaCoda);
-    }
 
-    // Effettuo l'inserimento del nodo nella tabella Hash
+        libera_ln(testaCoda);//lui elimina solo il nodo della coda con priorita' e non il nodo nella cache
+        //libera_n(testaCoda,testNode->key); questa in piu' aggiorna la dimensione ed elimina il nodo
+
+
+    }
     insertHashNode(testNode, hashIndex);
-    return testNode->imageBuffer;
+    
+    return testNode//testNode->imageBuffer;
 }
 
 void insertHashNode(hashNode *newNode, int index){

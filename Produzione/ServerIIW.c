@@ -56,7 +56,7 @@ void *gestore_utente(void *socket){
 		/* Ottengo tutte quante le informazioni dalla richiesta */
 
         reqline[0] = strtok(buffer, " \t\n");
-		if ( strncmp(reqline[0], "GET\0", 4)==0){
+		if ( strncmp(reqline[0], "GET\0", 4)==0){ //perche' questo if? reqline[0] ha altre cose oltre Head o Get??
 			requestType = reqline[0];
         } else if ( strncmp(reqline[0], "HEAD\0", 5) == 0){
 			requestType = reqline[0];
@@ -111,15 +111,21 @@ void *gestore_utente(void *socket){
 			if (strcmp(fileType, ".jpg") == 0){
 				printf("\nE' un'immagine!\n");
 				int *size = malloc(sizeof(int));
-				char *testAddress = searchHashNode(requestedFile, 800, 600, 10, 10, size);
-
+				hashNode *testAddress = searchHashNode(requestedFile, 800, 600, 10, 10, size);
+                                /*
+                                testAddress=Null;
+                                while(testAddress==Null){
+				  hashNode *testAddress = searchHashNode(requestedFile, 800, 600, 10, 10, size);
+                                }
+                                */
 				/*
 				char responseMessage[1000];
 				sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n", *size);
 				send(sock, responseMessage, strlen(responseMessage), 0);       
 				*/
 			
-				write(sock, testAddress, *size);
+				write(sock, testAddress->imageBuffer, *size);
+                                pthread_rwlock_unlock(&(testAddress->sem))
 
 			} else {
 
