@@ -25,7 +25,7 @@ int deleteHashNode(long test){
     int hashIndex = hashCode(test);
     int size;
 
-    if (testaHash[hashIndex]->key == test && testaHash[hashIndex]->next != NULL){
+    if (testaHash[hashIndex]->key == test && testaHash[hashIndex]->next != NULL){//posso mettere i primi due if in un unico mettendo testaHash[hashIndex] = testaHash[hashIndex]->next; 
 
         printf("Entro nel primo?");
         hashNode *toDelete = testaHash[hashIndex];
@@ -53,7 +53,7 @@ int deleteHashNode(long test){
             support = support->next;
         }
 
-        if (support->next->next != NULL){
+        if (support->next->next != NULL){ //aggregare i due if?
 
             hashNode *toDelete = support->next;
             size = toDelete->imageSize;
@@ -89,20 +89,30 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
 
     // Scorro la tabella Hash per cercare se il nodo è presente
     hashNode *support = testaHash[hashIndex];
+    int c;
     while(support != NULL){
-
+        c=0;
         if (support->key == key){
-            toSend = &(support->imageSize);
-            printf("\nTo send is: %d\n", *toSend);
-            printf("\nFound\n");
             //try to read sem
-            //if fail->support=testaHash[hashIndex]; //cosi' rifa' il controllo del nodo in cache(cioe' rifa' la read) perche' il semaforo e' in scrittura quindi il nodo e' in fase di eliminazione
-            //else: pthread_rwlock_rdlock(&(support->sem));
-                 //aggiugngere aggiornamento della coda con priorita'
-            return support//support->imageBuffer;
+            if(pthread_rwlock_tryrdlock(&(support->sem))!=0){ 
+            //if fail->
+               support=testaHash[hashIndex]; //cosi' rifa' il controllo del nodo in cache(cioe' rifa' la read) perche' il semaforo e' in scrittura quindi il nodo e' in fase di eliminazione
+               c=1; //se capita che testaHash[hashIndex]->key=key (e quindi facendo->next non ci sarebbe un controllo e si avrebbe un eventuale inserimento)    
+            }//else: pthread_rwlock_rdlock(&(support->sem)); dovrebbe gia' prenderlo
+            else{
+              toSend = &(support->imageSize);
+              printf("\nTo send is: %d\n", *toSend);
+              printf("\nFound\n");
+           
+                 //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
+              //inserisci_n(testaCoda,key) quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
+              return support//support->imageBuffer;
+            }
         }
-
-        support = support->next;
+        if (c==0){
+          support = support->next;
+        }
+        
     }
 
     // Se il nodo non è stato trovato...
@@ -123,18 +133,27 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     //open sem_nominato(hashIndex,0)
     //if fail(vuol dire che qualcun' altro sta inserendo lo stesso nodo)->libera il nodoHash allocato e return NULL(ci vorrebbe un goto) (con NULL bisogna mettere un controllo nel server per cui se ritorna null rileggo)
     //if ok->inserisco il nodo e distruggo il semaforo nominato 
+    se=sem_open(toHash,O_CREAT,0666,0);      
+    if(se==NULL){ //mettere l'errore 
+        free(testNode);
+        return NULL; //restituendo NULL il server rifara' la lettura  
+    }
+  
     // Effettuo l'inserimento del nodo nella tabella Hash e nella coda con priorita'
     while( (limite_dimensione - testNode->imageSize) < 0 ){
         
         // ... in caso contrario elimino la testa dalla coda con priorità per liberare spazio
 
         libera_ln(testaCoda);//lui elimina solo il nodo della coda con priorita' e non il nodo nella cache
-        //libera_n(testaCoda,testNode->key); questa in piu' aggiorna la dimensione ed elimina il nodo
+        //libera_n(testaCoda,testaCoda); questa in piu' aggiorna la dimensione ed elimina il nodo . Dovrei passargli il nodo 
 
 
     }
     insertHashNode(testNode, hashIndex);
-    
+
+    sem_unlink(toHash);
+    sem_destroy(se);   
+         
     return testNode//testNode->imageBuffer;
 }
 

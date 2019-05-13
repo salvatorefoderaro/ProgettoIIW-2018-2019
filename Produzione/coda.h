@@ -4,9 +4,9 @@
 struct nodo;
 
 struct nodo{
-  char indice;
+  long indice;
   struct nodo* suc;
-  struct DataItem *hashItem;
+  struct hashNode *hashItem;
 };
 
 typedef struct nodo nodo;
@@ -15,7 +15,7 @@ extern int limite_dimensione;  /* Declaration of the variable */
 
 struct nodo* coda;
 
-struct nodo* libera_n(struct nodo *testa,long n);
+struct nodo* libera_n(struct nodo *testa,struct nodo * n);
 void libera_ln(struct nodo *testa);
 struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes);
 struct nodo* inserisci_n(struct nodo* testa,long nod);

@@ -8,24 +8,27 @@ int limite_dimensione = 5000000;
 
 struct nodo* coda; //puntatore alla coda della lista collegata
 
-struct nodo* libera_n(struct nodo *testa,long n){
+struct nodo* libera_n(struct nodo *testa,struct nodo * n){
   //testa e' il puntatore alla testa della coda,n e' il puntatore al nodo da liberare
   //restituisce il puntatore alla testa
    struct nodo* new;
    struct nodo* aus;
    aus=testa;
-   if(testa->indice==n){ //se il nodo da eliminare e' quello in testa 
+   if(testa->indice==n->indice){ //se il nodo da eliminare e' quello in testa 
       //try sem in scrittura
-      //se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
+      if(pthread_rwlock_trywrlock(&(n->hashNode->sem))!=0){ 
+            //if fail->
+            return NULL;
+      }//se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
       //se va bene blocco il semaforo in scrittura relativo a testa->sem(non c' e' bisogno di liberarlo perche' elimino il nodo) 
-      limite_dimensione+=deleteHashNode(n);//CONTROLLARE perche' la funzione puo' ritornare NULL
+      limite_dimensione+=deleteHashNode(n->indice);//CONTROLLARE perche' la funzione puo' ritornare NULL
       new=testa->suc; //la nuova testa punta al successivo della vecchia 
       free(testa);
       return new; //ritorno la nuova testa
    }
    else{ //se il nodo da eliminare e' nel mezzo della lista
       
-     while(!(testa->suc->indice==n)){ //cerco il nodo nella lista
+     while(!(testa->suc->indice==n->indice)){ //cerco il nodo nella lista
      //testa tiene traccia del nodo precedente al nodo da eliminare
         if(testa->suc->suc==NULL){ //se il nodo testa->suc non e' quello cercato e il nodo successivo e' NULL => il nodo ricercato non e' nella lista
           puts("ERRORE:nodo non presente nella lista");
