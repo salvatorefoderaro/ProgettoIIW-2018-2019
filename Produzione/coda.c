@@ -70,7 +70,7 @@ struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){//si potrebbe
   return coda;
 }
 
-struct nodo* inserisci_n(struct nodo* testa,long nod){
+struct nodo* inserisci_n(struct nodo* testa,long nod,hashNode *h){
   struct nodo* aus; //puntatore al nodo successivo della lista
   struct nodo* aus1; //puntatore al nodo precente a quello da ricercare/inserire
   struct nodo* aus2;//puntatore alla testa della lista
@@ -84,6 +84,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod){
     }
     n->indice=nod;
     n->suc=NULL;
+    n->hashNode=h;
     testa=n;
     coda=n;
     return testa;
@@ -117,7 +118,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod){
     }
     n2->indice=nod;
     n2->suc=NULL;
-    
+    n2->hashNode=h;
   coda=inserisci_in_coda(coda,n2);  
   testa=aus2; //aus2 tiene conto di tutte le modifiche eventuali della testa della lista
   return testa;

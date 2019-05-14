@@ -105,7 +105,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
               printf("\nFound\n");
            
                  //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
-              //inserisci_n(testaCoda,key) quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
+              inserisci_n(testaCoda,key,support) //quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
               return support//support->imageBuffer;
             }
         }
@@ -124,7 +124,6 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     testNode->imageBuffer = getBlob(string, w, h, quality, colorSpace, toSend);
     testNode->imageSize = *toSend;
     printf("\nTo send is: %d\n", *toSend);
-    limite_dimensione-=testNode->imageSize;
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
     //non serve il semaforo in scrittura per il nuovo nodo perche' nessuno puo' leggerlo o scriverci perche' non il nodo non e' ancora inserita nella hash
@@ -134,7 +133,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     //if fail(vuol dire che qualcun' altro sta inserendo lo stesso nodo)->libera il nodoHash allocato e return NULL(ci vorrebbe un goto) (con NULL bisogna mettere un controllo nel server per cui se ritorna null rileggo)
     //if ok->inserisco il nodo e distruggo il semaforo nominato 
     se=sem_open(toHash,O_CREAT,0666,0);      
-    if(se==NULL){ //mettere l'errore 
+    if(errno==EEXIST){ //mettere l'errore 
         free(testNode);
         return NULL; //restituendo NULL il server rifara' la lettura  
     }
@@ -150,7 +149,8 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
 
     }
     insertHashNode(testNode, hashIndex);
-
+    
+    limite_dimensione-=testNode->imageSize;
     sem_unlink(toHash);
     sem_destroy(se);   
          
