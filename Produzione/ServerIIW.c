@@ -15,6 +15,7 @@
 #include <signal.h>
 #include <time.h>
 #include "newHash.h"
+#include "detection.h"
 
 #define fflush(stdin) while(getchar() != '\n')
 #define htdocsPath "htdocs"
@@ -92,7 +93,7 @@ void *gestore_utente(void *socket){
 
 		httpVersion = reqline[2];
 
-		printf("\nRequested file: %s\nRequest type is: %s\nHost is: %s\nAccept is: %s\nUser-Agent is: %s\nHTTP Version is: %s\n\n", requestedFile, requestType, host, accept, userAgent, httpVersion);
+		printf("\nRequested file: %s\nRequest type is: %s\n%s\n%s\n%s\n%s\n\n", requestedFile, requestType, host, accept, userAgent, httpVersion);
 
 		struct stat buffer;   
 		if (stat(requestedFile, &buffer) != 0){
@@ -108,13 +109,15 @@ void *gestore_utente(void *socket){
 
 		} else {
 
-			if (strcmp(fileType, ".jpg") == 0){
-				printf("\nE' un'immagine!\n");
+			if (strcmp(fileType, ".jpg") == 0 || strcmp(fileType, ".jpeg") == 0 || strcmp(fileType, ".png") || strcmp(fileType, ".gif") == 0){
 				int *size = malloc(sizeof(int));
+				int width, height;
+				runDetection(userAgent, &width, &height);
 				hashNode *testAddress;
+				printf("\nWidth is: %d and height is: %d", width, height);
 				testAddress=NULL;
 				while(testAddress==NULL){
-					testAddress = searchHashNode(requestedFile, 1920, 1080, 10, 10, size);
+					testAddress = searchHashNode(requestedFile, width, height, 0, 0, size);
 			}       
 
 			char responseMessage[1000];
@@ -187,6 +190,7 @@ int main(int argc , char *argv[]){
     char client_message[2000];
     pthread_t thread, thread1, thread2;
 
+	startDetectionProvider(4,  1000);
 
     socket_desc = socket(AF_INET , SOCK_STREAM , 0);
     if (socket_desc == -1)

@@ -54,7 +54,6 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
     MagickResetIterator(output);
 
     unsigned char *test = MagickGetImageBlob(output, (size_t*)size);
-    printf("\nLa dimensione è: %d indirizzo: %x\n", *size, test);
     output = DestroyMagickWand(output);
 
     MagickWandTerminus();

@@ -27,7 +27,6 @@ int deleteHashNode(long test){
 
     if (testaHash[hashIndex]->key == test && testaHash[hashIndex]->next != NULL){//posso mettere i primi due if in un unico mettendo testaHash[hashIndex] = testaHash[hashIndex]->next; 
 
-        printf("Entro nel primo?");
         hashNode *toDelete = testaHash[hashIndex];
         testaHash[hashIndex] = testaHash[hashIndex]->next;
         size = toDelete->imageSize;
@@ -38,7 +37,6 @@ int deleteHashNode(long test){
 
     } else if (testaHash[hashIndex]->key == test && testaHash[hashIndex]->next == NULL){
 
-        printf("Entro nel secondo?");
         hashNode *toDelete = testaHash[hashIndex];
         size = toDelete->imageSize;
         MagickRelinquishMemory(toDelete->imageBuffer);
@@ -80,8 +78,6 @@ int deleteHashNode(long test){
 
 hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpace, int *toSend){
 
-    printf("\n\nAvaliable size is: %d\n\n", limite_dimensione);
-
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
     sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality, colorSpace);
@@ -91,7 +87,6 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
 
     // Ottengo l'indice della tabella dal codice generato in precedenza
     int hashIndex = hashCode(key);
-    printf("\nHash index is: %d\n", hashIndex);
 
     // Scorro la tabella Hash per cercare se il nodo è presente
     hashNode *support = testaHash[hashIndex];
@@ -109,8 +104,6 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
             }//else: pthread_rwlock_rdlock(&(support->sem)); dovrebbe gia' prenderlo
             else{
               toSend = &(support->imageSize);
-              printf("\nTo send is: %d\n", *toSend);
-              printf("\nFound\n");
               //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
               inserisci_n(testaCoda,key,support); //quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
               return support; //support->imageBuffer;
@@ -132,7 +125,6 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     testNode->imageSize = *toSend;
     testNode->sem = malloc(sizeof(pthread_rwlock_t));
     pthread_rwlock_init(testNode->sem, NULL);
-    printf("\nTo send is: %d\n", *toSend);
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
     //non serve il semaforo in scrittura per il nuovo nodo perche' nessuno puo' leggerlo o scriverci perche' non il nodo non e' ancora inserita nella hash
