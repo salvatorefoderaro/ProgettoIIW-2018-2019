@@ -1,12 +1,17 @@
 #ifndef _NEWHASH_H 
 #define _NEWHASH_H
 #include <pthread.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <semaphore.h>
+
 struct hashNode {
    long key;
    char *imageBuffer;
    struct hashNode *next;
    int imageSize;
-   pthread_rwlock_t sem; 
+   pthread_rwlock_t *sem; 
 };
 
 typedef struct hashNode hashNode;

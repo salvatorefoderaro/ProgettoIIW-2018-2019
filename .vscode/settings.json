@@ -9,7 +9,8 @@
         "string.h": "c",
         "program.h": "c",
         "codahash.h": "c",
-        "newhash.h": "c"
+        "newhash.h": "c",
+        "coda.h": "c"
     },
     "python.linting.pylintEnabled": true
 }

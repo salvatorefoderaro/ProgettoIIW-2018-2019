@@ -3,10 +3,6 @@
 #include "imageToBlob.h"
 #include "newHash.h"
 #include "coda.h"
-#include <errno.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <semaphore.h>
 
 nodo *testaCoda;
 hashNode *testaHash[SIZE] = { NULL }; 
@@ -36,6 +32,7 @@ int deleteHashNode(long test){
         testaHash[hashIndex] = testaHash[hashIndex]->next;
         size = toDelete->imageSize;
         MagickRelinquishMemory(toDelete->imageBuffer);
+        pthread_mutex_destroy(toDelete->sem);
         free(toDelete);
         return size;
 
@@ -45,6 +42,7 @@ int deleteHashNode(long test){
         hashNode *toDelete = testaHash[hashIndex];
         size = toDelete->imageSize;
         MagickRelinquishMemory(toDelete->imageBuffer);
+        pthread_mutex_destroy(toDelete->sem);
         free(toDelete);
         testaHash[hashIndex] = NULL;
         return size;
@@ -62,6 +60,7 @@ int deleteHashNode(long test){
             hashNode *toDelete = support->next;
             size = toDelete->imageSize;
             MagickRelinquishMemory(toDelete->imageBuffer);  
+            pthread_mutex_destroy(toDelete->sem);
             free(toDelete);
             support->next = support->next->next;
             return size;
@@ -70,6 +69,7 @@ int deleteHashNode(long test){
 
             size = support->next->imageSize;
             MagickRelinquishMemory(support->imageBuffer);
+            pthread_mutex_destroy(support->next->sem);
             free(support->next);
             support->next = NULL;
             return size;
@@ -79,6 +79,8 @@ int deleteHashNode(long test){
 }
 
 hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpace, int *toSend){
+
+    printf("\n\nAvaliable size is: %d\n\n", limite_dimensione);
 
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
@@ -98,7 +100,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
         c=0;
         if (support->key == key){
             //try to read sem
-            if(pthread_rwlock_tryrdlock(&(support->sem))!=0){ 
+            if(pthread_rwlock_tryrdlock(support->sem)!=0){ 
             //if fail->
                printf("\n%d\n", errno);
                getchar();
@@ -128,7 +130,8 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     testNode->key = key;
     testNode->imageBuffer = getBlob(string, w, h, quality, colorSpace, toSend);
     testNode->imageSize = *toSend;
-    pthread_rwlock_init(&(testNode->sem), NULL);
+    testNode->sem = malloc(sizeof(pthread_rwlock_t));
+    pthread_rwlock_init(testNode->sem, NULL);
     printf("\nTo send is: %d\n", *toSend);
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
@@ -143,12 +146,18 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
         return NULL; //restituendo NULL il server rifara' la lettura  
     }
   
+    if (testNode->imageSize > dimensioneTotale){
+        return testNode;
+    }
+
     // Effettuo l'inserimento del nodo nella tabella Hash e nella coda con priorita'
     while( (limite_dimensione - testNode->imageSize) < 0 ){
         
+        printf("\n\nElimino nodo perché non ho spazio!\n\n\n");
+
         // ... in caso contrario elimino la testa dalla coda con priorità per liberare spazio
 
-        libera_ln(testaCoda);//lui elimina solo il nodo della coda con priorita' e non il nodo nella cache
+        testaCoda = libera_n(testaCoda, testaCoda);//lui elimina solo il nodo della coda con priorita' e non il nodo nella cache
         //libera_n(testaCoda,testaCoda); questa in piu' aggiorna la dimensione ed elimina il nodo . Dovrei passargli il nodo 
 
     }
@@ -165,7 +174,8 @@ void insertHashNode(hashNode *newNode, int index){
 
     // Effettuo l'inserimento nella coda con priorità
     testaCoda = inserisci_n(testaCoda, newNode->key, newNode);
-
+    printf("\nThe node key is: %ld\n", newNode->key);
+    printf("Sem address in hash: %x", newNode->sem);
     // Controllo se è da efettuare l'inserimento in testa...
     if (testaHash[index] == NULL){
 
@@ -189,7 +199,7 @@ void insertHashNode(hashNode *newNode, int index){
     }
 }
 
-int main(void){
+/* int main(void){
 
     MagickWandGenesis();
 
@@ -197,26 +207,16 @@ int main(void){
 
     int *sizeWe = malloc(sizeof(int));
 
-    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
     searchHashNode("AAA1", 10, 10, 10, 10, sizeWe);
-
-    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
     searchHashNode("AAA1", 10, 10, 10, 10, sizeWe);
-
-    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
     searchHashNode("BBBB", 10, 10, 10, 10, sizeWe);
-
-    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
     searchHashNode("BBBB", 10, 10, 10, 10, sizeWe);
-
-    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
-    
     searchHashNode("AAA", 10, 10, 10, 10, sizeWe);
     searchHashNode("AAA", 10, 10, 10, 10, sizeWe);
 
-    printf("\nAvaliable dimension is: %d\n", limite_dimensione);
     stampa(testaCoda);
-    libera_ln(testaCoda);
+    testaCoda = libera_n(testaCoda, testaCoda);
+    printf("Testa coda is: %x", testaCoda);
     stampa(testaCoda);
     MagickWandTerminus();
-}
+} */

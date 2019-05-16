@@ -1,14 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "coda.h"
 #include "newHash.h"
 
-int limite_dimensione = 5000000;
+const int dimensioneTotale = 1;
+int limite_dimensione = dimensioneTotale;
 
 struct nodo* coda; //puntatore alla coda della lista collegata
 
-struct nodo* libera_n(struct nodo *testa,struct nodo * n, struct hashNode *h){
+struct nodo* libera_n(struct nodo *testa, struct nodo * n){
   //testa e' il puntatore alla testa della coda,n e' il puntatore al nodo da liberare
   //restituisce il puntatore alla testa
    struct nodo* new;
@@ -16,10 +14,16 @@ struct nodo* libera_n(struct nodo *testa,struct nodo * n, struct hashNode *h){
    aus=testa;
    if(testa->indice==n->indice){ //se il nodo da eliminare e' quello in testa 
       //try sem in scrittura
-      if(pthread_rwlock_trywrlock(&(n->hashItem->sem))!=0){ 
+      
+      // Capire perché non funziona il pthread_rwlock_init()
+
+      /*       if(pthread_rwlock_trywrlock(n->hashItem->sem)!=0){ 
+        printf("Errno number is: %d", errno);
             //if fail->
             return NULL;
-      }//se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
+      } */
+      
+      //se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
       //se va bene blocco il semaforo in scrittura relativo a testa->sem(non c' e' bisogno di liberarlo perche' elimino il nodo) 
       limite_dimensione+=deleteHashNode(n->indice);//CONTROLLARE perche' la funzione puo' ritornare NULL
       new=testa->suc; //la nuova testa punta al successivo della vecchia 
@@ -68,6 +72,7 @@ struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){//si potrebbe
     coda=mes; //aggiorno la coda
     mes->suc=NULL; //il puntatore (della coda) al nuovo nodo deve essere NULL (nel caso ho reinserimento di un nodo precedente se non metto questa riga avro' un ciclo infinito in quanto il nodo reinserito in passato puntava ad un altro nodo)
   }
+  printf("Sem address in insert in coda: %x", mes->hashItem->sem);
   return coda;
 }
 
@@ -121,6 +126,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod,struct hashNode *h){
     n2->indice=nod;
     n2->suc=NULL;
     n2->hashItem=h;
+    printf("Sem address in insert: %x", n2->hashItem->sem);
   coda=inserisci_in_coda(coda,n2);  
   testa=aus2; //aus2 tiene conto di tutte le modifiche eventuali della testa della lista
   return testa;
@@ -135,10 +141,10 @@ void stampa(struct nodo *testa){
   }
   while(testa!=NULL){
     aus=testa->suc;
-    printf("STAMPA:%d\n",testa->indice);
+    printf("STAMPA:%ld\n",testa->indice);
     testa=aus;
   }
-  printf("Coda:%d\n\n",coda->indice);
+  printf("Coda:%ld\n\n",coda->indice);
 }
 
 /* void main(){

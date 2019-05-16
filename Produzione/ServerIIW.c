@@ -114,7 +114,7 @@ void *gestore_utente(void *socket){
 				hashNode *testAddress;
 				testAddress=NULL;
 				while(testAddress==NULL){
-					testAddress = searchHashNode(requestedFile, 800, 600, 10, 10, size);
+					testAddress = searchHashNode(requestedFile, 1920, 1080, 10, 10, size);
 			}       
 
 			char responseMessage[1000];
@@ -151,7 +151,7 @@ void *gestore_utente(void *socket){
 	pthread_exit((int*)-1);
 }	
 
-/* int main(int argc , char *argv[]){			
+int main(int argc , char *argv[]){			
 	int porta;
 
 	if (argc > 2 || argc == 1){
@@ -234,4 +234,4 @@ void *gestore_utente(void *socket){
 		pthread_create(&thread, NULL, gestore_utente, (void*)socket_cliente);
     }
     return 0;
-} */
+}
