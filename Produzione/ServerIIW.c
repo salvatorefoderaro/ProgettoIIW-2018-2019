@@ -54,7 +54,6 @@ void *gestore_utente(void *socket){
 		char *reqline[4], *requestType, *host, *userAgent, *accept, *requestedFile, *httpVersion;
 
 		/* Ottengo tutte quante le informazioni dalla richiesta */
-
         reqline[0] = strtok(buffer, " \t\n");
 		if ( strncmp(reqline[0], "GET\0", 4)==0){ //perche' questo if? reqline[0] ha altre cose oltre Head o Get??
 			requestType = reqline[0];
@@ -102,46 +101,45 @@ void *gestore_utente(void *socket){
             fstat(fd, &s);
             char responseMessage[1000];
 			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
-            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n", strlen(data_to_send), ctime(&s.st_mtime));
+            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n\n", strlen(data_to_send), ctime(&s.st_mtime));
             send(sock, responseMessage, strlen(responseMessage), 0);
 			write (sock, data_to_send, strlen(data_to_send));
 			close(fd);
+
 		} else {
 
 			if (strcmp(fileType, ".jpg") == 0){
 				printf("\nE' un'immagine!\n");
 				int *size = malloc(sizeof(int));
 				hashNode *testAddress;
-                                testAddress=NULL;
-                                while(testAddress==NULL){
-				  hashNode *testAddress = searchHashNode(requestedFile, 800, 600, 10, 10, size);
-                                }
-                                */
-				/*
-				char responseMessage[1000];
-				sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n", *size);
-				send(sock, responseMessage, strlen(responseMessage), 0);       
-				*/
-			
-				write(sock, testAddress->imageBuffer, *size);
-                                pthread_rwlock_unlock(&(testAddress->sem))
+				testAddress=NULL;
+				while(testAddress==NULL){
+					testAddress = searchHashNode(requestedFile, 800, 600, 10, 10, size);
+			}       
 
+			char responseMessage[1000];
+			sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n\n", testAddress->imageSize);
+			send(sock, responseMessage, strlen(responseMessage), 0);       
+			write(sock, testAddress->imageBuffer, testAddress->imageSize);
+			pthread_rwlock_unlock(&(testAddress->sem));
+			
 			} else {
 
-			fd=open(requestedFile, O_RDONLY);
-			printf("\nValue of fd is: %d\n", fd);
-            struct stat s;
-            fstat(fd, &s);
-            char responseMessage[1000];
-            sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n", s.st_size, ctime(&s.st_mtime));
-			send(sock, responseMessage, strlen(responseMessage), 0);            
-			if(strcmp(requestType, "GET") == 0){
-				while ((bytes_read=read(fd, data_to_send, 4096))>0)
-					write(sock, data_to_send, 4096);
-			}
-            close(fd);
+				fd=open(requestedFile, O_RDONLY);
+				printf("\nValue of fd is: %d\n", fd);
+				struct stat s;
+				fstat(fd, &s);
+				char responseMessage[1000];
+				sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n\n", s.st_size, ctime(&s.st_mtime));
+				send(sock, responseMessage, strlen(responseMessage), 0);            
+				if(strcmp(requestType, "GET") == 0){
+					while ((bytes_read=read(fd, data_to_send, 4096))>0)
+						write(sock, data_to_send, 4096);
+				}
+				close(fd);
 		}
     }
+}
 	
 	time_t now = time (0);
 	sTm = gmtime (&now);
@@ -151,10 +149,9 @@ void *gestore_utente(void *socket){
 	puts(comunicazioneServer);
 	close(sock);
 	pthread_exit((int*)-1);
-}
 }	
 
-int main(int argc , char *argv[]){			
+/* int main(int argc , char *argv[]){			
 	int porta;
 
 	if (argc > 2 || argc == 1){
@@ -237,4 +234,4 @@ int main(int argc , char *argv[]){
 		pthread_create(&thread, NULL, gestore_utente, (void*)socket_cliente);
     }
     return 0;
-}
+} */

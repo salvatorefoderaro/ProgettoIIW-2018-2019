@@ -3,6 +3,10 @@
 #include "imageToBlob.h"
 #include "newHash.h"
 #include "coda.h"
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <semaphore.h>
 
 nodo *testaCoda;
 hashNode *testaHash[SIZE] = { NULL }; 
@@ -96,6 +100,8 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
             //try to read sem
             if(pthread_rwlock_tryrdlock(&(support->sem))!=0){ 
             //if fail->
+               printf("\n%d\n", errno);
+               getchar();
                support=testaHash[hashIndex]; //cosi' rifa' il controllo del nodo in cache(cioe' rifa' la read) perche' il semaforo e' in scrittura quindi il nodo e' in fase di eliminazione
                c=1; //se capita che testaHash[hashIndex]->key=key (e quindi facendo->next non ci sarebbe un controllo e si avrebbe un eventuale inserimento)    
             }//else: pthread_rwlock_rdlock(&(support->sem)); dovrebbe gia' prenderlo
@@ -103,10 +109,9 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
               toSend = &(support->imageSize);
               printf("\nTo send is: %d\n", *toSend);
               printf("\nFound\n");
-           
-                 //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
-              inserisci_n(testaCoda,key,support) //quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
-              return support//support->imageBuffer;
+              //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
+              inserisci_n(testaCoda,key,support); //quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
+              return support; //support->imageBuffer;
             }
         }
         if (c==0){
@@ -123,16 +128,16 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     testNode->key = key;
     testNode->imageBuffer = getBlob(string, w, h, quality, colorSpace, toSend);
     testNode->imageSize = *toSend;
+    pthread_rwlock_init(&(testNode->sem), NULL);
     printf("\nTo send is: %d\n", *toSend);
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
     //non serve il semaforo in scrittura per il nuovo nodo perche' nessuno puo' leggerlo o scriverci perche' non il nodo non e' ancora inserita nella hash
 
-
     //open sem_nominato(hashIndex,0)
     //if fail(vuol dire che qualcun' altro sta inserendo lo stesso nodo)->libera il nodoHash allocato e return NULL(ci vorrebbe un goto) (con NULL bisogna mettere un controllo nel server per cui se ritorna null rileggo)
     //if ok->inserisco il nodo e distruggo il semaforo nominato 
-    se=sem_open(toHash,O_CREAT,0666,0);      
+    int se=sem_open(toHash,O_CREAT,0666,0);      
     if(errno==EEXIST){ //mettere l'errore 
         free(testNode);
         return NULL; //restituendo NULL il server rifara' la lettura  
@@ -146,7 +151,6 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
         libera_ln(testaCoda);//lui elimina solo il nodo della coda con priorita' e non il nodo nella cache
         //libera_n(testaCoda,testaCoda); questa in piu' aggiorna la dimensione ed elimina il nodo . Dovrei passargli il nodo 
 
-
     }
     insertHashNode(testNode, hashIndex);
     
@@ -154,13 +158,13 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     sem_unlink(toHash);
     sem_destroy(se);   
          
-    return testNode//testNode->imageBuffer;
+    return testNode; //testNode->imageBuffer;
 }
 
 void insertHashNode(hashNode *newNode, int index){
 
     // Effettuo l'inserimento nella coda con priorità
-    testaCoda = inserisci_n(testaCoda, newNode->key);
+    testaCoda = inserisci_n(testaCoda, newNode->key, newNode);
 
     // Controllo se è da efettuare l'inserimento in testa...
     if (testaHash[index] == NULL){
@@ -175,7 +179,7 @@ void insertHashNode(hashNode *newNode, int index){
 
         while(support->next != NULL){
             if (support->next->key == newNode->key){
-                return
+                return;
             }
             support = support->next;
         }
@@ -185,7 +189,7 @@ void insertHashNode(hashNode *newNode, int index){
     }
 }
 
-/* int main(void){
+int main(void){
 
     MagickWandGenesis();
 
@@ -206,8 +210,6 @@ void insertHashNode(hashNode *newNode, int index){
     searchHashNode("BBBB", 10, 10, 10, 10, sizeWe);
 
     printf("\nAvaliable dimension is: %d\n", limite_dimensione);
-
-    // printf("\nLa dimensione eliminata è: %d\n", deleteHashNode(4247311488675142450));
     
     searchHashNode("AAA", 10, 10, 10, 10, sizeWe);
     searchHashNode("AAA", 10, 10, 10, 10, sizeWe);
@@ -215,5 +217,6 @@ void insertHashNode(hashNode *newNode, int index){
     printf("\nAvaliable dimension is: %d\n", limite_dimensione);
     stampa(testaCoda);
     libera_ln(testaCoda);
+    stampa(testaCoda);
     MagickWandTerminus();
-} */
+}

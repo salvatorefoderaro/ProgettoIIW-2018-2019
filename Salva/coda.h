@@ -6,7 +6,7 @@ struct nodo;
 struct nodo{
   char indice;
   struct nodo* suc;
-  struct DataItem *hashItem;
+  struct hashNode *hashItem;
 };
 
 typedef struct nodo nodo;

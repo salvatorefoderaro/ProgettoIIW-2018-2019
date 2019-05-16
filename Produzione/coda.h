@@ -15,10 +15,10 @@ extern int limite_dimensione;  /* Declaration of the variable */
 
 struct nodo* coda;
 
-struct nodo* libera_n(struct nodo *testa,struct nodo * n,hashNode *h);
+struct nodo* libera_n(struct nodo *testa,struct nodo * n, struct hashNode *h);
 void libera_ln(struct nodo *testa);
 struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes);
-struct nodo* inserisci_n(struct nodo* testa,long nod);
+struct nodo* inserisci_n(struct nodo* testa,long nod, struct hashNode *h);
 void stampa(struct nodo *testa);
 
 #endif 

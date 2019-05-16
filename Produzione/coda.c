@@ -8,7 +8,7 @@ int limite_dimensione = 5000000;
 
 struct nodo* coda; //puntatore alla coda della lista collegata
 
-struct nodo* libera_n(struct nodo *testa,struct nodo * n){
+struct nodo* libera_n(struct nodo *testa,struct nodo * n, struct hashNode *h){
   //testa e' il puntatore alla testa della coda,n e' il puntatore al nodo da liberare
   //restituisce il puntatore alla testa
    struct nodo* new;
@@ -16,7 +16,7 @@ struct nodo* libera_n(struct nodo *testa,struct nodo * n){
    aus=testa;
    if(testa->indice==n->indice){ //se il nodo da eliminare e' quello in testa 
       //try sem in scrittura
-      if(pthread_rwlock_trywrlock(&(n->hashNode->sem))!=0){ 
+      if(pthread_rwlock_trywrlock(&(n->hashItem->sem))!=0){ 
             //if fail->
             return NULL;
       }//se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
@@ -52,6 +52,7 @@ void libera_ln(struct nodo *testa){
   struct nodo* aus;
   while(testa!=NULL){
     aus=testa->suc;
+    limite_dimensione+=deleteHashNode(testa->indice);
     free(testa);
     testa=aus;
   }
@@ -70,7 +71,7 @@ struct nodo* inserisci_in_coda(struct nodo *coda,struct nodo *mes){//si potrebbe
   return coda;
 }
 
-struct nodo* inserisci_n(struct nodo* testa,long nod,hashNode *h){
+struct nodo* inserisci_n(struct nodo* testa,long nod,struct hashNode *h){
   struct nodo* aus; //puntatore al nodo successivo della lista
   struct nodo* aus1; //puntatore al nodo precente a quello da ricercare/inserire
   struct nodo* aus2;//puntatore alla testa della lista
@@ -84,7 +85,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod,hashNode *h){
     }
     n->indice=nod;
     n->suc=NULL;
-    n->hashNode=h;
+    n->hashItem=h;
     testa=n;
     coda=n;
     return testa;
@@ -111,6 +112,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod,hashNode *h){
     aus1=testa; //aus equivale cosi' al nodo precedente nel prossimo ciclo
     testa=aus; //testa viene incrementato al nodo successivo della lista
   }
+
   struct nodo *n2=malloc(sizeof(struct nodo)); 
     if(!n2){
       puts("Impossibile allocare memoria");
@@ -118,7 +120,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod,hashNode *h){
     }
     n2->indice=nod;
     n2->suc=NULL;
-    n2->hashNode=h;
+    n2->hashItem=h;
   coda=inserisci_in_coda(coda,n2);  
   testa=aus2; //aus2 tiene conto di tutte le modifiche eventuali della testa della lista
   return testa;
@@ -138,14 +140,14 @@ void stampa(struct nodo *testa){
   }
   printf("Coda:%d\n\n",coda->indice);
 }
-/*
- void main(){
+
+/* void main(){
     struct nodo* testa;
     testa=NULL;
     coda=NULL;
     
     // Ho il solo ind1
-    long n=1;
+    /* long n=1;
     testa=inserisci_n(testa,n);
     stampa(testa);
     
@@ -167,15 +169,15 @@ void stampa(struct nodo *testa){
     
     
     testa=inserisci_n(testa,n);
+    stampa(testa); 
+
+    libera_ln(testa);    
     stampa(testa);
 
-    testa=libera_n(testa,testa->indice);    
-    stampa(testa);
-
-    testa=libera_n(testa,n);    
+    libera_ln(testa);    
     stampa(testa);
     
-    testa=libera_n(testa,n);    
+    libera_ln(testa);    
     
 }
  */
