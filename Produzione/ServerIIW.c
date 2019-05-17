@@ -45,6 +45,8 @@ void *gestore_utente(void *socket){
     char comunicazioneServer[1024];
 	int ricevuti;
 	while(ricevuti = recv(sock , buffer, 4096, 0)> 0){
+
+		printf("\nAvaliable size is: %d\n", limite_dimensione);
 		
         // Ricevo il messaggio, ma devo comunque dare una risposta
         char out[2000];
@@ -109,7 +111,7 @@ void *gestore_utente(void *socket){
 
 		} else {
 
-			if (strcmp(fileType, ".jpg") == 0 || strcmp(fileType, ".jpeg") == 0 || strcmp(fileType, ".png") || strcmp(fileType, ".gif") == 0){
+			if (strcmp(fileType, ".jpg") == 0){
 				int *size = malloc(sizeof(int));
 				int width, height;
 				runDetection(userAgent, &width, &height);
@@ -124,10 +126,10 @@ void *gestore_utente(void *socket){
 			sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n\n", testAddress->imageSize);
 			send(sock, responseMessage, strlen(responseMessage), 0);       
 			write(sock, testAddress->imageBuffer, testAddress->imageSize);
-			pthread_rwlock_unlock(&(testAddress->sem));
+			pthread_rwlock_unlock(testAddress->sem);
 			
 			} else {
-
+				printf("\nRequested file is: %s", requestedFile);
 				fd=open(requestedFile, O_RDONLY);
 				printf("\nValue of fd is: %d\n", fd);
 				struct stat s;
@@ -150,12 +152,14 @@ void *gestore_utente(void *socket){
 
 	sprintf(comunicazioneServer, "%s | Socket numero: %d | Connessione interrotta", buff, sock);
 	puts(comunicazioneServer);
+	printf("Error: %s\n", comunicazioneServer);
 	close(sock);
 	pthread_exit((int*)-1);
 }	
 
 int main(int argc , char *argv[]){			
 	int porta;
+signal(SIGPIPE, SIG_IGN);
 
 	if (argc > 2 || argc == 1){
 

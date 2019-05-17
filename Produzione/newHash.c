@@ -94,15 +94,13 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     while(support != NULL){
         c=0;
         if (support->key == key){
-            //try to read sem
             if(pthread_rwlock_tryrdlock(support->sem)!=0){ 
             //if fail->
-               printf("\n%d\n", errno);
-               getchar();
                support=testaHash[hashIndex]; //cosi' rifa' il controllo del nodo in cache(cioe' rifa' la read) perche' il semaforo e' in scrittura quindi il nodo e' in fase di eliminazione
                c=1; //se capita che testaHash[hashIndex]->key=key (e quindi facendo->next non ci sarebbe un controllo e si avrebbe un eventuale inserimento)    
             }//else: pthread_rwlock_rdlock(&(support->sem)); dovrebbe gia' prenderlo
             else{
+                printf("\nNodo trovato!\n");
               toSend = &(support->imageSize);
               //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
               inserisci_n(testaCoda,key,support); //quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
@@ -125,6 +123,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     testNode->imageSize = *toSend;
     testNode->sem = malloc(sizeof(pthread_rwlock_t));
     pthread_rwlock_init(testNode->sem, NULL);
+    pthread_rwlock_rdlock(testNode->sem);
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
     //non serve il semaforo in scrittura per il nuovo nodo perche' nessuno puo' leggerlo o scriverci perche' non il nodo non e' ancora inserita nella hash
@@ -166,8 +165,6 @@ void insertHashNode(hashNode *newNode, int index){
 
     // Effettuo l'inserimento nella coda con priorità
     testaCoda = inserisci_n(testaCoda, newNode->key, newNode);
-    printf("\nThe node key is: %ld\n", newNode->key);
-    printf("Sem address in hash: %x", newNode->sem);
     // Controllo se è da efettuare l'inserimento in testa...
     if (testaHash[index] == NULL){
 
