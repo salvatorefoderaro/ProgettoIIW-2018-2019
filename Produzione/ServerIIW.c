@@ -46,12 +46,11 @@ void *gestore_utente(void *socket){
 	int ricevuti;
 	while(ricevuti = recv(sock , buffer, 4096, 0)> 0){
 
-		printf("\nAvaliable size is: %d\n", limite_dimensione);
+		printf("\n%s\n", buffer);
 		
         // Ricevo il messaggio, ma devo comunque dare una risposta
         char out[2000];
-        sprintf(out, "\nSocket numero: %d\n", sock, buffer);
-        puts(out);
+        sprintf(out, "\nSocket numero: %d\n%s\n", sock, buffer);
         int bytes_read;
         int fd;
 		char *reqline[4], *requestType, *host, *userAgent, *accept, *requestedFile, *httpVersion;
@@ -67,7 +66,6 @@ void *gestore_utente(void *socket){
 		reqline[1] = strtok(NULL, " \t");
 		reqline[2] = strtok(NULL, " \t\n");
 		reqline[3] = strtok(NULL, "\n");
-
 		while (reqline[3] != NULL){
 			if(strncmp(reqline[3], "Host:", 5) == 0){
 				host = reqline[3];
@@ -76,7 +74,7 @@ void *gestore_utente(void *socket){
 			} else if(strncmp(reqline[3], "Accept:", 7) == 0){
 				accept = reqline[3];
 			}
-			reqline[3] = strtok(NULL, "\n");
+			reqline[3] = strtok(NULL,"\n");
 		}
 
 		char *fileType = malloc(5*sizeof(char));
@@ -89,15 +87,13 @@ void *gestore_utente(void *socket){
 			memset(requestedFile, 0, strlen(fileName) + 7);
 			strcat(requestedFile, htdocsPath);
 			strcat(requestedFile, fileName);
-			fileType = strrchr(fileName, '.');
-			printf("Il tipo di file è: %s", fileType + 1);
+			fileType = strrchr(fileName, '.') + 1;
 		}
 
 		httpVersion = reqline[2];
 
-		printf("\nRequested file: %s\nRequest type is: %s\n%s\n%s\n%s\n%s\n\n", requestedFile, requestType, host, accept, userAgent, httpVersion);
-
 		struct stat buffer;   
+
 		if (stat(requestedFile, &buffer) != 0){
 			struct stat s;
 			fd=open("404.html", O_RDONLY);
@@ -111,15 +107,16 @@ void *gestore_utente(void *socket){
 
 		} else {
 
-			if (strcmp(fileType, ".jpg") == 0){
+			if (strcmp(fileType, "jpg") == 0){
 				int *size = malloc(sizeof(int));
 				int width, height;
+
 				runDetection(userAgent, &width, &height);
+				
 				hashNode *testAddress;
-				printf("\nWidth is: %d and height is: %d", width, height);
 				testAddress=NULL;
 				while(testAddress==NULL){
-					testAddress = searchHashNode(requestedFile, width, height, 0, 0, size);
+					testAddress = searchHashNode(requestedFile, width, height, 0, size, fileType);
 			}       
 
 			char responseMessage[1000];
@@ -152,14 +149,14 @@ void *gestore_utente(void *socket){
 
 	sprintf(comunicazioneServer, "%s | Socket numero: %d | Connessione interrotta", buff, sock);
 	puts(comunicazioneServer);
-	printf("Error: %s\n", comunicazioneServer);
 	close(sock);
 	pthread_exit((int*)-1);
 }	
 
 int main(int argc , char *argv[]){			
+	
 	int porta;
-signal(SIGPIPE, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 
 	if (argc > 2 || argc == 1){
 
@@ -194,7 +191,7 @@ signal(SIGPIPE, SIG_IGN);
     char client_message[2000];
     pthread_t thread, thread1, thread2;
 
-	startDetectionProvider(4,  1000);
+	startDetectionProvider(10,  1000);
 
     socket_desc = socket(AF_INET , SOCK_STREAM , 0);
     if (socket_desc == -1)

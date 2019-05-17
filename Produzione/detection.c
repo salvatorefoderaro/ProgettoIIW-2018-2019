@@ -18,7 +18,7 @@ int startDetectionProvider(int numWorksets, int cacheItems){
 	const char* properties = "IsMobile,ScreenPixelsHeight,ScreenPixelsWidth";
 	const char* fileName = "51Degrees-LiteV3.2.dat";
 
-	// Create a pool of 4 worksets with a cache for 1000 items.
+	// Create a pool of numWorksets worksets with a cache for cacheItems items.
 	fiftyoneDegreesDataSetInitStatus status =
 		fiftyoneDegreesInitProviderWithPropertyString(
 		fileName, &provider, properties, numWorksets, cacheItems);

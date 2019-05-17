@@ -76,11 +76,11 @@ int deleteHashNode(long test){
     }
 }
 
-hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpace, int *toSend){
+hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, char *fileType){
 
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
-    sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality, colorSpace);
+    sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality);
     
     // Converto la stringa generata in codice hash
     long key = hash(toHash);
@@ -100,7 +100,6 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
                c=1; //se capita che testaHash[hashIndex]->key=key (e quindi facendo->next non ci sarebbe un controllo e si avrebbe un eventuale inserimento)    
             }//else: pthread_rwlock_rdlock(&(support->sem)); dovrebbe gia' prenderlo
             else{
-                printf("\nNodo trovato!\n");
               toSend = &(support->imageSize);
               //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
               inserisci_n(testaCoda,key,support); //quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
@@ -119,7 +118,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     hashNode *testNode = malloc(sizeof(hashNode));
     testNode->next = NULL;
     testNode->key = key;
-    testNode->imageBuffer = getBlob(string, w, h, quality, colorSpace, toSend);
+    testNode->imageBuffer = getBlob(string, w, h, quality, toSend, fileType);
     testNode->imageSize = *toSend;
     testNode->sem = malloc(sizeof(pthread_rwlock_t));
     pthread_rwlock_init(testNode->sem, NULL);
@@ -144,8 +143,6 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int colorSpac
     // Effettuo l'inserimento del nodo nella tabella Hash e nella coda con priorita'
     while( (limite_dimensione - testNode->imageSize) < 0 ){
         
-        printf("\n\nElimino nodo perché non ho spazio!\n\n\n");
-
         // ... in caso contrario elimino la testa dalla coda con priorità per liberare spazio
 
         testaCoda = libera_n(testaCoda, testaCoda);//lui elimina solo il nodo della coda con priorita' e non il nodo nella cache

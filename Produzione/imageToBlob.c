@@ -11,7 +11,7 @@ void ThrowWandException(MagickWand *wand){
   description=(char *) MagickRelinquishMemory(description);
 }
 
-char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *size){
+char *getBlob(char *fileName, int w, int h, int quality, int *size, char *fileType){
     MagickWand *output;
     MagickBooleanType status;
 
@@ -31,7 +31,7 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
       ThrowWandException(output);
 
     // Imposto il formato dell'immagine
-    status = MagickSetImageFormat(output,"jpg");
+    status = MagickSetImageFormat(output,fileType);
     if (status == MagickFalse)
       ThrowWandException(output);
 
@@ -49,18 +49,10 @@ char *getBlob(char *fileName, int w, int h, int quality, int colorSpace, int *si
       ThrowWandException(output);
     }
 
-    // Imposto lo spazio colore dell'immagine
-    if (colorSpace != 0){
-    status = MagickSetImageColorspace(output, colorSpace);
-    if (status == MagickFalse)
-      ThrowWandException(output);
-    }
-
     MagickResetIterator(output);
 
     // Carico l'immagine in memoria
     unsigned char *test = MagickGetImageBlob(output, (size_t*)size);
-    printf("\nLa dimensione è: %d indirizzo: %x\n", *size, test);
 
     // Libero la memoria dall'oggetto output
     output = DestroyMagickWand(output);
