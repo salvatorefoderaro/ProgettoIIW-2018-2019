@@ -101,8 +101,8 @@ void *gestore_utente(void *socket){
             char responseMessage[1000];
 			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
             sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n\n", strlen(data_to_send), ctime(&s.st_mtime));
-            send(sock, responseMessage, strlen(responseMessage), 0);
-			write (sock, data_to_send, strlen(data_to_send));
+            send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);
+			send(sock, data_to_send, strlen(data_to_send), MSG_NOSIGNAL);
 			close(fd);
 
 		} else {
@@ -121,22 +121,20 @@ void *gestore_utente(void *socket){
 
 			char responseMessage[1000];
 			sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n\n", testAddress->imageSize);
-			send(sock, responseMessage, strlen(responseMessage), 0);       
-			write(sock, testAddress->imageBuffer, testAddress->imageSize);
+			send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);       
+			send(sock, testAddress->imageBuffer, testAddress->imageSize, MSG_NOSIGNAL);
 			pthread_rwlock_unlock(testAddress->sem);
 			
 			} else {
-				printf("\nRequested file is: %s", requestedFile);
 				fd=open(requestedFile, O_RDONLY);
-				printf("\nValue of fd is: %d\n", fd);
 				struct stat s;
 				fstat(fd, &s);
 				char responseMessage[1000];
 				sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n\n", s.st_size, ctime(&s.st_mtime));
-				send(sock, responseMessage, strlen(responseMessage), 0);            
+				send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);            
 				if(strcmp(requestType, "GET") == 0){
 					while ((bytes_read=read(fd, data_to_send, 4096))>0)
-						write(sock, data_to_send, 4096);
+						send(sock, data_to_send, 4096, MSG_NOSIGNAL);
 				}
 				close(fd);
 		}
@@ -156,7 +154,6 @@ void *gestore_utente(void *socket){
 int main(int argc , char *argv[]){			
 	
 	int porta;
-	signal(SIGPIPE, SIG_IGN);
 
 	if (argc > 2 || argc == 1){
 
