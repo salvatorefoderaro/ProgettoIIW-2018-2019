@@ -148,6 +148,7 @@ void *gestore_utente(void *socket){
 	sprintf(comunicazioneServer, "%s | Socket numero: %d | Connessione interrotta", buff, sock);
 	puts(comunicazioneServer);
 	close(sock);
+	free(socket);
 	pthread_exit((int*)-1);
 }	
 
@@ -228,11 +229,9 @@ int main(int argc , char *argv[]){
 		time_t now = time (0);
 		sTm = gmtime (&now);
 		strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
-		
 		char comunicazioneConnessione[1024];
 		sprintf(comunicazioneConnessione, "\n%s | Socket numero: %d | Nuova connessione accettata", buff, *socket_cliente);
 		puts(comunicazioneConnessione);
-		
 		pthread_create(&thread, NULL, gestore_utente, (void*)socket_cliente);
     }
     return 0;
