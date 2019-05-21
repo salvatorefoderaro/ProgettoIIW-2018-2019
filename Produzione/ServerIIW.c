@@ -19,19 +19,15 @@
 
 #define fflush(stdin) while(getchar() != '\n')
 #define htdocsPath "htdocs"
- 
-pthread_mutex_t *fileMessagesAccess;
-pthread_mutex_t *fileUsersAccess;
-pthread_mutex_t *counter;
 
 __thread int sock;
 struct sigaction act;
 
 void *gestore_utente(void *socket){
     char data_to_send[4096];
-	char buff[2000];
+    char buff[2000];
     struct tm *sTm;
-	int scelta, valore_ritorno, uscita_thread, read_size;
+    int scelta, valore_ritorno, uscita_thread, read_size;
 	sock = *((int*)socket);
 
 	// Struttura dati per impostare il timeout della connessione
@@ -42,6 +38,14 @@ void *gestore_utente(void *socket){
 	
     char *prova = malloc(1024*sizeof(char));
 	char *buffer = malloc(4096);
+	if(!prova){
+		perror("Malloc fallita\n");
+		return -1;
+	}
+	if(!buffer){
+		perror("Malloc fallita\n");
+		return -1;
+	}
     char comunicazioneServer[1024];
 	int ricevuti;
 	while(ricevuti = recv(sock , buffer, 4096, 0)> 0){
@@ -57,12 +61,8 @@ void *gestore_utente(void *socket){
 
 		/* Ottengo tutte quante le informazioni dalla richiesta */
         reqline[0] = strtok(buffer, " \t\n");
-		if ( strncmp(reqline[0], "GET\0", 4)==0){ //perche' questo if? reqline[0] ha altre cose oltre Head o Get??
-			requestType = reqline[0];
-        } else if ( strncmp(reqline[0], "HEAD\0", 5) == 0){
-			requestType = reqline[0];
-		}
-
+		requestType = reqline[0];
+        
 		reqline[1] = strtok(NULL, " \t");
 		reqline[2] = strtok(NULL, " \t\n");
 		reqline[3] = strtok(NULL, "\n");
@@ -80,16 +80,36 @@ void *gestore_utente(void *socket){
 		char *fileType = malloc(5*sizeof(char));
 
         if ( strncmp(reqline[1], "/\0", 2)==0){
-    	    requestedFile = "htdocs/index.html";        //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
-		} else {
-            char *fileName= strtok(reqline[1], " ");
-			requestedFile = malloc(strlen(fileName) + 7);
-			memset(requestedFile, 0, strlen(fileName) + 7);
-			strcat(requestedFile, htdocsPath);
-			strcat(requestedFile, fileName);
-			fileType = strrchr(fileName, '.') + 1;
-		}
+				requestedFile = "htdocs/index.html";
+				fileType = "html";
+				printf("Il tipo di file è: %s", fileType );
 
+                    //Because if no file is specified, index.html will be opened by default (like it happens in APACHE...
+		} else {
+				char *fileName= strtok(reqline[1], " ");
+				int lun=strlen(fileName);
+				char *fileName2= strtok(reqline[1], ".");
+		 
+				if ( strlen(fileName2)!=lun){
+					requestedFile = malloc(strlen(fileName) + 7);
+					memset(requestedFile, 0, strlen(fileName) + 7);
+					strcat(requestedFile, htdocsPath);
+					strcat(requestedFile, fileName);
+					fileType = strrchr(fileName, '.');
+					printf("Il tipo di file è: %s", fileType + 1);
+				}
+				else{
+					requestedFile = malloc(strlen(fileName) + 18);
+					memset(requestedFile, 0, strlen(fileName) + 18);
+					strcat(requestedFile, htdocsPath);
+					strcat(requestedFile, fileName);
+					strcat(requestedFile, "/index.html");
+					fileType = "html";
+					printf("Il tipo di file è: %s", fileType );
+								
+				} 
+		}
+	
 		httpVersion = reqline[2];
 
 		struct stat buffer;   
@@ -97,11 +117,14 @@ void *gestore_utente(void *socket){
 		if (stat(requestedFile, &buffer) != 0){
 			struct stat s;
 			fd=open("404.html", O_RDONLY);
+			//ERRORE OPEN
+
             fstat(fd, &s);
             char responseMessage[1000];
 			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
             sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n\n", strlen(data_to_send), ctime(&s.st_mtime));
-            send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);
+            //CONTROLLO SULLA SEND
+			send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);
 			send(sock, data_to_send, strlen(data_to_send), MSG_NOSIGNAL);
 			close(fd);
 
@@ -121,19 +144,23 @@ void *gestore_utente(void *socket){
 
 			char responseMessage[1000];
 			sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n\n", testAddress->imageSize);
+			//ERRORE SEND
 			send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);       
 			send(sock, testAddress->imageBuffer, testAddress->imageSize, MSG_NOSIGNAL);
 			pthread_rwlock_unlock(testAddress->sem);
 			
 			} else {
 				fd=open(requestedFile, O_RDONLY);
+				//ERRORE OPEN
 				struct stat s;
 				fstat(fd, &s);
 				char responseMessage[1000];
 				sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n\n", s.st_size, ctime(&s.st_mtime));
+				//ERRORE SEND
 				send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);            
 				if(strcmp(requestType, "GET") == 0){
 					while ((bytes_read=read(fd, data_to_send, 4096))>0)
+						//ERRORE SEND
 						send(sock, data_to_send, 4096, MSG_NOSIGNAL);
 				}
 				close(fd);
@@ -174,20 +201,13 @@ int main(int argc , char *argv[]){
 	}
 	} 
 	
-	fileMessagesAccess = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(fileMessagesAccess, NULL);
-	fileUsersAccess = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(fileUsersAccess, NULL);
-	counter = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(counter, NULL);
-
+	
 	char buff[20];
     struct tm *sTm;
     int socket_desc , *socket_cliente , c , read_size;
-	int utenti_connessi = 0;
     struct sockaddr_in server , client;
     char client_message[2000];
-    pthread_t thread, thread1, thread2;
+    pthread_t thread;
 
 	startDetectionProvider(10,  1000);
 
@@ -209,7 +229,8 @@ int main(int argc , char *argv[]){
     }
      
     listen(socket_desc , 3);
-     
+    //puo' fallire??
+
     puts("\nIn attesa di connessione...");
     c = sizeof(struct sockaddr_in);
      
@@ -218,7 +239,11 @@ int main(int argc , char *argv[]){
     ltime=time(NULL); 
 		
 	socket_cliente = malloc(sizeof(int));
-    *socket_cliente = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
+    if(!socket_cliente){
+		perror("Malloc fallita\n");
+		return -1;
+	}
+	*socket_cliente = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
     
 		if (*socket_cliente < 0)
 		{
