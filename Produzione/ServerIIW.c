@@ -30,7 +30,7 @@ ssize_t writen(int fd, const void *buf, size_t n){
  ptr = buf;  
  nleft = n;
  while (nleft > 0) {
-   if ( (nwritten = send(fd, ptr, nleft,0)) < 0) {
+   if ( (nwritten = send(fd, ptr, nleft,MSG_NOSIGNAL)) < 0) {
       if ((nwritten < 0) && (errno == EINTR))
 	   nwritten = 0;
       else
@@ -51,14 +51,17 @@ int readn(int fd, void *buf, size_t n) {
  char *ptr;
  ptr = buf;
  nleft = n; 
-   if ( (nread = read(fd, ptr, nleft)) < 0) {
+   if ( (nread = recv(fd, ptr, nleft, MSG_NOSIGNAL)) < 0) {
        if (errno == EINTR)/* funzione interrotta da un segnale prima di averpotuto leggere qualsiasi dato. */ 
          nread = 0;  
-       else
+       else{
 	   	 pthread_exit(-1); /*errore */
+		printf("\nEsco?\n");
+	   }
 	}
    nleft -= nread; 
-   ptr += nread; 
+   ptr += nread;
+   printf("\nnleft is: %d\n", nleft);
  return(nleft);/* return >= 0 */
 }
 
@@ -230,9 +233,9 @@ void *gestore_utente(void *socket){
 						}
 				}
 				close(fd);
-		}
-    }
-}
+			}
+   	 	}
+	}
 	
 	time_t now = time (0);
 	sTm = gmtime (&now);
