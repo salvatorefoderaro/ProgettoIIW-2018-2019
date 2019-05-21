@@ -23,6 +23,45 @@
 __thread int sock;
 struct sigaction act;
 
+ssize_t writen(int fd, const void *buf, size_t n){
+ size_t nleft;
+ ssize_t nwritten;
+ const char *ptr;
+ ptr = buf;  
+ nleft = n;
+ while (nleft > 0) {
+   if ( (nwritten = send(fd, ptr, nleft,MSG_NOSIGNAL)) <= 0) {
+      if ((nwritten < 0) && (errno == EINTR)) nwritten = 0;
+      else return(-1); /* errore */
+   } 
+   nleft -= nwritten;
+   ptr += nwritten;
+ } /* end while */
+ 
+ return(nleft);
+}
+
+
+
+int readn(int fd, void *buf, size_t n) { 
+ size_t nleft;
+ ssize_t nread;
+ char *ptr;
+ ptr = buf;
+ nleft = n; 
+ while (nleft > 0) { 
+   if ( (nread = read(fd, ptr, nleft)) < 0) {
+       if (errno == EINTR)/* funzione interrotta da un segnale prima di averpotuto leggere qualsiasi dato. */ 
+         nread = 0;  
+       else return(-1); /*errore */}     
+   else if (nread == 0) break;/* EOF: si interrompe il ciclo */ 
+   nleft -= nread; 
+   ptr += nread; 
+ }  /* end while */
+ return(nleft);/* return >= 0 */
+}
+
+
 void *gestore_utente(void *socket){
     char data_to_send[4096];
     char buff[2000];
@@ -48,8 +87,12 @@ void *gestore_utente(void *socket){
 	}
     char comunicazioneServer[1024];
 	int ricevuti;
-	while(ricevuti = recv(sock , buffer, 4096, 0)> 0){
-
+	while(ricevuti = readn(sock , buffer, 4096, 0)> 0){
+             if(ricevuti<20){
+                perror("Messaggio ricevuto troppo piccolo\n");
+                close(fd);
+                pthread_exit(-1);
+             }
 		printf("\n%s\n", buffer);
 		
         // Ricevo il messaggio, ma devo comunque dare una risposta
@@ -117,17 +160,24 @@ void *gestore_utente(void *socket){
 		if (stat(requestedFile, &buffer) != 0){
 			struct stat s;
 			fd=open("404.html", O_RDONLY);
-			//ERRORE OPEN
+			if(fd<0){
+                             perror("Apertura file fallita\n");
+                             pthread_exit(-2);
+                        }
 
             fstat(fd, &s);
             char responseMessage[1000];
 			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
-            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n\n", strlen(data_to_send), ctime(&s.st_mtime));
-            //CONTROLLO SULLA SEND
-			send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);
-			send(sock, data_to_send, strlen(data_to_send), MSG_NOSIGNAL);
+                        sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\nLast-Modified: %s\n\n", strlen(data_to_send), ctime(&s.st_mtime));
+			if(writen(sock, responseMessage, strlen(responseMessage))<0){
+                             perror("Scrittura su socket fallita\n");
+                             pthread_exit(-1);
+                        }
+			if(writen(sock, data_to_send, strlen(data_to_send))<0){
+                             perror("Scrittura su socket fallita\n");
+                             pthread_exit(-1);
+                        }
 			close(fd);
-
 		} else {
 
 			if (strcmp(fileType, "jpg") == 0){
@@ -144,24 +194,37 @@ void *gestore_utente(void *socket){
 
 			char responseMessage[1000];
 			sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n\n", testAddress->imageSize);
-			//ERRORE SEND
-			send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);       
-			send(sock, testAddress->imageBuffer, testAddress->imageSize, MSG_NOSIGNAL);
+			
+			if(writen(sock, responseMessage, strlen(responseMessage))<0){
+                                 perror("Scrittura su socket fallita\n");
+                                 pthread_exit(-1);
+                        }       
+			if(writen(sock, testAddress->imageBuffer, testAddress->imageSize)<0){
+ 				perror("Scrittura su socket fallita\n");
+                                pthread_exit(-1);
+  			}
 			pthread_rwlock_unlock(testAddress->sem);
 			
 			} else {
 				fd=open(requestedFile, O_RDONLY);
-				//ERRORE OPEN
+				if(fd<0){
+                                        perror("Apertura file fallita\n");
+                                        pthread_exit(-2);
+                                }
 				struct stat s;
 				fstat(fd, &s);
 				char responseMessage[1000];
 				sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n\n", s.st_size, ctime(&s.st_mtime));
-				//ERRORE SEND
-				send(sock, responseMessage, strlen(responseMessage), MSG_NOSIGNAL);            
+				
+				if(writen(sock, responseMessage, strlen(responseMessage))<0){
+ 					   perror("Scrittura su socket fallita\n");
+                                           pthread_exit(-1);
+				}            
 				if(strcmp(requestType, "GET") == 0){
-					while ((bytes_read=read(fd, data_to_send, 4096))>0)
-						//ERRORE SEND
-						send(sock, data_to_send, 4096, MSG_NOSIGNAL);
+				       if(writen(sock, data_to_send, 4096)<0){
+                                           perror("Scrittura su socket fallita\n");
+                                           pthread_exit(-1);
+             			       }
 				}
 				close(fd);
 		}

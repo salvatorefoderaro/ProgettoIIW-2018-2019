@@ -7,11 +7,11 @@
 nodo *testaCoda;
 hashNode *testaHash[SIZE] = { NULL }; 
 
-long hashCode(long key) {
+long hashCode(long key) { //calcolo indice per la tabella hash
    return key % SIZE;
 }
 
-signed long hash(char *str){
+signed long hash(char *str){ //calcolo il codice hash (che verra' modulato) in base alla stringa di ingresso
     signed long hash = 5381;
     int c;
 
@@ -25,7 +25,7 @@ int deleteHashNode(long test){
     int hashIndex = hashCode(test);
     int size;
 
-    if (testaHash[hashIndex]->key == test && testaHash[hashIndex]->next != NULL){//posso mettere i primi due if in un unico mettendo testaHash[hashIndex] = testaHash[hashIndex]->next; 
+    if (testaHash[hashIndex]->key == test){//posso mettere i primi due if in un unico mettendo testaHash[hashIndex] = testaHash[hashIndex]->next; 
 
         hashNode *toDelete = testaHash[hashIndex];
         testaHash[hashIndex] = testaHash[hashIndex]->next;
@@ -34,45 +34,22 @@ int deleteHashNode(long test){
         pthread_mutex_destroy(toDelete->sem);
         free(toDelete);
         return size;
-
-    } else if (testaHash[hashIndex]->key == test && testaHash[hashIndex]->next == NULL){
-
-        hashNode *toDelete = testaHash[hashIndex];
-        size = toDelete->imageSize;
-        MagickRelinquishMemory(toDelete->imageBuffer);
-        pthread_mutex_destroy(toDelete->sem);
-        free(toDelete);
-        testaHash[hashIndex] = NULL;
-        return size;
-
     } else {
 
         hashNode *support = testaHash[hashIndex];
         while(support->next->key != test){
-
+            if(support->next->next==NULL){ //se il nodo testa->suc non e' quello cercato e il nodo successivo e' NULL => il nodo ricercato non e' nella lista
+              puts("ERRORE:nodo non presente nella tabella hash");
+              return 0; //perche' non ho eliminato niente
+            }
             support = support->next;
         }
-
-        if (support->next->next != NULL){ //aggregare i due if?
-
-            hashNode *toDelete = support->next;
-            size = toDelete->imageSize;
-            MagickRelinquishMemory(toDelete->imageBuffer);  
-            pthread_mutex_destroy(toDelete->sem);
-            free(toDelete);
-            support->next = support->next->next;
-            return size;
-
-        } else {
-
-            size = support->next->imageSize;
-            MagickRelinquishMemory(support->imageBuffer);
-            pthread_mutex_destroy(support->next->sem);
-            free(support->next);
-            support->next = NULL;
-            return size;
-
-        }
+        size = toDelete->imageSize;
+        MagickRelinquishMemory(support->next->imageBuffer);  
+        pthread_mutex_destroy(support->next->sem);
+        free(support->next);
+        support->next = support->next->next;
+        return size;
     }
 }
 
@@ -80,6 +57,11 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
 
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
+    if(!toHash){
+     perror("Malloc fallita\n");
+     exit(-1);
+    } 
+    
     sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality);
     
     // Converto la stringa generata in codice hash
@@ -101,9 +83,8 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
             }//else: pthread_rwlock_rdlock(&(support->sem)); dovrebbe gia' prenderlo
             else{
               toSend = &(support->imageSize);
-              //IMPORTANTE aggiungere aggiornamento della coda con priorita' in quanto il nodo e' stato appena acceduto e quindi ha piu' priorita'
-              inserisci_n(testaCoda,key,support); //quando inserisco ho il problema: (struct DataItem *hashItem), cioe' se sostituisco il nodo devo passare anche il puntatore al DataItem     
-              return support; //support->imageBuffer;
+              inserisci_n(testaCoda,key,support);
+              return support;
             }
         }
         if (c==0){
@@ -116,6 +97,10 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
 
     // Alloco memoria per la creazione del nuovo nodo
     hashNode *testNode = malloc(sizeof(hashNode));
+    if(!testNode){
+     perror("Malloc fallita\n");
+     exit(-1);
+    } 
     testNode->next = NULL;
     testNode->key = key;
     testNode->imageBuffer = getBlob(string, w, h, quality, toSend, fileType);

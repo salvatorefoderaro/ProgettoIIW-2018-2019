@@ -21,10 +21,7 @@ struct nodo* libera_n(struct nodo *testa, struct nodo * n){
           printf("Errno number is: %d", errno);
               //if fail->
               return NULL;
-        }
-/*       printf("\nBefore deadlock\n");
-      pthread_rwlock_wrlock(n->hashItem->sem);
-      printf("\nAfter deadlock\n"); */
+    }
       //se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
       //se va bene blocco il semaforo in scrittura relativo a testa->sem(non c' e' bisogno di liberarlo perche' elimino il nodo) 
       limite_dimensione+=deleteHashNode(n->indice);//CONTROLLARE perche' la funzione puo' ritornare NULL
@@ -107,7 +104,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod,struct hashNode *h){
           }else{ //se il nodo e' in mezzo alla lista: il precedente punta al successivo
               aus1->suc=testa->suc;
           }   
-        coda=inserisci_in_coda(coda,testa);
+          coda=inserisci_in_coda(coda,testa);
           testa=aus2; //aus2 tiene conto di tutte le modifiche eventuali della testa della lista
           return testa;
       }else{
