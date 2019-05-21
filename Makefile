@@ -1,5 +1,5 @@
 cache: hashTableCoda.c coda.c imageToBlob.c
-	gcc -Wall -o cache hashTableCoda.c coda.c imageToBlob.c `pkg-config --cflags --libs MagickWand`
+	gcc -Wall -o -g cache hashTableCoda.c coda.c imageToBlob.c `pkg-config --cflags --libs MagickWand`
 
 server: ServerIIW.c
-	gcc -Wall -o server ServerIIW.c -lpthread
+	gcc -Wall -o -g server ServerIIW.c -lpthread

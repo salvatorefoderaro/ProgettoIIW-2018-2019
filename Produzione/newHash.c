@@ -44,7 +44,7 @@ int deleteHashNode(long test){
             }
             support = support->next;
         }
-        size = toDelete->imageSize;
+        size = support->imageSize;
         MagickRelinquishMemory(support->next->imageBuffer);  
         pthread_mutex_destroy(support->next->sem);
         free(support->next);
