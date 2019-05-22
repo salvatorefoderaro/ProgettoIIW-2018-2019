@@ -1,14 +1,14 @@
 #include "imageToBlob.h"
 
 void ThrowWandException(MagickWand *wand){ 
+  
   char *description;
-
   ExceptionType
   severity;
-
   description=MagickGetException(wand,&severity);
   (void) fprintf(stderr,"%s %s %lu %s\n",GetMagickModule(),description);
   description=(char *) MagickRelinquishMemory(description);
+  
 }
 
 char *getBlob(char *fileName, int w, int h, int quality, int *size, char *fileType){

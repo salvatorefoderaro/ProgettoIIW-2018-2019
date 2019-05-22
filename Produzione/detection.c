@@ -99,4 +99,3 @@ static void reportDatasetInitStatus(fiftyoneDegreesDataSetInitStatus status,
 		break;
 	}
 }
-// Snippet End

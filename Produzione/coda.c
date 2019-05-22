@@ -4,7 +4,7 @@
 const int dimensioneTotale = 50000000;
 int limite_dimensione = dimensioneTotale;
 
-struct nodo* coda; //puntatore alla coda della lista collegata
+struct nodo* coda; 
 
 struct nodo* libera_n(struct nodo *testa, struct nodo * n){
   //testa e' il puntatore alla testa della coda,n e' il puntatore al nodo da liberare
@@ -32,7 +32,6 @@ struct nodo* libera_n(struct nodo *testa, struct nodo * n){
      while(!(testa->suc->indice==n->indice)){ //cerco il nodo nella lista
      //testa tiene traccia del nodo precedente al nodo da eliminare
         if(testa->suc->suc==NULL){ //se il nodo testa->suc non e' quello cercato e il nodo successivo e' NULL => il nodo ricercato non e' nella lista
-          puts("ERRORE:nodo non presente nella lista");
           return aus; //ritorno la testa(non e' stata modificata)
         }
         testa=testa->suc;//vado al nodo successivo per continuare la ricerca
