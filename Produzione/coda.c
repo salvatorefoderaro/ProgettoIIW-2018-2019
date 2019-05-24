@@ -14,13 +14,10 @@ struct nodo* libera_n(struct nodo *testa, struct nodo * n){
    aus=testa;
    if(testa->indice==n->indice){ //se il nodo da eliminare e' quello in testa 
       //try sem in scrittura
-      
-      // Capire perché non funziona il pthread_rwlock_init()
-
     if(pthread_rwlock_trywrlock(n->hashItem->sem)!=0){ 
+      //se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :     
       return NULL;
     }
-      //se fail->return(puo' capitare che anche se era il nodo meno usato ci sta qualcuno che lo sta leggendo? non dovrebbe capitare. Anche se capitasse ritornando verrebbe cercato un nuovo nodo da eliminare(eventualmente di nuovo lui)) :
       //se va bene blocco il semaforo in scrittura relativo a testa->sem(non c' e' bisogno di liberarlo perche' elimino il nodo) 
       limite_dimensione+=deleteHashNode(n->indice);//CONTROLLARE perche' la funzione puo' ritornare NULL
       new=testa->suc; //la nuova testa punta al successivo della vecchia 

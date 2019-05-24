@@ -26,7 +26,7 @@ __thread struct tm *sTm;
 
 struct sigaction act;
 
-ssize_t writen(int fd, const void *buf, size_t n){
+ssize_t writen(int fd, const void *buf, size_t n){//send
 	size_t nleft;
 	ssize_t nwritten;
 	const char *ptr;
@@ -51,7 +51,7 @@ ssize_t writen(int fd, const void *buf, size_t n){
 	return(nleft);
 }
 
-int readn(int fd, void *buf, size_t n) { 
+int readn(int fd, void *buf, size_t n) { //recv
  size_t nleft;
 	ssize_t nread;
 	char *ptr;
@@ -91,11 +91,10 @@ void *gestore_utente(void *socket){
     tv.tv_usec = 0;
     setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 	
-	char *buffer = calloc(1, 4096*sizeof(char));
+	char *buffer = calloc(1, 4096*sizeof(char));//malloc+memset
 
 	if(!buffer){
-		//fprintf(stderr, "%s", "Malloc fallita\n");
-			time_t now = time (0);
+		 	time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
 			fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, sock);

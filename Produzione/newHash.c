@@ -25,8 +25,7 @@ int deleteHashNode(long test){
     int hashIndex = hashCode(test);
     int size;
 
-    if (testaHash[hashIndex]->key == test){//posso mettere i primi due if in un unico mettendo testaHash[hashIndex] = testaHash[hashIndex]->next; 
-
+    if (testaHash[hashIndex]->key == test){ //se il nodo e' in testa
         hashNode *toDelete = testaHash[hashIndex];
         testaHash[hashIndex] = testaHash[hashIndex]->next;
         size = toDelete->imageSize;
@@ -37,7 +36,7 @@ int deleteHashNode(long test){
     } else {
 
         hashNode *support = testaHash[hashIndex];
-        while(support->next->key != test){
+        while(support->next->key != test){//cerco il nodo nella sotto lista dell' indice
             if(support->next->next==NULL){ //se il nodo testa->suc non e' quello cercato e il nodo successivo e' NULL => il nodo ricercato non e' nella lista
               puts("ERRORE:nodo non presente nella tabella hash");
               return 0; //perche' non ho eliminato niente
@@ -80,7 +79,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
             //if fail->
                support=testaHash[hashIndex]; //cosi' rifa' il controllo del nodo in cache(cioe' rifa' la read) perche' il semaforo e' in scrittura quindi il nodo e' in fase di eliminazione
                c=1; //se capita che testaHash[hashIndex]->key=key (e quindi facendo->next non ci sarebbe un controllo e si avrebbe un eventuale inserimento)    
-            }//else: pthread_rwlock_rdlock(&(support->sem)); dovrebbe gia' prenderlo
+            }
             else{
               toSend = &(support->imageSize);
               inserisci_n(testaCoda,key,support);
@@ -106,22 +105,28 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
     testNode->imageBuffer = getBlob(string, w, h, quality, toSend, fileType);
     testNode->imageSize = *toSend;
     testNode->sem = malloc(sizeof(pthread_rwlock_t));
+    if(!(testNode->sem)){
+     fprintf(stderr, "Malloc fallita\n");
+     pthread_exit(-1);
+    } 
     pthread_rwlock_init(testNode->sem, NULL);
     pthread_rwlock_rdlock(testNode->sem);
 
     // Controllo che sia disponibile memoria per l'immagine che voglio andare ad inserire...
-    //non serve il semaforo in scrittura per il nuovo nodo perche' nessuno puo' leggerlo o scriverci perche' non il nodo non e' ancora inserita nella hash
+    //non serve il semaforo in scrittura per il nuovo nodo perche' nessuno puo' leggerlo o scriverci perche' il nodo non e' ancora inserita nella hash
 
     //open sem_nominato(hashIndex,0)
     //if fail(vuol dire che qualcun' altro sta inserendo lo stesso nodo)->libera il nodoHash allocato e return NULL(ci vorrebbe un goto) (con NULL bisogna mettere un controllo nel server per cui se ritorna null rileggo)
     //if ok->inserisco il nodo e distruggo il semaforo nominato 
     int se=sem_open(toHash,O_CREAT,0666,0);      
-    if(errno==EEXIST){ //mettere l'errore 
+    if(errno==EEXIST){ 
         free(testNode);
         return NULL; //restituendo NULL il server rifara' la lettura  
     }
   
-    if (testNode->imageSize > dimensioneTotale){
+    if (testNode->imageSize > dimensioneTotale){//controllo se l' immagine da inserire e' piu' grande della cache
+        sem_unlink(toHash);
+        sem_destroy(se);   
         return testNode;
     }
 

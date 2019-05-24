@@ -1,0 +1,37 @@
+In coda.c
+*Perche' in inserisci_in_coda non facciamo che non restituisce nulla ma che modifica la variabile globale coda?
+
+In newHash.c
+*in search , al posto di verificare se l' immagine inserita ha dimensioni maggiori della cache, non converrebbe fare il controllo all' inizio con toSize? risparmiando cosi' molto tempo nel caso l' immagine e' piu' grande
+     
+  if (*toSend > dimensioneTotale){//controllo se l' immagine da inserire e' piu' grande della cache
+               // Alloco memoria per la creazione del nuovo nodo
+    hashNode *testNode = malloc(sizeof(hashNode));
+    if(!testNode){
+     fprintf(stderr, "Malloc fallita\n");
+     pthread_exit(-1);
+    } 
+    testNode->next = NULL;
+    testNode->key = key;
+    testNode->imageBuffer = getBlob(string, w, h, quality, toSend, fileType);
+    testNode->imageSize = *toSend;
+    testNode->sem = malloc(sizeof(pthread_rwlock_t));
+    if(!(testNode->sem)){
+     fprintf(stderr, "Malloc fallita\n");
+     pthread_exit(-1);
+    } 
+    pthread_rwlock_init(testNode->sem, NULL);
+    pthread_rwlock_rdlock(testNode->sem);
+    return testNode;
+  }
+
+
+In server.c
+*in gestore_coda-> verificare tutti gli errori e se vogliamo, inserire messaggi corretti di errore(anche in stderror)
+*eventuale gestione dei segnali
+
+
+
+DA FARE:
+-Test
+-Relazione
