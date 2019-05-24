@@ -8,7 +8,8 @@ void ThrowWandException(MagickWand *wand){
   description=MagickGetException(wand,&severity);
   (void) fprintf(stderr,"%s %s %lu %s\n",GetMagickModule(),description);
   description=(char *) MagickRelinquishMemory(description);
-  
+  fprintf(stderr, "Errore nell'elaborazione dell'immagine\n");
+  pthread_exit(-1);
 }
 
 char *getBlob(char *fileName, int w, int h, int quality, int *size, char *fileType){

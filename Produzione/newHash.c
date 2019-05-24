@@ -58,8 +58,8 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string)); // Controllo sul Null per la malloc
     if(!toHash){
-     perror("Malloc fallita\n");
-     exit(-1);
+     fprintf(stderr, "Malloc fallita\n");
+     pthread_exit(-1);
     } 
     
     sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality);
@@ -98,8 +98,8 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
     // Alloco memoria per la creazione del nuovo nodo
     hashNode *testNode = malloc(sizeof(hashNode));
     if(!testNode){
-     perror("Malloc fallita\n");
-     exit(-1);
+     fprintf(stderr, "Malloc fallita\n");
+     pthread_exit(-1);
     } 
     testNode->next = NULL;
     testNode->key = key;
