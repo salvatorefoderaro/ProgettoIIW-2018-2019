@@ -35,3 +35,4 @@ In server.c
 DA FARE:
 -Test
 -Relazione
+-Controllare i "continue" al posto dei pthread_exit
