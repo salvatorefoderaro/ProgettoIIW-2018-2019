@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "src/pattern/51Degrees.h"
 
 static fiftyoneDegreesProvider provider;

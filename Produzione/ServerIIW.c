@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <sys/stat.h>
 #include <semaphore.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
@@ -16,6 +17,7 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #define htdocsPath "htdocs" 
+#define _GNU_SOURCE
 
 FILE *logFile;
 __thread int sock;
@@ -24,6 +26,8 @@ __thread struct tm *sTm;
 __thread char *buffer;
 __thread char responseMessage[1000];
 __thread int *socketSender;
+__thread char data_to_send[4096];
+
 struct sigaction act;
 
 ssize_t writen(int fd, const void *buf, size_t n){
@@ -44,7 +48,7 @@ ssize_t writen(int fd, const void *buf, size_t n){
 			close(fd);
 			free(buffer);
 			free(socketSender);
-			pthread_exit((int*)-1);
+			pthread_exit((void*)-1);
 		}
 	} 
 	nleft -= nwritten;
@@ -71,7 +75,7 @@ int readn(int fd, void *buf, size_t n) {
 			close(fd);
 			free(buffer);
 			free(socketSender);
-			pthread_exit((int*)-1);	
+			pthread_exit((void*)-1);	
 		}
 	}
 	nleft -= nread; 
@@ -85,8 +89,32 @@ void *file_flush(){
 	}
 }
 
+void sendBadRequest(int socket){
+	sprintf(responseMessage,"HTTP/1.1 400 Bad Request\n\n");
+	writen(socket, responseMessage, strlen(responseMessage));
+}
+
+void sendNotFound(int socket, char *requestedFile){
+	sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
+	sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %ld\n\n", strlen(data_to_send));
+	writen(socket, responseMessage, strlen(responseMessage)); 
+	writen(socket, data_to_send, strlen(data_to_send));
+} 
+
+void sendFoundHeader(int socket, int size, char* type){
+	if(strcmp(type, "html") == 0){
+		char *type = "text/html";
+	} else if(strcmp(type, "image") == 0){
+		char *type = "image";
+	} else {
+		char *type = "undefined";
+	}
+
+	sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\ncontent-type: %s\n\n", size, type);
+	writen(sock, responseMessage, strlen(responseMessage));
+}
+
 void *gestore_utente(void *socket){
-    char data_to_send[4096];
     int scelta, valore_ritorno, uscita_thread, read_size;
 	socketSender = socket;
 	sock = *((int*)socket);
@@ -107,17 +135,14 @@ void *gestore_utente(void *socket){
 		close(sock);
 		free(buffer);
 		free(socket);
-		pthread_exit(-1);
+		pthread_exit((void*)-1);
 	}
-    char comunicazioneServer[1024];
 	int ricevuti;
 	while(ricevuti = readn(sock , buffer, 4096)){
 		if(ricevuti>4076){
-			sprintf(responseMessage,"HTTP/1.1 400 Bad Request\nContent-Length: %d\n\n", strlen(data_to_send));
-			writen(sock, responseMessage, strlen(responseMessage));
+			sendBadRequest(sock);
 		}
 
-		
         int bytes_read;
         int fd;
 		char *reqline[4], *requestType, *host, *userAgent, *accept, *requestedFile, *httpVersion;
@@ -125,27 +150,23 @@ void *gestore_utente(void *socket){
 		/* Ottengo tutte quante le informazioni dalla richiesta */
         reqline[0] = strtok(buffer, " \t\n");
 		if (reqline[0] == NULL){
-			sprintf(responseMessage,"HTTP/1.1 400 Bad Request\nContent-Length: %d\n\n", strlen(data_to_send));
-			writen(sock, responseMessage, strlen(responseMessage));
+			sendBadRequest(sock);
 			continue;
 		}
 
 		requestType = reqline[0];
 		if ( (reqline[1] = strtok(NULL, " \t") ) == NULL){
-			sprintf(responseMessage,"HTTP/1.1 400 Bad Request\nContent-Length: %d\n\n", strlen(data_to_send));
-			writen(sock, responseMessage, strlen(responseMessage));
+			sendBadRequest(sock);
 			continue;
 		}
 
 		if ( (reqline[2] = strtok(NULL, " \t\n") ) == NULL){
-			sprintf(responseMessage,"HTTP/1.1 400 Bad Request\nContent-Length: %d\n\n", strlen(data_to_send));
-			writen(sock, responseMessage, strlen(responseMessage));
+			sendBadRequest(sock);
 			continue;
 		}
 		
 		if ( (reqline[3] = strtok(NULL, "\n") ) == NULL){
-			sprintf(responseMessage,"HTTP/1.1 400 Bad Request\nContent-Length: %d\n\n", strlen(data_to_send));
-			writen(sock, responseMessage, strlen(responseMessage));
+			sendBadRequest(sock);
 			continue;
 		}
 
@@ -199,24 +220,7 @@ void *gestore_utente(void *socket){
 		struct stat s;
 
 		if (stat(requestedFile, &s) != 0){
-			fd=open("htdocs/404.html", O_RDONLY);
-			if(fd==-1){
-				time_t now = time (0);
-				sTm = gmtime (&now);
-				strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
-				fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, sock);
-				//fprintf(stderr, "%s", "Apertura del file fallita\n");
-				close(sock);
-				free(buffer);
-				free(socket);
-				pthread_exit((int*)-1);		
-			}
-
-			sprintf(data_to_send, "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /%s was not found on this server.</p></body></html>", requestedFile);
-            sprintf(responseMessage,"HTTP/1.1 404 Not Found\nContent-Length: %d\n\n", strlen(data_to_send));
-			writen(sock, responseMessage, strlen(responseMessage));
-			writen(sock, data_to_send, strlen(data_to_send));
-			close(fd);
+			sendNotFound(sock, requestedFile);
 			continue;
 		} else {
 
@@ -231,9 +235,7 @@ void *gestore_utente(void *socket){
 					testAddress = searchHashNode(requestedFile, 0, 0, 0, &size, fileType);
 			}
 
-			sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\n\n", testAddress->imageSize);
-			
-			writen(sock, responseMessage, strlen(responseMessage));
+			sendFoundHeader(sock, testAddress->imageSize, "image");
 			writen(sock, testAddress->imageBuffer, testAddress->imageSize);
 			pthread_rwlock_unlock(testAddress->sem);
 			continue;
@@ -242,7 +244,6 @@ void *gestore_utente(void *socket){
 
 				fd=open(requestedFile, O_RDONLY);
 				if(fd<0){
-					//fprintf(stderr, "%s", "Apertura file fallita\n");
 					time_t now = time (0);
 					sTm = gmtime (&now);
 					strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
@@ -250,13 +251,13 @@ void *gestore_utente(void *socket){
 					close(sock);
 					free(buffer);
 					free(socket);
-					pthread_exit((int*)-1);	
+					close(fd);
+					pthread_exit((void*)-1);	
 				}
 				struct stat s;
 				fstat(fd, &s);
 
-				sprintf(responseMessage,"HTTP/1.1 200 OK\nContent-Length: %d\nLast-Modified: %s\n\n", s.st_size, ctime(&s.st_mtime));
-				writen(sock, responseMessage, strlen(responseMessage));
+				sendFoundHeader(sock, s.st_size, fileType);
 
 				if(strcmp(requestType, "GET") == 0){
 					while ((bytes_read=read(fd, data_to_send, 1024))>0) {
@@ -268,15 +269,6 @@ void *gestore_utente(void *socket){
 			continue;
    	 	}
 	}
-
-	time_t now = time (0);
-	sTm = gmtime (&now);
-	strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
-	fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, sock);
-	close(sock);
-	free(buffer);
-	free(socket);
-	pthread_exit((int*)-1);	
 }	
 
 int main(int argc , char *argv[]){			

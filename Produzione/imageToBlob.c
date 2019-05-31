@@ -3,13 +3,13 @@
 void ThrowWandException(MagickWand *wand){ 
   
   char *description;
-  ExceptionType
+  ExceptionType 
   severity;
   description=MagickGetException(wand,&severity);
   (void) fprintf(stderr,"%s %s %lu %s\n",GetMagickModule(),description);
   description=(char *) MagickRelinquishMemory(description);
   fprintf(stderr, "Errore nell'elaborazione dell'immagine\n");
-  pthread_exit(-1);
+  pthread_exit((void*)-1);
 }
 
 char *getBlob(char *fileName, int w, int h, int quality, int *size, char *fileType){
@@ -26,7 +26,7 @@ char *getBlob(char *fileName, int w, int h, int quality, int *size, char *fileTy
     output = NewMagickWand();
 
     // Leggo dal disco il file
-    status = MagickReadImage(output, "template.jpg");
+    status = MagickReadImage(output, fileName);
     free(requestedFile);
     if (status == MagickFalse)
       ThrowWandException(output);

@@ -5,7 +5,6 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <semaphore.h>
-
 struct hashNode {
    long key;
    char *imageBuffer;

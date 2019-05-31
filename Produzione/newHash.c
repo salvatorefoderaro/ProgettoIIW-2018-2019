@@ -31,7 +31,7 @@ int deleteHashNode(long test){
         testaHash[hashIndex] = testaHash[hashIndex]->next;
         size = toDelete->imageSize;
         MagickRelinquishMemory(toDelete->imageBuffer);
-        pthread_mutex_destroy(toDelete->sem);
+        pthread_mutex_destroy((pthread_mutex_t*)toDelete->sem);
         free(toDelete);
         return size;
     } else {
@@ -46,7 +46,7 @@ int deleteHashNode(long test){
         }
         size = support->imageSize;
         MagickRelinquishMemory(support->next->imageBuffer);  
-        pthread_mutex_destroy(support->next->sem);
+        pthread_mutex_destroy((pthread_mutex_t*)support->next->sem);
         free(support->next);
         support->next = support->next->next;
         return size;
@@ -60,10 +60,10 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
     if(!toHash){
      fprintf(stderr, "Malloc fallita\n");
      free(toHash);
-     pthread_exit(-1);
+     pthread_exit((void*)-1);
     } 
     
-    sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality);
+    sprintf(toHash, "%s|%d|%d|%d", string, w, h, quality);
     
     // Converto la stringa generata in codice hash
     long key = hash(toHash);
@@ -102,7 +102,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
     if(!testNode){
      fprintf(stderr, "Malloc fallita\n");
      free(toHash);
-     pthread_exit(-1);
+     pthread_exit((void*)-1);
     } 
     testNode->next = NULL;
     testNode->key = key;
@@ -118,7 +118,7 @@ hashNode * searchHashNode(char *string, int w, int h, int quality, int *toSend, 
     //open sem_nominato(hashIndex,0)
     //if fail(vuol dire che qualcun' altro sta inserendo lo stesso nodo)->libera il nodoHash allocato e return NULL(ci vorrebbe un goto) (con NULL bisogna mettere un controllo nel server per cui se ritorna null rileggo)
     //if ok->inserisco il nodo e distruggo il semaforo nominato 
-    int se=sem_open(toHash,O_CREAT,0666,0);      
+    sem_t* se=sem_open(toHash,O_CREAT,0666,0);      
     if(errno==EEXIST){ //mettere l'errore 
         free(testNode);
         free(toHash);

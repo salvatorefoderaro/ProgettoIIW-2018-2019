@@ -78,7 +78,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod,struct hashNode *h){
     struct nodo *n=malloc(sizeof(struct nodo)); 
     if(!n){
       fprintf(stderr, "Impossibile allocare memoria");
-      pthread_exit(-1);
+      pthread_exit((void*)-1);
     }
     n->indice=nod;
     n->suc=NULL;
@@ -113,7 +113,7 @@ struct nodo* inserisci_n(struct nodo* testa,long nod,struct hashNode *h){
   struct nodo *n2=malloc(sizeof(struct nodo)); 
     if(!n2){
       fprintf(stderr, "Impossibile allocare memoria");
-      pthread_exit(-1);
+      pthread_exit((void*)-1);
     }
     n2->indice=nod;
     n2->suc=NULL;
