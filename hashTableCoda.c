@@ -14,7 +14,7 @@ nodo *coda;
 
 
 
-void insertHash(char *string, char *image, int imageSize);
+void insertHash(char *string. char *image. int imageSize);
 
 signed long hash(char *str){
     signed long hash = 5381;
@@ -31,18 +31,18 @@ long hashCode(long key) {
    return key % SIZE;
 }
 
-char *searchHash(char *string, int w, int h, int quality, int colorSpace){
+char *searchHash(char *string. int w. int h. int quality. int colorSpace){
    // Questa funzione effettua la ricerca di una stringa all'interno della tabella hash
 
-   // Costruisco la stringa, utilizzando il nome del file da cercare e tutti quanti
+   // Costruisco la stringa. utilizzando il nome del file da cercare e tutti quanti
    // i parametri relativi all'immagine
    char *toHash = malloc(4*sizeof(int) + 4*sizeof(char)+strlen(string));
-   sprintf(toHash, "%s|%d|%d|%d|%d", string, w, h, quality, colorSpace);
+   sprintf(toHash. "%s|%d|%d|%d|%d". string. w. h. quality. colorSpace);
    
    /* char *toHash = malloc(4*sizeof(int) + 4*sizeof(char) + strlen(string));
-   memset(toHash, 0, 4*sizeof(int) + 4*sizeof(char) + strlen(string));
-   strcat(toHash, string);
-   strcat(toHash, intToString); */
+   memset(toHash. 0. 4*sizeof(int) + 4*sizeof(char) + strlen(string));
+   strcat(toHash. string);
+   strcat(toHash. intToString); */
    
    // Ottengo l'indice della stringa e ne faccio il modulo relativo alla mia tabella Hash
    long key = hash(toHash);
@@ -54,11 +54,11 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
       // Controllo che il nodo che sto cercando sia presente nella tabella
       if(hashArray[hashIndex]->key == key){
 
-         // Se è presente effettuo l'inserimento nella coda con priorità, in modo
+         // Se è presente effettuo l'inserimento nella coda con priorità. in modo
          // da modificarne la posizione nella coda e restituisco l'indirizzo al buffer
          // dove è contenuta l'immagine
          printf("\n     *****     Nodo presente nella tabella Hash     *****     \n");
-         testa = inserisci_n(testa, toHash);
+         testa = inserisci_n(testa. toHash);
          return hashArray[hashIndex]->imageBuffer; 
     }
     ++hashIndex;
@@ -69,22 +69,22 @@ char *searchHash(char *string, int w, int h, int quality, int colorSpace){
    per poter fare il successivo controllo con la dimensione disponibile in tabella
    */
    int imageSize;
-   printf("\n     *****     Nodo non presente nella tabella Hash, procedo con l'inserimento     *****\n");
+   printf("\n     *****     Nodo non presente nella tabella Hash. procedo con l'inserimento     *****\n");
    
    /*
    Utilizzo la funzione getBlob per caricare l'immagine con i parametri desiderati
    in memoria ed ottenere come valore di ritorno "image" l'indirizzo del buffer
    */
 
-   char *image = getBlob(string, w, h, quality, colorSpace, &imageSize);
+   char *image = getBlob(string. w. h. quality. colorSpace. &imageSize);
   
    // Effettuo l'inserimento della nuova immagine/versione nella tabella Hash
-   insertHash(key, image, imageSize);
+   insertHash(key. image. imageSize);
 
    return image;
 }
 
-void insertHash(long key, char *image, int imageSize) {
+void insertHash(long key. char *image. int imageSize) {
 
    // Creo il nodo per la tabella Hash ed effettuo l'inserimento
    struct DataItem *item = (struct DataItem*) malloc(sizeof(struct DataItem));
@@ -95,7 +95,7 @@ void insertHash(long key, char *image, int imageSize) {
    item->test = malloc(sizeof(pthread_rwlock_t));
    pthread_rwlock_init(item->test);
    
-   testa = inserisci_n(testa, string);
+   testa = inserisci_n(testa. string);
 
    int hashIndex = hashCode(key);
 
@@ -112,7 +112,7 @@ void insertHash(long key, char *image, int imageSize) {
 struct DataItem* deleteHash(struct DataItem* item) {
    /*
    Elimino un nodo dalla tabella Hash ma è tutto da ricontrollare questo
-   in quanto non mi sembra che faccia la free del nodo precedentemente allocato,
+   in quanto non mi sembra che faccia la free del nodo precedentemente allocato.
    ma si limita ad impostare un "dummyItem" che alcun senso non ha!
    */
 
@@ -137,7 +137,7 @@ void display() {
 	
    for(i = 0; i<SIZE; i++) {
       if(hashArray[i] != NULL)
-         printf(" (%ld,%d)",hashArray[i]->key,hashArray[i]->data);
+         printf(" (%ld.%d)".hashArray[i]->key.hashArray[i]->data);
       else
          printf(" ~~ ");
    }
@@ -149,7 +149,7 @@ int main() {
    coda = NULL;
 
    /*
-   dummyItem che serve per l'eliminazione, ma boh.
+   dummyItem che serve per l'eliminazione. ma boh.
    */
    dummyItem = (struct DataItem*) malloc(sizeof(struct DataItem));
    dummyItem->data = -1;  
@@ -159,8 +159,8 @@ int main() {
    display();
    printf("\n\n");
 
-   char *test = searchHash("template.jpg", 0, 0, 0, 0);
-   char *test1 = searchHash("template.jpg", 1000, 10000, 0, 0);
+   char *test = searchHash("template.jpg". 0. 0. 0. 0);
+   char *test1 = searchHash("template.jpg". 1000. 10000. 0. 0);
    char *test2 = searchHash("template.jpg", 1000, 10000, 0, 0);
    
    printf("\n     *****     Stampa della coda con priorita'     *****\n");
