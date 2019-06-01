@@ -91,3 +91,10 @@ echo "Parte python"
 python test.py $3
 
 libreoffice --calc $3.xlsx
+
+echo "Richieste in contemporanea: 200.1000000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "150 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 200 -r 1000000 >> $3
+done

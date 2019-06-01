@@ -21,7 +21,7 @@
 
 FILE *logFile;
 __thread int sock;
-__thread char buff[2000];
+__thread char buff[800];
 __thread struct tm *sTm;
 __thread char *buffer;
 __thread char responseMessage[1000];
@@ -44,7 +44,7 @@ ssize_t writen(int fd, const void *buf, size_t n){
 			time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
-			fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, sock);
+			fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, fd);
 			close(fd);
 			free(buffer);
 			free(socketSender);
@@ -54,12 +54,11 @@ ssize_t writen(int fd, const void *buf, size_t n){
 	nleft -= nwritten;
 	ptr += nwritten;
 	}
-	//printf("\nFinito di trasmettere? %d", nleft);
 	return(nleft);
 }
 
 int readn(int fd, void *buf, size_t n) { 
- size_t nleft;
+ 	size_t nleft;
 	ssize_t nread;
 	char *ptr;
 	ptr = buf;
@@ -71,7 +70,7 @@ int readn(int fd, void *buf, size_t n) {
 			time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
-			fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, sock);
+			fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, fd);
 			close(fd);
 			free(buffer);
 			free(socketSender);
@@ -182,6 +181,16 @@ void *gestore_utente(void *socket){
 		}
 
 		char* fileType = calloc(1, 10*sizeof(char));
+		if(!fileType){
+			time_t now = time (0);
+			sTm = gmtime (&now);
+			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
+			fprintf(logFile, "%s | Socket numero: %d | Connessione interrotta\n", buff, sock);
+			close(sock);
+			free(buffer);
+			free(socket);
+			pthread_exit((void*)-1);
+		}
         if ( strncmp(reqline[1], "/\0", 2) ==0 ){
 				requestedFile = "htdocs/index.html";
 				strncpy(fileType, "html", 10*sizeof(char));
@@ -300,14 +309,17 @@ int main(int argc , char *argv[]){
     int socket_desc , *socket_cliente , c , read_size;
     struct sockaddr_in server , client;
     char client_message[2000];
-    pthread_t *thread, fileFlush;
+    pthread_t *thread, *fileFlush;
 
+	fileFlush = malloc(sizeof(pthread_t));
 	//startDetectionProvider(10,  1000);
+	pthread_create(fileFlush, NULL, file_flush, NULL);
 
 	if ((socket_desc = socket(AF_INET , SOCK_STREAM , 0)) < 0){
 		perror("Errore in socket");
 		exit(-1);
 	};
+
 	memset((void *)&server, 0, sizeof(server));
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -326,33 +338,60 @@ int main(int argc , char *argv[]){
 
     puts("\nIn attesa di connessione...");
 
-    for( ; ; ){			
+    for(;;){			
 
 		socket_cliente = calloc(1, sizeof(int));
 		if(!socket_cliente){
-			fprintf(stderr, "%s", "Malloc fallita\n");
-			return -1;
+			time_t now = time (0);
+			sTm = gmtime (&now);
+			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
+			fprintf(logFile, "%s | Errore nella malloc relativo al socket\n", buff);
+			close(sock);
+			free(buffer);
+			free(socket_cliente);
+			continue;
 		}
 		*socket_cliente = accept(socket_desc, (struct sockaddr *)NULL, NULL);
 		
 		if (*socket_cliente < 0){
-			fprintf(stderr, "%s", "Connessione rifiutata\n");
-			return 1;
+			time_t now = time (0);
+			sTm = gmtime (&now);
+			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
+			fprintf(logFile, "%s | Connessione rifiutata\n", buff);
+			close(sock);
+			free(buffer);
+			free(socket_cliente);
+			continue;
 		}
 
-		/*
+		
 		time_t now = time (0);
 		sTm = gmtime (&now);
 		strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
  		char comunicazioneConnessione[1024];
 		fprintf(logFile, "\n%s | Socket numero: %d | Nuova connessione accettata\n", buff, *socket_cliente);
-		*/
-
+		
 		thread = malloc(sizeof(pthread_t));
 		if (!thread){
-			exit(-1);
+			time_t now = time (0);
+			sTm = gmtime (&now);
+			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
+			fprintf(logFile, "%s | Errore nella malloc del thread\n", buff);
+			close(sock);
+			free(buffer);
+			free(socket_cliente);
+			continue;			
 		}
-		pthread_create(thread, NULL, gestore_utente, (void*)socket_cliente);
+		if (pthread_create(thread, NULL, gestore_utente, (void*)socket_cliente) != 0){
+			time_t now = time (0);
+			sTm = gmtime (&now);
+			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
+			fprintf(logFile, "%s | Errore nella creazione del thread\n", buff);
+			close(sock);
+			free(buffer);
+			free(socket_cliente);
+			continue;
+		}
     }
     return 0;
 }
