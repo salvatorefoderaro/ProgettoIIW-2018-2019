@@ -17,6 +17,8 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #define htdocsPath "htdocs" 
+#define flushTime 60
+#define socketTimeout 5
 #define _GNU_SOURCE
 
 FILE *logFile;
@@ -27,7 +29,6 @@ __thread char *buffer;
 __thread char responseMessage[1000];
 __thread int *socketSender;
 __thread char data_to_send[4096];
-
 struct sigaction act;
 
 ssize_t writen(int fd, const void *buf, size_t n){
@@ -83,7 +84,7 @@ int readn(int fd, void *buf, size_t n) {
 
 void *file_flush(){
 	while(1){
-		sleep(30);
+		sleep(flushTime);
 		fflush(logFile);
 	}
 }
@@ -113,16 +114,15 @@ void sendFoundHeader(int socket, int size, char* type){
 	writen(sock, responseMessage, strlen(responseMessage));
 }
 
-void *gestore_utente(void *socket){
-    int scelta, valore_ritorno, uscita_thread, read_size;
+void *requestHandler(void *socket){
+
 	socketSender = socket;
 	sock = *((int*)socket);
 
 	// Struttura dati per impostare il timeout della connessione
     struct timeval tv;
-    tv.tv_sec = 5;
-    tv.tv_usec = 0;
-    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+    tv.tv_sec = socketTimeout;
+    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
 	
 	buffer = calloc(1, 4096*sizeof(char));//malloc+memset
 
@@ -236,12 +236,17 @@ void *gestore_utente(void *socket){
 			if (strcmp(fileType, "jpg") == 0){
 				int width, height, size;
 
-				//runDetection(userAgent, &width, &height);
+				#ifdef detection
+					runDetection(userAgent, &width, &height);
+				#else
+					width = 0;
+					height = 0;
+				#endif
 				
 				hashNode *testAddress;
 				testAddress=NULL;
 				while(testAddress==NULL){
-					testAddress = searchHashNode(requestedFile, 0, 0, 0, &size, fileType);
+					testAddress = searchHashNode(requestedFile, width, height, 0, &size, fileType);
 			}
 
 			sendFoundHeader(sock, testAddress->imageSize, "image");
@@ -306,13 +311,17 @@ int main(int argc , char *argv[]){
 	
 	char buff[20];
     struct tm *sTm;
-    int socket_desc , *socket_cliente , c , read_size;
-    struct sockaddr_in server , client;
-    char client_message[2000];
+    int socket_desc , *socket_cliente;
+    struct sockaddr_in server;
     pthread_t *thread, *fileFlush;
 
 	fileFlush = malloc(sizeof(pthread_t));
-	//startDetectionProvider(10,  1000);
+
+	#ifdef detection
+		startDetectionProvider(10,  1000);
+	#endif
+
+
 	pthread_create(fileFlush, NULL, file_flush, NULL);
 
 	if ((socket_desc = socket(AF_INET , SOCK_STREAM , 0)) < 0){
@@ -368,7 +377,6 @@ int main(int argc , char *argv[]){
 		time_t now = time (0);
 		sTm = gmtime (&now);
 		strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
- 		char comunicazioneConnessione[1024];
 		fprintf(logFile, "\n%s | Socket numero: %d | Nuova connessione accettata\n", buff, *socket_cliente);
 		
 		thread = malloc(sizeof(pthread_t));
@@ -382,7 +390,7 @@ int main(int argc , char *argv[]){
 			free(socket_cliente);
 			continue;			
 		}
-		if (pthread_create(thread, NULL, gestore_utente, (void*)socket_cliente) != 0){
+		if (pthread_create(thread, NULL, requestHandler, (void*)socket_cliente) != 0){
 			time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);

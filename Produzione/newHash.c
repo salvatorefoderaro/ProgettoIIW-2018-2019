@@ -15,7 +15,7 @@ signed long hash(char *str){ //calcolo il codice hash (che verra' modulato) in b
     signed long hash = 5381;
     int c;
 
-    while (c = *str++)
+    while (c = *(str++))
         hash = ((hash * 33) + hash) + c;
     return hash;
 }

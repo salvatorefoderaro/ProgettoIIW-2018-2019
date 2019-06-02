@@ -38,7 +38,7 @@ char *getBlob(char *fileName, int w, int h, int quality, int *size, char *fileTy
 
     // Imposto altezza e larghezza dell'immagine
     if (w != 0 && h != 0){
-    status = MagickResizeImage(output, w, h, 0);
+      status = MagickResizeImage(output, w, h, 0);
     if (status == MagickFalse)
       ThrowWandException(output);
     }
