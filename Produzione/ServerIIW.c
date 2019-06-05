@@ -136,6 +136,7 @@ void *requestHandler(void *socket){
 		free(socket);
 		pthread_exit((void*)-1);
 	}
+
 	int ricevuti;
 	while(ricevuti = readn(sock , buffer, 4096)){
 		if(ricevuti>4076){
@@ -220,6 +221,7 @@ void *requestHandler(void *socket){
 						strcat(requestedFile, "/index.html");
 					}
 					strncpy(fileType, "html", 10*sizeof(char));
+					
 				}
 			free(fileName2);
 		}

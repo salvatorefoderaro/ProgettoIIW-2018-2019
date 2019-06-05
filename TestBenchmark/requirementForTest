@@ -1,5 +1,7 @@
-sudo apt install aptitude && sudo aptitude install graphicsmagick-libmagick-dev-compat && sudo aptitude install libmagickwand-dev libmagickcore-dev imagemagick
-./configure && make && sudo make install
-
+sudo su
+sudo apt install aptitude
+sudo aptitude install graphicsmagick-libmagick-dev-compat
+sudo aptitude install libmagickwand-dev libmagickcore-dev imagemagick
+sudo apt install python
 sudo apt install python-pip
 sudo pip install xlsxwriter
