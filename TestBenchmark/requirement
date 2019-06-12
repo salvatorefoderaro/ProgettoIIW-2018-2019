@@ -1,8 +1,0 @@
-#!/bin/bash
-
-sudo apt install build-essential
-sudo apt install aptitude
-sudo aptitude install libmagickwand-dev libmagickcore-dev imagemagick
-sudo apt install python
-sudo apt install python-pip
-sudo pip install xlsxwriter

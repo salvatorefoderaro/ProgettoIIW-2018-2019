@@ -1,1 +1,0 @@
-cc -o wand magickCore.c `pkg-config --cflags --libs MagickWand`

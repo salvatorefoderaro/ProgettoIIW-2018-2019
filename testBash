@@ -1,5 +1,0 @@
-#!/bin/bash
-for ((c=1; c<=3; c++))
-do  
-   ./baton -c 5 -t 500 -u http://localhost:10002/
-done
