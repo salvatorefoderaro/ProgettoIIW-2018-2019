@@ -1,0 +1,79 @@
+typedef enum {
+  MagickFalse = 0,
+  MagickTrue = 1
+} MagickBooleanType;
+
+struct _MagickWand {
+  size_t id;
+  char name[MagickPathExtent];  /* Wand name to use for MagickWand Logs */
+  Image *images;          /* The images in this wand - also the current image */
+  ImageInfo *image_info;      /* Global settings used for images in Wand */
+  ExceptionInfo *exception;
+
+  MagickBooleanType
+    insert_before,    /* wand set to first image, prepend new images */
+    image_pending,    /* this image is pending Next/Previous Iteration */
+    debug;            /* Log calls to MagickWand library */
+
+  size_t signature;
+};
+
+MagickWand *NewMagickWand(void)
+
+NewMagickWand() restituisce una nuova struttura di tipo Wand, necessario come
+parametro per tutti quanti gli altri metodi. Un eccezzione viene sollevata
+se non c'è memoria a sufficienza per poter allocare la memoria. Successivamente,
+per poter poter liberare la memoria bisogna utilizzare la funzione DestroyMagickWand(Wand *wand)
+
+MagickBooleanType MagickReadImage(MagickWand *wand, const char *filename)
+
+MagickReadImage legge un'immagine o una sequenza di immagini. Le immagini
+vengono inserite prima dell'attuale puntatore a posizione di immagine.
+MagickSetFirstIterator() permette di inserire le nuove immagini prima di tutte
+le altre al momento presenti nella struttura Wand; MagickSetLastIterator()
+permette di aggiungere le immagini alla fine; MagickSetIteratorIndex() permette
+di inserire le immagini dopo la posizione specificata. 
+
+o wand: la struttura Wand
+o filename: il nome dell'immagine, comprensivo di percorso relativo o completo
+
+MagickBooleanType MagickSetImageFormat(MagickWand *wand, const char *format)
+
+MagickSetImageFormat() permette di impostare il formato dell'immagine
+all'interno di una particolare sequenza.
+
+o wand: la struttura Wand
+o format: il formato dell'immagine
+
+MagickBooleanType MagickResizeImage(MagickWand *wand, const size_t widthSize, const size_t heightSize, const FilterType filter)
+
+MagickResizeImage() permette di ridimensionare un'immagine impostando
+larghezza ed altezza, utilizzando uno dei seguenti filtri:
+
+Bessel Blackman Box
+Catrom Cubic Gaussian
+Hanning Hermite Lanczos
+Mitchell Point Quandratic
+Sinc Triangle
+
+o wand: la struttura Wand
+o widthSize: la larghezza desiderata dell'immagine
+o heightSize: la lunghezza deiderata dell'immagine
+o filter: il filtro da utilizzare
+
+MagickBooleanType MagickSetImageCompressionQuality(MagickWand *wand, const size_t quality)
+
+MagickSetImageCompressionQuality() permette di impostare la qualità di compressione
+dell'immagine:
+
+o wand: la struttura Wand
+o quality: la qualità di compressione dell'immagine
+
+unsigned char *MagickGetImageBlob(MagickWand *wand, size_t *size)
+
+MagickGetImageBlob() permette di memorizzare in memoria un'immagine, ottenendo
+come valore di ritorno l'indirizzo di memoria iniziale.
+MagickRelinquishMemory(unsigned char *imageAddress) permette di eliminare l'immagine dalla memoria.
+
+o wand: la struttura Wand
+o size: puntatore ad un intero che conterrà la dimensione dell'immagine

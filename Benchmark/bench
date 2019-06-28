@@ -1,0 +1,181 @@
+#!/bin/bash
+
+rm $3
+rm $3.xlsx
+
+echo "Richieste in contemporanea: 10.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "10 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 10 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 25.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "25 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 25 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 50.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "50 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 50 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 75.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "75 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 75 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 100.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "100 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 100 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 150.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "150 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 150 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 10.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "10 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 10 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 25.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "25 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 25 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 50.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "50 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 50 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 75.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "75 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 75 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 100.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "100 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 100 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 150.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "150 richieste in contemporanea"
+    ./baton -u http://localhost:$1/$2 -c 150 -r 10000 >> $3
+done
+
+echo "Apache"
+echo "Apache" >> $3
+
+echo "Richieste in contemporanea: 10.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "10 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 10 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 25.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "25 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 25 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 50.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "50 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 50 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 75.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "75 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 75 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 100.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "100 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 100 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 150.5000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "150 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 150 -r 5000 >> $3
+done
+
+echo "Richieste in contemporanea: 10.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "10 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 10 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 25.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "25 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 25 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 50.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "50 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 50 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 75.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "75 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 75 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 100.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "100 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 100 -r 10000 >> $3
+done
+
+echo "Richieste in contemporanea: 150.10000" >> $3
+for ((c=1; c<=3; c++))
+do  
+    echo "150 richieste in contemporanea"
+    ./baton -u http://localhost:80/$2 -c 150 -r 10000 >> $3
+done
+
+echo "Parte python"
+
+python toExcel.py $3
+
+libreoffice --calc $3.xlsx

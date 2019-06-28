@@ -1,0 +1,1897 @@
+Richieste in contemporanea: 10.5000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          82.071546ms
+Requests per second:                            60922
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          93.734158ms
+Requests per second:                            53342
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:           85.88422ms
+Requests per second:                            58218
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 25.5000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          108.90811ms
+Requests per second:                            45910
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         139.399997ms
+Requests per second:                            35868
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         128.687811ms
+Requests per second:                            38854
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 50.5000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          102.18568ms
+Requests per second:                            48931
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         110.246236ms
+Requests per second:                            45353
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         139.011988ms
+Requests per second:                            35968
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 75.5000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         117.393669ms
+Requests per second:                            42592
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          130.31341ms
+Requests per second:                            38369
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         126.524782ms
+Requests per second:                            39518
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 100.5000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         138.380435ms
+Requests per second:                            36132
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         122.915455ms
+Requests per second:                            40678
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         101.226694ms
+Requests per second:                            49394
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 150.5000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         120.448455ms
+Requests per second:                            41512
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          99.799692ms
+Requests per second:                            50100
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         105.182201ms
+Requests per second:                            47537
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 10.10000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         180.569573ms
+Requests per second:                            55380
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         182.446579ms
+Requests per second:                            54811
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         173.359215ms
+Requests per second:                            57684
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 25.10000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         201.614501ms
+Requests per second:                            49600
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         177.790311ms
+Requests per second:                            56246
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         193.719769ms
+Requests per second:                            51621
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 50.10000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         195.109116ms
+Requests per second:                            51253
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         183.016046ms
+Requests per second:                            54640
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         184.640077ms
+Requests per second:                            54159
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 75.10000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         181.522827ms
+Requests per second:                            55089
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         179.003176ms
+Requests per second:                            55865
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         199.662015ms
+Requests per second:                            50085
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 100.10000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         181.248998ms
+Requests per second:                            55173
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         179.624194ms
+Requests per second:                            55672
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         187.005991ms
+Requests per second:                            53474
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 150.10000
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         185.494801ms
+Requests per second:                            53910
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         193.099282ms
+Requests per second:                            51787
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:10000/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         191.602041ms
+Requests per second:                            52192
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Apache
+Richieste in contemporanea: 10.5000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          92.050849ms
+Requests per second:                            54318
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         106.611437ms
+Requests per second:                            46899
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         115.339654ms
+Requests per second:                            43350
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 25.5000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          92.831942ms
+Requests per second:                            53861
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         101.285287ms
+Requests per second:                            49366
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          98.528714ms
+Requests per second:                            50747
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 50.5000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         106.055123ms
+Requests per second:                            47145
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         103.265905ms
+Requests per second:                            48419
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          95.310624ms
+Requests per second:                            52460
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 75.5000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          99.805708ms
+Requests per second:                            50097
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         108.135893ms
+Requests per second:                            46238
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         112.171083ms
+Requests per second:                            44575
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 100.5000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:          96.485854ms
+Requests per second:                            51821
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         106.517087ms
+Requests per second:                            46941
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         107.443767ms
+Requests per second:                            46536
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 150.5000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         122.343125ms
+Requests per second:                            40869
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         101.385611ms
+Requests per second:                            49317
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                  5000
+Time taken to complete requests:         103.566073ms
+Requests per second:                            48278
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                     5000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 10.10000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         184.548743ms
+Requests per second:                            54186
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         177.749954ms
+Requests per second:                            56259
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         172.994322ms
+Requests per second:                            57805
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 25.10000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         191.794925ms
+Requests per second:                            52139
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         181.419861ms
+Requests per second:                            55121
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         184.563905ms
+Requests per second:                            54182
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 50.10000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         185.431914ms
+Requests per second:                            53928
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         184.941123ms
+Requests per second:                            54071
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         186.300955ms
+Requests per second:                            53677
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 75.10000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         188.279808ms
+Requests per second:                            53112
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         173.951715ms
+Requests per second:                            57487
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         190.966908ms
+Requests per second:                            52365
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 100.10000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         181.360133ms
+Requests per second:                            55139
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         185.526424ms
+Requests per second:                            53901
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         188.569373ms
+Requests per second:                            53031
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Richieste in contemporanea: 150.10000
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         187.102534ms
+Requests per second:                            53447
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         192.870029ms
+Requests per second:                            51848
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================
+Configuring to send GET requests to: http://localhost:80/img/template.jpg
+Generating the requests...
+Finished generating the requests
+Sending the requests to the server...
+Finished sending the requests
+Processing the results...
+
+=========================== Results ========================================
+
+Total requests:                                 10000
+Time taken to complete requests:         183.438812ms
+Requests per second:                            54514
+Max response time (ms):                             0
+Min response time (ms):                    9223372036854775807
+Avg response time (ms):                           NaN
+
+========= Percentage of responses by status code ==========================
+
+Number of connection errors:                    10000
+Number of 1xx responses:                            0
+Number of 2xx responses:                            0
+Number of 3xx responses:                            0
+Number of 4xx responses:                            0
+Number of 5xx responses:                            0
+
+===========================================================================

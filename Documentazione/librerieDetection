@@ -1,0 +1,44 @@
+static fiftyoneDegreesProvider provider;
+const char* properties = "IsMobile,ScreenPixelsHeight,ScreenPixelsWidth";
+const char* fileName = "51Degrees-LiteV3.2.dat";
+
+fiftyoneDegreesDataSetInitStatus fiftyoneDegreesInitProviderWithPropertyString(
+    const char *fileName, fiftyoneDegreesProvider *provider,
+    const char *properties, int poolSize, int cacheSize)
+
+Inizializza il provider passato alla funzione.
+
+o fileName: il path del file .dat contenente le informazioni su tutti gli user agent
+o provider: il provider da inizializzare
+o properties: le proprietà con le quali fare il match
+o poolSize: il numero di thread all'interno del pool
+o cacheSize: il numero di elementi da mantenere in cache
+
+fiftyoneDegreesWorkset *fiftyoneDegreesProviderWorksetGet(fiftyoneDegreesProvider *provider)
+
+Restituisce un work set dal pool associato con il provider. 
+Nelle operazioni multithread verrà sempre restituito un work set.
+Nelle operazioni single thread, verrà restituito NULL se non sono
+disponibili workset. Il workset ottenuto deve essere rilasciato al
+provider chiamato la funzione fiftyoneDegreesWorksetRelease quando
+ha finito. 
+
+o provider: il provider precedentemente inizializzato
+
+void fiftyoneDegreesWorksetRelease(fiftyoneDegreesWorkset *ws)
+
+Restituisce il worket al pool il quale l'ha creato.
+Le workset create senza un pool dovrebbero essere liberate
+utilizando il metodo fiftyoneDegreesWorksetFree.
+
+o ws: il workset ottenuto dalla funzione precedente
+
+void fiftyoneDegreesMatch(fiftyoneDegreesWorkset *ws, const char *userAgent)
+
+Il metodo principale utilizzto per eseguire un match. Per prima cosa,
+la cache degli User-Agent viene controllata per determinare se lo User-Agent
+è stato già trovato. Altrimenti viene effettuata la detection. La cache
+viene aggiornata prima che il resultset venga restituito.
+
+o ws: il workset ottenuto dalla funzione precedente
+o userAgent: stringa contente lo user-agent da analizzare
