@@ -14,7 +14,6 @@ struct hashNode {
 };
 
 typedef struct hashNode hashNode;
-#define SIZE 2
 
 extern int limite_dimensione;  /* Declaration of the variable */
 

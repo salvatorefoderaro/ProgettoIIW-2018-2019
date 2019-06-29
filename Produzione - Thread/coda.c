@@ -1,7 +1,7 @@
 #include "coda.h"
 #include "newHash.h"
+#include "config.h"
 
-const int dimensioneTotale = 500000000;
 int limite_dimensione = dimensioneTotale;
 
 struct nodo* coda; 

@@ -16,9 +16,7 @@
 #include <signal.h> 
 #include <sys/socket.h> 
 #include <sys/types.h> 
-#define htdocsPath "htdocs" 
-#define flushTime 60
-#define socketTimeout 5
+#include "config.h"
 #define _GNU_SOURCE
 
 FILE *logFile;
