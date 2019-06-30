@@ -316,6 +316,10 @@ int main(int argc , char *argv[]){
 	int porta;
 
 	logFile = fopen ("server.log", "a");
+	if(!logFile){
+		perror("\nErrore nella funzione fopen()!\n");
+		exit(-1);
+	}
 
 	if (argc > 3 || argc == 1){
 		printf("\nUtilizzo: Server [opzioni]\n\nOpzioni:\n  indirizzo                    Avvia il server utilizzando la porta indicata\n");
@@ -343,20 +347,28 @@ int main(int argc , char *argv[]){
     pthread_t *thread, *fileFlush;
 
 	fileFlush = malloc(sizeof(pthread_t));
+	if (!fileFlush){
+		perror("\nErrore nella funzione malloc()!\n");
+		exit(-1);
+	}
+
 
 	#ifdef detection
-		startDetectionProvider(10,  1000);
+		startDetectionProvider(workSetDetection,  cacheItemDetection);
 	#endif
 
-	pthread_create(fileFlush, NULL, file_flush, NULL);
+	if (pthread_create(fileFlush, NULL, file_flush, NULL) != 0){
+		perror("\nErrore nella funzione pthread_create()!\n");
+		exit(-1);
+	}
 
 	if ((socket_desc = socket(AF_INET , SOCK_STREAM , 0)) < 0){
-		perror("Errore in socket");
+		perror("\nErrore nella funzione socket()!\n");
 		exit(-1);
 	}
 
 	if (setsockopt(socket_desc, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(int)) < 0) {
-		perror("errore setsockopt");
+		perror("\nErrore nella funzione setsockopt()!\n");
 		exit(1);
 	}
 
@@ -367,12 +379,12 @@ int main(int argc , char *argv[]){
      
     if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
     {
-		fprintf(stderr, "%s", "Bind non riuscita\n");
+		perror("\nErrore nella funzione bind()!\n");
         exit(-1);
     }
      
-    if (listen(socket_desc , 50) < 0){
-		printf("\nErrore nella listen!\n");
+    if (listen(socket_desc , backlog) < 0){
+		perror("\nErrore nella funzione listen()!\n");
 		exit(-1);
 	}
 

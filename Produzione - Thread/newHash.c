@@ -12,20 +12,13 @@ long hashCode(long key) { //calcolo indice per la tabella hash
    return key % SIZE;
 }
 
-signed long hash(char *str){ //calcolo il codice hash (che verra' modulato) in base alla stringa di ingresso
-    signed long hash = 5381;
-    int c;
-    	unsigned char *p;
-
-	p = (unsigned char *) str;
-
-	while (*p != '\0') {
-		hash = (hash << 5) + hash + *p;
-		++p;
+unsigned long hash(unsigned char *str){
+	unsigned int hash = 0;
+	int c;
+	while (c = *str++)
+	    hash += c;
+	return hash;
     }
-    return hash;
-
-}
 
 int deleteHashNode(long hashIndexDelete){
 
@@ -41,13 +34,14 @@ int deleteHashNode(long hashIndexDelete){
         pthread_mutex_destroy((pthread_mutex_t*)toDelete->sem);
         free(toDelete);
         return size;
+
     } else {
 
         hashNode *support = testaHash[hashIndex];
         while(support->next->key != hashIndexDelete){
             if(support->next->next==NULL){ //se il nodo testa->suc non e' quello cercato e il nodo successivo e' NULL => il nodo ricercato non e' nella lista
-              puts("ERRORE:nodo non presente nella tabella hash");
-              return 0; //perche' non ho eliminato niente
+		        perror("\nNodo non presente nella tabella Hash\n");
+                return 0; //perche' non ho eliminato niente
             }
             support = support->next;
         }
@@ -65,15 +59,16 @@ hashNode *searchHashNode(char *string, int w, int h, int quality, int *toSend, c
     // Alloco lo spazio per una stringa contenente il nome del file ed i parametri
     char *toHash = calloc(1, 4*sizeof(int) + 4*sizeof(char)+strlen(string)); // Controllo sul Null per la malloc
     if(!toHash){
-     fprintf(stderr, "Malloc fallita\n");
-     free(toHash);
-     pthread_exit((void*)-1);
+		perror("\nErrore nella funzione malloc()!\n");
+        free(toHash);
+        pthread_exit((void*)-1);
     } 
     
     sprintf(toHash, "%s|%d|%d|%d", string, w, h, quality);
     
     // Converto la stringa generata in codice hash
-    long key = hash(toHash);
+    unsigned long key = hash(toHash);
+
     // Ottengo l'indice della tabella dal codice generato in precedenza
     int hashIndex = hashCode(key);
 
@@ -97,20 +92,19 @@ hashNode *searchHashNode(char *string, int w, int h, int quality, int *toSend, c
             }
         }
         if (c==0){
-            if (support->next == NULL){
+            if(support->next == NULL){
                 lastNode = support;
             }
             support = support->next;
         }
-         
     }
-    
+
     // Se il nodo non è stato trovato...
 
     // Alloco memoria per la creazione del nuovo nodo
     hashNode *testNode = malloc(sizeof(hashNode));
     if(!testNode){
-     fprintf(stderr, "Malloc fallita\n");
+		perror("\nErrore nella funzione malloc()!\n");
      free(toHash);
      pthread_exit((void*)-1);
     } 
@@ -129,7 +123,7 @@ hashNode *searchHashNode(char *string, int w, int h, int quality, int *toSend, c
     //if fail(vuol dire che qualcun' altro sta inserendo lo stesso nodo)->libera il nodoHash allocato e return NULL(ci vorrebbe un goto) (con NULL bisogna mettere un controllo nel server per cui se ritorna null rileggo)
     //if ok->inserisco il nodo e distruggo il semaforo nominato 
     sem_t* se=sem_open(toHash,O_CREAT,0666,0);      
-    if(errno==EEXIST){ //mettere l'errore 
+    if(se == SEM_FAILED && errno==EEXIST){ //mettere l'errore 
         free(testNode);
         free(toHash);
         return NULL; //restituendo NULL il server rifara' la lettura  
@@ -164,13 +158,12 @@ void insertHashNode(hashNode *newNode, hashNode *lastNode, int index){
     testaCoda = inserisci_n(testaCoda, newNode->key, newNode);
     // Controllo se è da efettuare l'inserimento in testa...
     if (testaHash[index] == NULL){
-
         testaHash[index] = newNode;
         return;
 
     // ... oppure in coda all'indice della tabella Hash
     } else {
-        if (lastNode != NULL)
+        if(lastNode != NULL)
             lastNode->next = newNode;
         return;
     }
