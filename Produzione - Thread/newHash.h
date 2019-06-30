@@ -17,7 +17,7 @@ typedef struct hashNode hashNode;
 
 extern int limite_dimensione;  /* Declaration of the variable */
 
-void insertHashNode(hashNode *newNode, int index);
+void insertHashNode(hashNode *newNode, hashNode *lastNode, int index);
 int deleteHashNode(long test);
 hashNode* searchHashNode(char *string, int w, int h, int quality, int *toSend, char *fileType);
 

@@ -15,10 +15,16 @@ long hashCode(long key) { //calcolo indice per la tabella hash
 signed long hash(char *str){ //calcolo il codice hash (che verra' modulato) in base alla stringa di ingresso
     signed long hash = 5381;
     int c;
+    	unsigned char *p;
 
-    while (c == *(str++))
-        hash = ((hash << 5) + hash) + c;
+	p = (unsigned char *) str;
+
+	while (*p != '\0') {
+		hash = (hash << 5) + hash + *p;
+		++p;
+    }
     return hash;
+
 }
 
 int deleteHashNode(long hashIndexDelete){
@@ -68,12 +74,12 @@ hashNode *searchHashNode(char *string, int w, int h, int quality, int *toSend, c
     
     // Converto la stringa generata in codice hash
     long key = hash(toHash);
-
     // Ottengo l'indice della tabella dal codice generato in precedenza
     int hashIndex = hashCode(key);
 
     // Scorro la tabella Hash per cercare se il nodo è presente
     hashNode *support = testaHash[hashIndex];
+    hashNode *lastNode = support;
     int c;
     while(support != NULL){
         c=0;
@@ -91,11 +97,14 @@ hashNode *searchHashNode(char *string, int w, int h, int quality, int *toSend, c
             }
         }
         if (c==0){
-          support = support->next;
+            if (support->next == NULL){
+                lastNode = support;
+            }
+            support = support->next;
         }
-        
+         
     }
-
+    
     // Se il nodo non è stato trovato...
 
     // Alloco memoria per la creazione del nuovo nodo
@@ -140,7 +149,7 @@ hashNode *searchHashNode(char *string, int w, int h, int quality, int *toSend, c
         //libera_n(testaCoda,testaCoda); questa in piu' aggiorna la dimensione ed elimina il nodo . Dovrei passargli il nodo 
 
     }
-    insertHashNode(testNode, hashIndex);
+    insertHashNode(testNode, lastNode, hashIndex);
     
     limite_dimensione-=testNode->imageSize;
     sem_unlink(toHash);
@@ -149,7 +158,7 @@ hashNode *searchHashNode(char *string, int w, int h, int quality, int *toSend, c
     return testNode; //testNode->imageBuffer;
 }
 
-void insertHashNode(hashNode *newNode, int index){
+void insertHashNode(hashNode *newNode, hashNode *lastNode, int index){
 
     // Effettuo l'inserimento nella coda con priorità
     testaCoda = inserisci_n(testaCoda, newNode->key, newNode);
@@ -161,17 +170,8 @@ void insertHashNode(hashNode *newNode, int index){
 
     // ... oppure in coda all'indice della tabella Hash
     } else {
-
-        hashNode *support = testaHash[index];
-
-        while(support->next != NULL){
-            if (support->next->key == newNode->key){
-                return;
-            }
-            support = support->next;
-        }
-        
-        support->next = newNode;
+        if (lastNode != NULL)
+            lastNode->next = newNode;
         return;
     }
 }

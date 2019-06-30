@@ -194,7 +194,6 @@ void *requestHandler(void *socket){
 			accept = strtok(NULL, "\0");
 			char *otherString = accept;
 			do {
-				printf("\nResto del mondo è: %s\n", otherString);
 				char *string = strtok(otherString,";");
 				char *qValue = strtok(NULL, ",");
 				otherString = strtok(NULL, ",");
@@ -205,7 +204,6 @@ void *requestHandler(void *socket){
 					quality =  atoi(qValue)*10;
 					break;
 				}
-				printf("\n%s\n%s\n%s\n", string, otherString, qValue);
 			} while(otherString != NULL);
 		}
 
