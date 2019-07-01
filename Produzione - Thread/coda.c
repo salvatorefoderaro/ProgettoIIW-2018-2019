@@ -34,11 +34,12 @@ struct nodo* libera_n(struct nodo *testa, struct nodo * n){
         testa=testa->suc;//vado al nodo successivo per continuare la ricerca
      }
      //se ho trovato il nodo:
-     testa->suc=testa->suc->suc; //il nodo precedente punta al nodo successivo 
+     new=testa->suc->suc;
+     free(testa->suc);
+     testa->suc=new; //il nodo precedente punta al nodo successivo 
      if(testa->suc==NULL){
        coda=testa;
-     } 
-     free(testa->suc);
+     }
      return aus; //ritorno la testa(non modificata)
    }
 }
