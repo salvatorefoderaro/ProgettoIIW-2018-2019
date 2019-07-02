@@ -3,6 +3,7 @@
 #include "imageToBlob.h"
 #include "newHash.h"
 #include "coda.h"
+#include "config.h"
 
 nodo *testaCoda;
 hashNode *testaHash[SIZE] = { NULL }; 

@@ -388,12 +388,11 @@ int main(int argc , char *argv[]){
 		exit(-1);
 	}
 
-    puts("\nIn attesa di connessione...");
-
     for(;;){			
 
 		socket_cliente = calloc(1, sizeof(int));
 		if(!socket_cliente){
+			perror("\nErrore nella funzione calloc()!\n");
 			time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
@@ -406,6 +405,7 @@ int main(int argc , char *argv[]){
 		
 		*socket_cliente = accept(socket_desc, (struct sockaddr *)NULL, NULL);
 		if (*socket_cliente < 0){
+			perror("\nErrore nella funzione accept()!\n");
 			time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
@@ -420,9 +420,10 @@ int main(int argc , char *argv[]){
 		sTm = gmtime (&now);
 		strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
 		fprintf(logFile, "\n%s | Socket numero: %d | Nuova connessione accettata\n", buff, *socket_cliente);
+	
 		thread = malloc(sizeof(pthread_t));
-
 		if (!thread){
+			perror("\nErrore nella funzione malloc(!\n");
 			time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
@@ -434,6 +435,7 @@ int main(int argc , char *argv[]){
 		}
 		
 		if (pthread_create(thread, NULL, requestHandler, (void*)socket_cliente) != 0){
+			perror("\nErrore nella funzione pthread_create()!\n");
 			time_t now = time (0);
 			sTm = gmtime (&now);
 			strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
